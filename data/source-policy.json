@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "officialDomains": [
+    "openai.com",
+    "status.openai.com",
+    "help.openai.com"
+  ],
+  "socialWatchlist": [],
+  "unknownSourcePolicy": "manual-review",
+  "notes": "Do not guess account identities. Add social accounts only after a maintainer confirms the exact canonical account and collection method."
+}

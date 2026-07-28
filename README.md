@@ -16,12 +16,14 @@ no seeded or fabricated observations.
   excerpt, normalized features, and content hash.
 - **Public posts:** administrator-approved issue records carrying
   `approved-public-source`. No social account is guessed or scraped.
-- **Forecasts:** deterministic daily snapshots committed to Git. With no
+- **Forecasts:** deterministic snapshots refreshed by a daily agent and
+  committed to Git. With no
   verified observations, the site shows a documented broad prior and no likely
   time interval.
 
-The public site and daily job use GitHub Pages, Issues, and Actions. Standard
-GitHub-hosted Actions runners are free for public repositories.
+The daily agent gathers compliant evidence and runs the repository's
+deterministic pipeline. GitHub Issues provide the review queue, and GitHub
+Actions only tests and deploys the committed static site.
 
 ## Submit and verify a reset
 
@@ -29,8 +31,8 @@ GitHub-hosted Actions runners are free for public repositories.
 2. Review and submit the prefilled public GitHub issue.
 3. A maintainer checks privacy, timestamp validity, duplication, and provenance.
 4. The maintainer removes `pending-review` and adds `verified-observation`.
-5. The next daily or manually dispatched workflow validates, deduplicates, and
-   publishes the observation.
+5. The next agent refresh validates, deduplicates, commits, and publishes the
+   observation.
 
 Editing a verified issue changes its content hash. The next collection appends a
 correction entry to that observation's audit history; Git preserves the prior
@@ -58,22 +60,22 @@ Run the full suite:
 npm run verify
 ```
 
-## Daily deployment
+## Daily agent and deployment
 
-[`.github/workflows/pages.yml`](.github/workflows/pages.yml) runs daily at
-04:17 UTC, on pushes to `main`, and on manual dispatch. It:
+The recurring Codex agent follows
+[`docs/DAILY_AGENT.md`](docs/DAILY_AGENT.md). Each run:
 
-1. fast-forwards a queued checkout;
-2. collects verified GitHub issues and live OpenAI Status records;
-3. validates, deduplicates, forecasts, and scores mature outcomes;
-4. commits changed data, forecast, job history, and RSS;
-5. runs tests and builds the static site;
-6. deploys GitHub Pages.
+1. stops safely if the working tree is not clean;
+2. reviews official, terms-compliant sources and the configured watchlist;
+3. collects verified GitHub issues and live OpenAI Status records;
+4. validates, deduplicates, forecasts, and scores mature outcomes;
+5. reviews the diff, runs the verification suite, commits, and pushes;
+6. checks the GitHub Pages deployment and public site.
 
-GitHub notes that scheduled runs can be delayed and that schedules in inactive
-public repositories may be disabled after 60 days. The generated snapshot shows
-collection time and health so a stale or degraded source is not presented as
-fresh.
+The agent does not make up reset events or probabilities. GitHub Actions runs
+on the resulting push and only tests, builds, and deploys the static site. The
+generated snapshot shows collection time and source health so stale or degraded
+sources are not presented as fresh.
 
 See [operations](docs/OPERATIONS.md) and
 [product and architecture](docs/PRODUCT_AND_ARCHITECTURE.md).

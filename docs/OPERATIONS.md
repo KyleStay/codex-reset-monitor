@@ -2,21 +2,22 @@
 
 ## Production data flow
 
-The deployed system has no private database and no paid AI call.
+The deployed system has no private database or application-time AI call. A
+recurring Codex agent performs the daily research and publishing work.
 
 1. GitHub Issue Forms collect public reset reports and suggested source URLs.
 2. Maintainers review reports in GitHub. Only `verified-observation` and
    `approved-public-source` labels authorize ingestion.
-3. At 04:17 UTC every day, GitHub Actions reads labeled issues with its built-in
-   repository token and reads OpenAI's public incident JSON.
-4. The job validates timestamps, rejects sensitive-looking notes, caps trust,
+3. Each day, the agent reviews terms-compliant sources, reads labeled issues,
+   and runs the live OpenAI Status adapter.
+4. Deterministic code validates timestamps, rejects sensitive-looking notes, caps trust,
    deduplicates 15-minute surface/time-zone buckets, preserves audit history,
    generates a forecast, scores completed outcomes, and writes source health.
-5. Changed data and forecasts are committed to `main`, then GitHub Pages is
-   rebuilt and deployed.
+5. The agent reviews and verifies changed data, commits it to `main`, pushes,
+   and checks the resulting GitHub Pages deployment.
 
-The workflow also supports manual dispatch. It fast-forwards its checkout before
-collection so queued runs cannot overwrite a prior generated commit.
+The GitHub Actions workflow never gathers evidence or writes data. It tests,
+builds, and deploys the exact commit pushed by the agent or a maintainer.
 
 ## Maintainer review
 
@@ -34,14 +35,13 @@ For a valid reset observation:
 4. Search existing verified issues for a duplicate in the same surface,
    time zone, and 15-minute reset bucket.
 5. Remove `pending-review`; add `verified-observation`.
-6. Dispatch the Pages workflow for immediate publication, or wait for the daily
-   run.
+6. Ask the agent to refresh immediately, or wait for its next daily run.
 
 For a compliant public source, verify the canonical public HTTPS URL,
 publication time, neutral title, and minimal excerpt; then replace
 `pending-review` with `approved-public-source`.
 
-GitHub repository permissions protect label changes and workflow dispatch. The
+GitHub repository permissions protect label changes. The
 static `/admin/` page contains no embedded administrator credential.
 
 ## Local development
@@ -69,10 +69,11 @@ The configured production repository is
 3. Define repository variables:
    - `PUBLIC_SITE_URL=https://kylestay.github.io/codex-reset-monitor`
    - `APP_ORIGIN=https://kylestay.github.io`
-4. Ensure workflow permissions allow `contents: write`, `issues: read`,
-   `pages: write`, and `id-token: write`.
+4. Ensure workflow permissions allow `contents: read`, `pages: write`, and
+   `id-token: write`.
 5. Create the labels listed below.
-6. Run **Refresh data and deploy GitHub Pages** manually.
+6. Run **Test and deploy GitHub Pages** manually, or push a verified agent
+   refresh.
 7. Verify `/`, `/performance/`, `/submit/`, `/methodology/`, `/admin/`, and
    `/feed.xml` over HTTPS.
 
@@ -85,24 +86,22 @@ Required labels:
 - `approved-public-source`
 - `rejected`
 
-## Scheduled-job limitations
+## Agent and deployment limitations
 
-GitHub Actions standard hosted runners are free for public repositories.
-Scheduled workflows:
+The daily research run depends on the configured Codex host being available,
+authenticated to GitHub, and able to reach approved sources. It is not an
+always-on server and its availability or model usage is not covered by GitHub
+Pages' free hosting allowance. A dirty working tree, failed validation,
+ambiguous evidence, or unavailable source must fail closed without a push.
 
-- can start later than the exact cron time during load;
-- run from the default branch;
-- may be automatically disabled after 60 days without repository activity.
-
-The job commits a timestamped source/job snapshot when it runs, which normally
-keeps the repository active. Operators should still check workflow history
-monthly. If collection fails, the last valid records are retained and the
-source is marked degraded; the site must not imply the source is fresh.
+GitHub Actions standard hosted runners are free for public repositories and are
+used only after a push for testing and Pages deployment. If either the agent or
+deployment fails, the last valid site remains public. Timestamps and source
+health must make stale data visible.
 
 References:
 
 - https://docs.github.com/actions/concepts/billing-and-usage
-- https://docs.github.com/actions/reference/workflows-and-actions/events-that-trigger-workflows
 - https://docs.github.com/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-githubs-form-schema
 
 ## Forecasting, scoring, and rollback

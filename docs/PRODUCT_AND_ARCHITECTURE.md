@@ -4,11 +4,12 @@ Last verified: 2026-07-28
 
 ## Current direction
 
-The live product uses GitHub Pages, Actions, Issues, and repository-backed JSON.
-It contains no demonstration observations. OpenAI does not expose a public feed
-of individual Codex account reset times, so real reset evidence must come from
-explicit user observations. The system keeps those observations distinct from
-official service incidents and approved public-source context.
+The live product uses a recurring Codex research agent, GitHub Pages, Actions,
+Issues, and repository-backed JSON. It contains no demonstration observations.
+OpenAI does not expose a public feed of individual Codex account reset times, so
+real reset evidence must come from explicit user observations. The system keeps
+those observations distinct from official service incidents and approved
+public-source context.
 
 ## Evidence and trust
 
@@ -29,11 +30,11 @@ one record. One report cannot produce a high-confidence forecast.
 ## Architecture
 
 ```text
-OpenAI Status JSON       verified / approved GitHub Issues
+Official public sources    verified / approved GitHub Issues
          |                              |
- official adapter           issue parser + label-event audit
+ daily research agent       issue parser + label-event audit
          |                              |
-         +------ validation + normalization + hashing ------+
+         +-- adapters + validation + normalization + hashing --+
                                       |
                      repository-backed versioned JSON
                                       |
@@ -69,19 +70,21 @@ The prior is not adjusted by official incidents.
 | Capability | Selected service | Verified behavior | Limitation / safe degradation |
 | --- | --- | --- | --- |
 | Public site | GitHub Pages | Public repository Pages and custom Actions workflow | Last successful artifact remains available after a failed refresh. |
-| Daily collection and deploy | GitHub Actions | Standard hosted runners are free for public repositories | Schedules may be delayed and disabled after 60 inactive days; show timestamps and health. |
+| Daily research and refresh | Recurring local Codex agent | Can browse approved public sources, review evidence, run deterministic code, and publish through authenticated Git | Depends on the configured host, Codex availability/usage, credentials, and a clean checkout; failures leave the prior site intact. |
+| Test and deploy | GitHub Actions | Push-triggered standard hosted runners are free for public repositories | Actions does not gather evidence or modify datasets; the last successful artifact remains available after failure. |
 | Observation input | GitHub Issue Forms | Structured required fields in public repositories | Requires a GitHub account; forms are public preview. |
 | Administrative protection | GitHub repository permissions | Only collaborators can apply labels or dispatch workflows | Public users can read the audit queue but cannot approve records. |
 | Persistent data and rollback | Git repository | Versioned JSON, issue history, commit history | Repository scale is suitable only for a small public dataset; migrate behind interfaces if it grows materially. |
 
-No payment card or paid service is required for this architecture. It makes no
-AI API calls. GitHub documents standard hosted Actions runners as free for
-public repositories.
+No payment card or paid service is required by the public site architecture,
+and the deployed application makes no AI API calls. The daily agent uses the
+operator's existing Codex access and is therefore not a zero-compute-cost
+guarantee. GitHub documents standard hosted Actions runners as free for public
+repositories.
 
 Primary references:
 
 - https://docs.github.com/actions/concepts/billing-and-usage
-- https://docs.github.com/actions/reference/workflows-and-actions/events-that-trigger-workflows
 - https://docs.github.com/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-githubs-form-schema
 - https://status.openai.com/api/v2/incidents.json
 
