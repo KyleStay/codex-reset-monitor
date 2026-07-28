@@ -6,6 +6,7 @@ import { SiteFooter } from "./components/SiteFooter";
 const origin = process.env.APP_ORIGIN || "http://localhost:3000";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const socialImage = `${origin.replace(/\/$/, "")}${basePath}/og.png`;
+const favicon = `${basePath}/favicon.svg`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(origin),
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
     template: "%s · Codex Reset Monitor",
   },
   description: "An unofficial, open-source experiment estimating when observed Codex usage-limit resets may occur.",
-  icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
+  icons: { icon: favicon, shortcut: favicon },
   openGraph: {
     title: "Codex Reset Monitor",
     description: "Calm, transparent, experimental reset estimates—never guarantees.",

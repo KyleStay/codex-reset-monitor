@@ -45,7 +45,7 @@ jobs:
         env:
           NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
           NEXT_PUBLIC_API_BASE: ${{ vars.NEXT_PUBLIC_API_BASE }}
-          APP_ORIGIN: ${{ vars.PUBLIC_SITE_URL }}
+          APP_ORIGIN: ${{ vars.APP_ORIGIN }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:
