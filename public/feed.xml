@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+<title>Codex Reset Monitor</title><link>https://example.github.io/codex-reset-monitor</link>
+<description>Meaningful changes to experimental Codex reset forecasts.</description>
+<lastBuildDate>Tue, 28 Jul 2026 15:12:17 GMT</lastBuildDate>
+<item><guid>events-6-cutoff-2026-07-28</guid><title>Experimental—limited history: 24h probability 92%</title><link>https://example.github.io/codex-reset-monitor</link><pubDate>Tue, 28 Jul 2026 15:12:17 GMT</pubDate><description>Experimental estimate, never a guarantee. Model schedule-baseline-0.1.0.</description></item>
+</channel></rss>

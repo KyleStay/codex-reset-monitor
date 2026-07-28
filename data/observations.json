@@ -1,0 +1,8 @@
+[
+  { "id": "rst-001", "observedResetAtUtc": "2026-07-22T03:51:00.000Z", "verificationState": "confirmed" },
+  { "id": "rst-002", "observedResetAtUtc": "2026-07-23T06:22:00.000Z", "verificationState": "confirmed" },
+  { "id": "rst-003", "observedResetAtUtc": "2026-07-24T06:04:00.000Z", "verificationState": "confirmed" },
+  { "id": "rst-004", "observedResetAtUtc": "2026-07-25T13:10:00.000Z", "verificationState": "confirmed" },
+  { "id": "rst-005", "observedResetAtUtc": "2026-07-26T14:33:00.000Z", "verificationState": "confirmed" },
+  { "id": "rst-006", "observedResetAtUtc": "2026-07-27T18:20:00.000Z", "verificationState": "confirmed" }
+]

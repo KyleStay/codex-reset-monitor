@@ -1,0 +1,34 @@
+[
+  {
+    "id": "events-6-cutoff-2026-07-28",
+    "at": "2026-07-28T14:00:00.000Z",
+    "p6": 0.23,
+    "interval": "Jul 28, 8:48 PM–Jul 29, 1:00 AM UTC",
+    "outcome": "Awaiting outcome",
+    "brier": null
+  },
+  {
+    "id": "fc-102",
+    "at": "2026-07-27T14:00:00.000Z",
+    "p6": 0.61,
+    "interval": "17:20–21:10 UTC",
+    "outcome": "Reset at 18:20 UTC",
+    "brier": 0.16
+  },
+  {
+    "id": "fc-101",
+    "at": "2026-07-26T14:00:00.000Z",
+    "p6": 0.73,
+    "interval": "13:50–17:20 UTC",
+    "outcome": "Reset at 14:33 UTC",
+    "brier": 0.11
+  },
+  {
+    "id": "fc-100",
+    "at": "2026-07-25T14:00:00.000Z",
+    "p6": 0.44,
+    "interval": "17:10–22:40 UTC",
+    "outcome": "Reset next day",
+    "brier": 0.29
+  }
+]

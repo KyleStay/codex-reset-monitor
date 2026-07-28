@@ -1,0 +1,60 @@
+name: Refresh data and deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Refresh official data and deterministic forecast
+        run: npm run update:data
+        env:
+          STATUS_FEED_URL: https://status.openai.com/api/v2/incidents.json
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+      - name: Preserve the immutable daily forecast record
+        run: |
+          git config user.name "codex-reset-monitor-bot"
+          git config user.email "codex-reset-monitor-bot@users.noreply.github.com"
+          git add data/generated public/feed.xml
+          git diff --cached --quiet || git commit -m "data: publish daily forecast"
+          git push
+      - run: npm test
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
+          NEXT_PUBLIC_API_BASE: ${{ vars.NEXT_PUBLIC_API_BASE }}
+          APP_ORIGIN: ${{ vars.PUBLIC_SITE_URL }}
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: out
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

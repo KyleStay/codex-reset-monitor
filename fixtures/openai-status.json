@@ -1,0 +1,15 @@
+{
+  "page": { "id": "openai-status", "name": "OpenAI Status" },
+  "incidents": [
+    {
+      "id": "fixture-codex-usage-2026-06",
+      "name": "Codex usage limits depleting faster than expected",
+      "status": "resolved",
+      "impact": "minor",
+      "created_at": "2026-06-26T21:04:00.000Z",
+      "resolved_at": "2026-06-29T21:06:00.000Z",
+      "shortlink": "https://status.openai.com/",
+      "body": "Demonstration fixture based on an official incident. Visit the original source for current details."
+    }
+  ]
+}
