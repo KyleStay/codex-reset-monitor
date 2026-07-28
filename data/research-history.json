@@ -1,0 +1,89 @@
+[
+  {
+    "id": "research-reset-2026-05-05",
+    "eventDate": "2026-05-05",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "unknown",
+    "title": "Usage-limit reset reported after an apparent outage-compensation action",
+    "summary": "A public Codex issue reported weekly usage returning to 100% and the renewal date moving without intervening use. An OpenAI repository contributor explained that this behavior occurs when usage limits are reset and that resets are sometimes used to compensate users after outages. This supports an inferred reset, not a confirmed personal observation in this project.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "Possible outage compensation",
+      "confidence": "attributed",
+      "rationale": "An OpenAI repository contributor described outage compensation as a reason these resets are occasionally performed, but did not identify a specific incident for this event."
+    },
+    "detectionSignals": [
+      "Weekly usage remaining rises to 100% without corresponding inactivity-window expiry.",
+      "The displayed renewal or reset date moves forward at the same time.",
+      "Several independent public reports cluster in a short period.",
+      "An OpenAI staff or official status source attributes the change to a reset."
+    ],
+    "contradictions": [
+      "The public report did not provide a machine-verifiable exact reset timestamp.",
+      "No specific OpenAI Status incident was linked to the reset."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/21226",
+        "publicationTimeUtc": "2026-05-05T18:14:39Z",
+        "title": "Weekly Limit Increased to 100% Without Any Usage",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/21226#issuecomment-4381991662",
+        "publicationTimeUtc": "2026-05-05T18:36:17Z",
+        "title": "OpenAI repository contributor explanation",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-07-28T17:00:00Z",
+    "lastReviewedAtUtc": "2026-07-28T17:00:00Z"
+  },
+  {
+    "id": "research-reset-2026-04-28",
+    "eventDate": "2026-04-28",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "unknown",
+    "title": "Early weekly-limit reset corroborated by an OpenAI repository contributor",
+    "summary": "A public Codex issue reported that a weekly limit reset many hours before the displayed reset time. An OpenAI repository contributor stated that this was the intended result of a limit reset: usage returns to 100% remaining and the time window restarts. The event is retained as inferred history because it was not submitted and verified as a personal observation through this project.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "Operator-initiated usage-limit reset; motivation unknown",
+      "confidence": "confirmed",
+      "rationale": "An OpenAI repository contributor confirmed the mechanism and intended behavior, but the public record did not state why this particular reset was initiated."
+    },
+    "detectionSignals": [
+      "Usage remaining returns to 100% before the previously displayed reset time.",
+      "The usage window restarts and a new future reset timestamp appears.",
+      "Contemporaneous reports from multiple surfaces can distinguish a broad reset from an account-specific display issue."
+    ],
+    "contradictions": [
+      "The report supplied only an approximate local event time and did not state its time zone.",
+      "The public record did not establish affected-plan scope or the reason for the reset."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/19987",
+        "publicationTimeUtc": "2026-04-28T14:16:26Z",
+        "title": "Weekly Limits always resets many hours early",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/19987#issuecomment-4336950477",
+        "publicationTimeUtc": "2026-04-28T15:57:24Z",
+        "title": "OpenAI repository contributor confirmation",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-07-28T17:00:00Z",
+    "lastReviewedAtUtc": "2026-07-28T17:00:00Z"
+  }
+]

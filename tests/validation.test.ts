@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import researchHistory from "../data/research-history.json";
+import { validateHistoricalResearch } from "../lib/research";
 import { observationDedupeKey, validateObservation } from "../lib/validation";
 
 const valid = {
@@ -32,4 +34,11 @@ test("dedupe key collapses matching surface, timezone, and 15-minute reset bucke
   const first = validateObservation(valid);
   const second = validateObservation({ ...valid, observedResetAtUtc: "2026-07-27T12:07:00-04:00" });
   assert.equal(await observationDedupeKey(first), await observationDedupeKey(second));
+});
+
+test("historical research remains explicitly inferred and source-backed", () => {
+  const rows = validateHistoricalResearch(researchHistory);
+  assert.ok(rows.length >= 2);
+  assert.ok(rows.every((row) => row.verificationState === "inferred"));
+  assert.ok(rows.every((row) => row.sources.length > 0 && row.detectionSignals.length > 0));
 });

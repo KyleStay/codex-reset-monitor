@@ -5,6 +5,7 @@ import {
   collectionHealth,
   currentForecast,
   forecastHistory,
+  historicalResearch,
   incidents,
   publicSignals,
   resetHistory,
@@ -95,6 +96,22 @@ export default function Home() {
             <Link className="text-link" href="/submit">Report an observation <span aria-hidden="true">→</span></Link>
           </div>
           <Timeline items={resetHistory} empty="No reset observations yet." />
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="shell">
+          <div className="section-heading">
+            <div>
+              <p className="section-label">Historical research</p>
+              <h2>Past reset evidence and possible causes</h2>
+            </div>
+          </div>
+          <p className="section-intro">
+            These are inferred public events, not verified observations. Each entry states what the evidence supports,
+            what remains unknown, and signals that could help detect similar events in the future.
+          </p>
+          <Timeline items={historicalResearch} empty="No historical reset research has passed validation." />
         </div>
       </section>
 

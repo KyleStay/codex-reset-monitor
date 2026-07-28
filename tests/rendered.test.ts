@@ -12,6 +12,8 @@ test("static export contains critical public and administrator journeys", async 
   const home = await readFile(new URL("../out/index.html", import.meta.url), "utf8");
   assert.match(home, /experimental estimate, never a guarantee/i);
   assert.match(home, /Reset history/);
+  assert.match(home, /Past reset evidence and possible causes/);
+  assert.match(home, /Staff corroboration/);
   assert.match(home, /Forecast history/);
   assert.doesNotMatch(home, /Seeded demonstration data/i);
   const submit = await readFile(new URL("../out/submit/index.html", import.meta.url), "utf8");

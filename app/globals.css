@@ -119,6 +119,7 @@ h2 { margin-bottom: 1.2rem; font-size: clamp(2rem, 4vw, 3.35rem); }
 .state-corrected, .state-manual-url { color: var(--amber); }
 .timeline-body small { display: block; margin-top: .35rem; color: var(--muted); }
 .timeline-body a { display: inline-block; margin-top: .45rem; color: var(--teal); font-size: .78rem; }
+.timeline-body a + a { margin-left: .8rem; }
 .split-timelines { display: grid; grid-template-columns: 1fr 1fr; gap: 8vw; }
 .split-timelines .timeline::before { left: 98px; }
 .split-timelines .timeline li { grid-template-columns: 80px 1fr; gap: 36px; }

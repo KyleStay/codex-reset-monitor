@@ -1,6 +1,8 @@
 import snapshotJson from "../data/generated/snapshot.json";
 import generatedHistory from "../data/generated/forecast-history.json";
 import observationsJson from "../data/observations.json";
+import researchHistoryJson from "../data/research-history.json";
+import { validateHistoricalResearch } from "./research";
 import type {
   Forecast,
   ForecastHistoryRow,
@@ -73,6 +75,26 @@ export const publicSignals = snapshot.approvedPublicSources.map((record) => ({
   detail: record.excerpt ?? "Administrator-approved public source metadata.",
   url: record.canonicalUrl,
 }));
+
+export const historicalResearch = validateHistoricalResearch(researchHistoryJson)
+  .sort((a, b) => b.eventDate.localeCompare(a.eventDate))
+  .map((event) => ({
+    id: event.id,
+    date: event.eventDate,
+    dateLabel: new Intl.DateTimeFormat("en", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(`${event.eventDate}T00:00:00Z`)),
+    state: `Inferred · grade ${event.evidenceGrade}`,
+    title: event.title,
+    detail: `${event.summary} Cause: ${event.cause.assessment} (${event.cause.confidence}). Detection: ${event.detectionSignals.join(" ")}`,
+    links: event.sources.map((source) => ({
+      href: source.canonicalUrl,
+      label: source.provenance === "official_repository_staff" ? "Staff corroboration" : "Public report",
+    })),
+  }));
 
 export const currentForecast = snapshot.forecast;
 export const forecastHistory = generatedHistory as unknown as ForecastHistoryRow[];

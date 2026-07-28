@@ -20,6 +20,9 @@ public-source context.
 - **Incident:** an official OpenAI Status record. It is context, not a reset.
 - **Public signal:** minimal metadata from an issue carrying
   `approved-public-source`.
+- **Inferred historical reset:** a source-backed research record with explicit
+  evidence grade, date precision, contradictions, cause confidence, and
+  detection signals. It never enters confirmed training labels.
 - **Forecast:** a point-in-time experimental estimate.
 
 GitHub authentication prevents anonymous form flooding. The collector does not

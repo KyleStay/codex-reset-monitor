@@ -8,7 +8,9 @@ authentication and sandbox-access rules apply here.
 - The public remote is `https://github.com/KyleStay/codex-reset-monitor`.
 - The public site is `https://kylestay.github.io/codex-reset-monitor/`.
 - A recurring Codex agent follows `docs/DAILY_AGENT.md` to research approved
-  sources, refresh deterministic data and forecasts, verify, commit, and push.
+  sources, backfill source-backed historical reset research and possible causes,
+  improve the product when needed, refresh deterministic data and forecasts,
+  verify, commit, and push.
 - GitHub Pages deploys through `.github/workflows/pages.yml`. The workflow only
   tests, builds, and deploys commits; it must not research, rewrite data, or
   create forecast commits.

@@ -16,6 +16,9 @@ no seeded or fabricated observations.
   excerpt, normalized features, and content hash.
 - **Public posts:** administrator-approved issue records carrying
   `approved-public-source`. No social account is guessed or scraped.
+- **Historical research:** a validated ledger of inferred public reset events,
+  possible causes, contradictions, and future detection signals. It remains
+  separate from verified observations and cannot silently become training data.
 - **Forecasts:** deterministic snapshots refreshed by a daily agent and
   committed to Git. With no
   verified observations, the site shows a documented broad prior and no likely

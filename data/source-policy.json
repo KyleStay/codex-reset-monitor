@@ -3,7 +3,22 @@
   "officialDomains": [
     "openai.com",
     "status.openai.com",
-    "help.openai.com"
+    "help.openai.com",
+    "developers.openai.com"
+  ],
+  "researchSources": [
+    {
+      "host": "github.com",
+      "scope": "openai/codex issues, comments, releases, and pull requests",
+      "trust": "mixed",
+      "rule": "OpenAI staff comments may corroborate mechanisms or causes; user reports remain public claims."
+    },
+    {
+      "host": "community.openai.com",
+      "scope": "public Codex discussions",
+      "trust": "low",
+      "rule": "Use for discovery and corroboration only; never promote a community claim to a confirmed observation."
+    }
   ],
   "socialWatchlist": [],
   "unknownSourcePolicy": "manual-review",

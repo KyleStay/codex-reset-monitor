@@ -97,6 +97,34 @@ export interface SourceRecord {
   contentHash: string;
 }
 
+export interface HistoricalResearchEvent {
+  id: string;
+  eventDate: string;
+  datePrecision: "day" | "hour" | "exact";
+  classification: "inferred_reset" | "reset_mechanism_change";
+  verificationState: "inferred";
+  scope: "unknown" | "paid_plans" | "selected_plans";
+  title: string;
+  summary: string;
+  evidenceGrade: "A" | "B" | "C" | "D";
+  cause: {
+    assessment: string;
+    confidence: "confirmed" | "attributed" | "hypothesis" | "unknown";
+    rationale: string;
+  };
+  detectionSignals: string[];
+  contradictions: string[];
+  sources: Array<{
+    canonicalUrl: string;
+    publicationTimeUtc: string;
+    title: string;
+    provenance: "official_repository_staff" | "public_report";
+    role: "primary" | "corroborating";
+  }>;
+  firstRecordedAtUtc: string;
+  lastReviewedAtUtc: string;
+}
+
 export interface SourceHealth {
   status: "healthy" | "degraded" | "disabled";
   checkedAtUtc: string;

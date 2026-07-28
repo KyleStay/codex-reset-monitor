@@ -1,8 +1,10 @@
 # Daily research agent
 
 This runbook is the production contract for the recurring Codex agent. The
-agent may find and classify evidence, but repository code is the sole authority
-for probability calculation, scoring, and generated forecast history.
+agent owns the complete research, maintenance, verification, and publishing
+loop. It may improve collectors, schemas, tests, documentation, and
+presentation when needed, but repository code is the sole authority for
+probability calculation, scoring, and generated forecast history.
 
 ## Safety gates
 
@@ -17,12 +19,14 @@ for probability calculation, scoring, and generated forecast history.
    personal reset.
 5. Do not guess an account identity, including any account referred to only as
    "Tibo". Do not use prohibited, brittle, authenticated, or evasive scraping.
-6. Do not change model code, model versions, promotion thresholds, source
-   policy, or verification labels during a routine run.
+6. Do not weaken verification, privacy, provenance, backtesting, or model
+   promotion gates. Model changes require reproducible evaluation and the
+   declared promotion criteria; an agent's judgment alone is insufficient.
 
 ## Evidence research
 
 Read `data/source-policy.json` before browsing.
+Read `docs/HISTORICAL_RESEARCH.md` before researching.
 
 - Check OpenAI Status through the existing adapter.
 - Review current issues labeled `verified-observation`; only those issues may
@@ -43,6 +47,18 @@ Read `data/source-policy.json` before browsing.
 - Treat public descriptions of reset behavior as public signals or pending
   review only. Do not submit them as if the agent personally observed a reset.
 - Deduplicate by canonical URL and content hash before creating an issue.
+- Make bounded progress on historical backfill during every run. Search
+  source-native archives and permanent URLs, not only the latest search
+  results.
+- Maintain `data/research-history.json` with explicit evidence class, date
+  precision, scope, evidence grade, cause confidence, contradictions, source
+  provenance, and future detection signals.
+- Seek causes, but do not force one. Distinguish outage compensation,
+  promotions, mechanism changes, plan migrations, metering/display corrections,
+  and coincident incidents.
+- Improve source adapters and public presentation when a durable, compliant
+  source or evidence class cannot be represented correctly. Add tests for any
+  new behavior.
 
 ## Refresh and publish
 
@@ -56,15 +72,18 @@ Read `data/source-policy.json` before browsing.
    never enter that historical forecast.
 3. Run `npm run verify`. If validation, tests, lint, or build fails, do not
    commit or push.
-4. If the refresh is valid, commit only the intended data, generated forecast,
-   RSS, and any structured source-issue effects. Use a dated
-   `data: agent daily refresh` commit message. Never create an empty commit.
+4. If the refresh is valid, commit only the intended research, source data,
+   generated forecast, RSS, tests, documentation, and presentation changes.
+   Use a dated `data: agent daily refresh` commit message. Never create an empty
+   commit.
 5. Push `main` normally. Never force-push.
 6. Monitor **Test and deploy GitHub Pages** to completion. Verify the live home,
    performance, history timelines, source health, timestamp, and feed over
    HTTPS. Do not claim publication if the deployment or live check was not
    verified.
 
-The run report must state which sources were checked, newly accepted and
-pending evidence, observation/source counts, forecast changes, verification
-result, commit, deployment result, live URL, and any limitations or blockers.
+The run report must state which sources and historical ranges were checked,
+newly accepted and pending evidence, inferred events and cause assessments,
+detection signals learned, observation/source counts, forecast changes,
+verification result, commit, deployment result, live URL, and any limitations
+or blockers.
