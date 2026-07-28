@@ -25,6 +25,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Refresh the queued checkout
+        run: git pull --ff-only origin main
       - run: npm ci
       - name: Refresh official data and deterministic forecast
         run: npm run update:data
