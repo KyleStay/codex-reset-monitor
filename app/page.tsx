@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { ProbabilityArc } from "./components/ProbabilityArc";
 import { Timeline } from "./components/Timeline";
-import { currentForecast, forecastHistory, incidents, publicSignals, resetHistory } from "../lib/seed";
+import {
+  collectionHealth,
+  currentForecast,
+  forecastHistory,
+  incidents,
+  publicSignals,
+  resetHistory,
+} from "../lib/seed";
 
 const formatUtc = (value: string) => new Intl.DateTimeFormat("en", {
   month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit", timeZone: "UTC",
@@ -12,34 +19,44 @@ const formatWindow = (start: string, end: string) => {
 };
 
 export default function Home() {
+  const confirmedCount = currentForecast.featureSnapshot.confirmedEventCount;
+  const hasTimingHistory = currentForecast.likelyStartUtc && currentForecast.likelyEndUtc;
   return (
     <>
       <section className="hero">
         <div className="shell">
           <div className="eyebrow-row">
             <span className="eyebrow">Experimental public forecast</span>
-            <span className="live-note"><i /> Seeded demonstration data</span>
+            <span className="live-note"><i /> Live sources · {confirmedCount} verified reset{confirmedCount === 1 ? "" : "s"}</span>
           </div>
           <div className="hero-grid">
             <div className="hero-copy">
               <p className="kicker">Current estimate</p>
-              <h1>A reset is most likely <em>within the next day.</em></h1>
-              <p className="lede">
-                Based on a small set of verified observations, the likely window is
-                <strong> {formatWindow(currentForecast.likelyStartUtc, currentForecast.likelyEndUtc)}</strong>. This is an experimental estimate, never a guarantee.
-              </p>
+              <h1>{hasTimingHistory ? <>A reset is most likely <em>within the next day.</em></> : <>There is <em>no learned reset schedule yet.</em></>}</h1>
+              {hasTimingHistory ? (
+                <p className="lede">
+                  Based on verified observations, the likely window is
+                  <strong> {formatWindow(currentForecast.likelyStartUtc!, currentForecast.likelyEndUtc!)}</strong>. This is an experimental estimate, never a guarantee.
+                </p>
+              ) : (
+                <p className="lede">
+                  No verified reset observations are available, so a likely time range is not published.
+                  The probabilities below are an explicitly labeled broad prior—not a result learned from demo or account data.
+                  This is an experimental estimate, never a guarantee.
+                </p>
+              )}
               <div className="forecast-meta">
-                <span><b>Confidence D</b> · Very limited</span>
+                <span><b>Confidence {currentForecast.confidenceGrade}</b> · {confirmedCount === 0 ? "No reset history" : "Limited history"}</span>
                 <span>Updated <time dateTime={currentForecast.forecastAtUtc}>{formatUtc(currentForecast.forecastAtUtc)} UTC</time></span>
               </div>
             </div>
             <div className="signal-card">
               <div className="signal-card-head">
                 <span>Data sufficiency</span>
-                <strong>6 / 20 events</strong>
+                <strong>{confirmedCount} / 20 events</strong>
               </div>
-              <div className="meter"><span style={{ width: "30%" }} /></div>
-              <p><b>Experimental—limited history.</b> At least 20 confirmed events are required before a statistical model can be considered for promotion.</p>
+              <div className="meter"><span style={{ width: `${Math.min(100, confirmedCount / 20 * 100)}%` }} /></div>
+              <p><b>{currentForecast.dataSufficiencyLabel}.</b> At least 20 confirmed events are required before a statistical model can be considered for promotion.</p>
             </div>
           </div>
           <div className="probability-row">
@@ -87,7 +104,8 @@ export default function Home() {
             <p className="section-label">Official service context</p>
             <h2>Codex incident timeline</h2>
             <p className="section-intro">Official incidents are context signals, not reset confirmations.</p>
-            <Timeline items={incidents} empty="No approved incidents." />
+            <Timeline items={incidents} empty="No Codex-relevant official incidents were returned." />
+            <p className="source-health"><b>Collector:</b> {collectionHealth.officialStatus.message}</p>
           </div>
           <div>
             <p className="section-label">Approved public context</p>
@@ -112,11 +130,12 @@ export default function Home() {
                   <tr key={row.id}>
                     <td><time dateTime={row.at}>{formatUtc(row.at)}</time><small>{row.id}</small></td>
                     <td><b>{Math.round(row.p6 * 100)}%</b></td>
-                    <td>{row.interval}</td>
+                    <td>{row.interval ?? "Unavailable—no timing history"}</td>
                     <td>{row.outcome}</td>
                     <td>{row.brier ?? "Pending"}</td>
                   </tr>
                 ))}
+                {!forecastHistory.length && <tr><td colSpan={5}>No real forecast has been published yet.</td></tr>}
               </tbody>
             </table>
           </div>

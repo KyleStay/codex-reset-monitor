@@ -15,8 +15,9 @@ authentication and sandbox-access rules apply here.
 - A sandboxed GitHub authentication, credential, keychain, or network failure
   is inconclusive. Retry the same read-only or user-authorized operation with
   narrow escalated access before reporting GitHub as unavailable.
-- Do not claim the optional submission/admin write API is live unless
-  `NEXT_PUBLIC_API_BASE` is configured and the deployed API has been verified.
+- Reset reports come from GitHub Issue Forms. Only issues labeled
+  `verified-observation` by a repository maintainer enter the public dataset.
+  Do not add seeded or fabricated reset records.
 
 ## Verification
 

@@ -9,7 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "update:data": "node scripts/update-data.mjs",
+    "update:data": "node --import tsx scripts/update-data.ts",
     "qa:visual": "node scripts/visual-qa.mjs",
     "test": "npm run build && node --import tsx --test tests/*.test.ts",
     "verify": "npm run lint && npm test",

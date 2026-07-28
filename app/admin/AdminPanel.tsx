@@ -1,56 +1,69 @@
-"use client";
+import { collectionHealth, currentForecast } from "../../lib/seed";
 
-import { useState } from "react";
-
-const apiBase = process.env.NEXT_PUBLIC_API_BASE ?? "";
-const pending = [
-  { id: "obs-pending-17", limit: "Jul 28, 08:12 UTC", reset: "Jul 28, 12:36 UTC", surface: "CLI", trust: "0.15", note: "Manual retry; no sensitive content detected." },
-  { id: "obs-pending-16", limit: "Jul 27, 19:44 UTC", reset: "Jul 28, 02:08 UTC", surface: "IDE", trust: "0.15", note: "Possible duplicate within the 15-minute dedupe window." },
-];
+const repo = "https://github.com/KyleStay/codex-reset-monitor";
 
 export function AdminPanel() {
-  const [key, setKey] = useState("");
-  const [message, setMessage] = useState("Read-only demonstration. Enter the server-side admin key to perform an audited action.");
-
-  async function act(id: string, action: "confirmed" | "rejected") {
-    if (!apiBase) {
-      setMessage("The write API is not configured, so this static demonstration is read-only.");
-      return;
-    }
-    try {
-      const response = await fetch(`${apiBase}/admin/observations/${id}`, {
-        method: "PATCH",
-        headers: { "content-type": "application/json", "x-admin-key": key },
-        body: JSON.stringify({ verificationState: action, reason: action === "confirmed" ? "Administrator verified observation" : "Administrator rejected observation" }),
-      });
-      const result = await response.json() as { error?: string };
-      if (!response.ok) throw new Error(result.error ?? "Admin action failed");
-      setMessage(`${id} marked ${action}. An immutable audit entry was created.`);
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Admin action failed");
-    }
-  }
-
+  const confirmedCount = currentForecast.featureSnapshot.confirmedEventCount;
   return (
     <div className="admin-shell">
       <aside className="admin-sidebar">
-        <p className="footer-brand">Administration</p><span className="chip">Protected area</span>
-        <nav aria-label="Administration"><a href="#review">Review queue</a><a href="#sources">Source health</a><a href="#models">Models & rollback</a></nav>
+        <p className="footer-brand">Administration</p>
+        <span className="chip">GitHub-protected actions</span>
+        <nav aria-label="Administration">
+          <a href="#review">Review queue</a>
+          <a href="#sources">Source health</a>
+          <a href="#models">Models</a>
+        </nav>
       </aside>
       <div className="admin-main">
-        <p className="section-label">Review queue</p><h1 style={{ fontSize: "3.2rem" }}>Pending observations</h1>
-        <div className="admin-key"><label className="field" style={{ flex: 1 }}><span>Admin key</span><input type="password" value={key} onChange={(event) => setKey(event.target.value)} autoComplete="current-password" /></label></div>
-        <p className="form-status" role="status">{message}</p>
-        <div id="review">
-          {pending.map((item) => (
-            <article className="review-card" key={item.id}>
-              <div><span className="chip">Pending · trust {item.trust}</span><h3>{item.surface} observation · {item.id}</h3><p>Limit reached {item.limit} · access returned {item.reset}</p><small>{item.note}</small></div>
-              <div className="admin-actions"><button className="button" onClick={() => act(item.id, "confirmed")}>Verify</button><button className="button secondary" onClick={() => act(item.id, "rejected")}>Reject</button></div>
-            </article>
-          ))}
+        <p className="section-label">Review queue</p>
+        <h1 style={{ fontSize: "3.2rem" }}>Real reports, reviewed in GitHub</h1>
+        <div className="notice">
+          The queue is publicly auditable, but only repository collaborators can
+          apply verification labels or run the publishing workflow. No admin
+          secret is embedded in this static site.
         </div>
-        <section id="sources" style={{ marginTop: "4rem" }}><p className="section-label">Source health</p><h2>Collectors</h2><div className="review-card"><div><span className="chip">Fixture healthy</span><h3>OpenAI public status</h3><p>Live JSON endpoint is configured in the daily workflow. The local test path uses a realistic fixture.</p></div><div><small>Last fixture check<br /><b>14:00 UTC</b></small></div></div></section>
-        <section id="models" style={{ marginTop: "4rem" }}><p className="section-label">Models & rollback</p><h2>Promotion is blocked</h2><div className="notice"><b>6 confirmed events.</b> Retraining requires at least 20. Active model: schedule baseline 0.1.0. Candidate: logistic 0.1.0 (evaluation only).</div><div className="form-actions"><button className="button secondary" onClick={() => setMessage("Retraining skipped: 14 more confirmed labels are required.")}>Start retraining</button><button className="button secondary" onClick={() => setMessage("Rollback preview: no production change was made in this demonstration.")}>Review rollback</button></div></section>
+        <div id="review" className="admin-link-grid">
+          <a className="review-card" href={`${repo}/issues?q=is%3Aissue+is%3Aopen+label%3Apending-review`}>
+            <div><span className="chip">Needs review</span><h3>Pending reports and sources</h3><p>Validate timestamps, privacy, duplicates, and provenance before approval.</p></div>
+            <strong aria-hidden="true">↗</strong>
+          </a>
+          <a className="review-card" href={`${repo}/issues?q=is%3Aissue+label%3Averified-observation`}>
+            <div><span className="chip">Published evidence</span><h3>Verified reset observations</h3><p>The daily collector reads only issues with this protected label.</p></div>
+            <strong aria-hidden="true">↗</strong>
+          </a>
+          <a className="review-card" href={`${repo}/issues?q=is%3Aissue+label%3Aapproved-public-source`}>
+            <div><span className="chip">Approved context</span><h3>Approved public sources</h3><p>Only minimal metadata and canonical URLs are published.</p></div>
+            <strong aria-hidden="true">↗</strong>
+          </a>
+        </div>
+
+        <section id="sources" style={{ marginTop: "4rem" }}>
+          <p className="section-label">Source health</p>
+          <h2>Daily collectors</h2>
+          <div className="review-card">
+            <div><span className="chip">{collectionHealth.officialStatus.status}</span><h3>OpenAI public status</h3><p>{collectionHealth.officialStatus.message}</p></div>
+            <small>{new Date(collectionHealth.officialStatus.checkedAtUtc).toISOString()}</small>
+          </div>
+          <div className="review-card">
+            <div><span className="chip">{collectionHealth.observations.status}</span><h3>Verified GitHub issues</h3><p>{collectionHealth.observations.message}</p></div>
+            <small>{confirmedCount} verified</small>
+          </div>
+        </section>
+
+        <section id="models" style={{ marginTop: "4rem" }}>
+          <p className="section-label">Models and publishing</p>
+          <h2>{confirmedCount < 20 ? "Retraining remains blocked" : "Eligible for candidate evaluation"}</h2>
+          <div className="notice">
+            <b>{confirmedCount} confirmed event{confirmedCount === 1 ? "" : "s"}.</b>{" "}
+            Candidate training requires at least 20. Active model: {currentForecast.modelVersion}.
+            No model can be promoted or rolled back from client-side code.
+          </div>
+          <div className="form-actions">
+            <a className="button" href={`${repo}/actions/workflows/pages.yml`}>Open protected workflow console</a>
+            <a className="button secondary" href={`${repo}/commits/main/data/generated/forecast-history.json`}>Review forecast history</a>
+          </div>
+        </section>
       </div>
     </div>
   );

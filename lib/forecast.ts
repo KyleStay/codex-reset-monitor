@@ -2,8 +2,33 @@ import { HORIZONS, type FeatureSnapshot, type Forecast, type Horizon } from "./d
 
 const clamp = (value: number, min = 0.01, max = 0.98) => Math.min(max, Math.max(min, value));
 const sigmoid = (value: number) => 1 / (1 + Math.exp(-value));
+const featureTag = (features: FeatureSnapshot) => {
+  const value = [
+    features.confirmedEventCount,
+    features.medianCycleHours,
+    features.cycleDispersionHours,
+    features.activeIncident,
+    features.approvedPostCount24h,
+    features.sourceTrustMean,
+    features.dataQuality,
+  ].join("|");
+  let hash = 2_166_136_261;
+  for (const character of value) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16_777_619);
+  }
+  return (hash >>> 0).toString(16).padStart(8, "0");
+};
+export const NO_DATA_PRIOR: Record<Horizon, number> = {
+  1: 0.04,
+  3: 0.12,
+  6: 0.22,
+  12: 0.39,
+  24: 0.63,
+};
 
 export function baselineProbability(hours: Horizon, features: FeatureSnapshot): number {
+  if (features.confirmedEventCount < 2) return NO_DATA_PRIOR[hours];
   const elapsed = features.hoursSinceLastConfirmedReset ?? features.medianCycleHours * 0.5;
   const remaining = Math.max(0, features.medianCycleHours - elapsed);
   const scale = Math.max(2, features.cycleDispersionHours);
@@ -14,6 +39,7 @@ export function baselineProbability(hours: Horizon, features: FeatureSnapshot): 
 
 export function candidateProbability(hours: Horizon, features: FeatureSnapshot): number {
   const base = baselineProbability(hours, features);
+  if (features.confirmedEventCount < 2) return base;
   const logit = Math.log(base / (1 - base));
   const incident = features.activeIncident ? 0.28 : 0;
   const reports = Math.min(0.3, features.weightedReportVolume6h * 0.08);
@@ -26,43 +52,67 @@ export function buildForecast(features: FeatureSnapshot, now = new Date(features
   const probabilities = Object.fromEntries(
     HORIZONS.map((hours) => [hours, candidateProbability(hours, features)])
   ) as Record<Horizon, number>;
+  const hasTimingHistory = features.confirmedEventCount >= 2 && features.hoursSinceLastConfirmedReset !== null;
   const elapsed = features.hoursSinceLastConfirmedReset ?? 0;
   const remaining = Math.max(1, features.medianCycleHours - elapsed);
   const center = now.getTime() + remaining * 3_600_000;
   const halfWidth = Math.max(90 * 60_000, features.cycleDispersionHours * 1_800_000);
   const confidenceGrade = features.confirmedEventCount >= 50 ? "B" : features.confirmedEventCount >= 20 ? "C" : "D";
+  const explanationFactors = hasTimingHistory
+    ? [
+        {
+          label: "Time since the last confirmed reset",
+          direction: remaining <= 12 ? "raises" as const : "lowers" as const,
+          detail: `${Math.round(elapsed)} hours have elapsed against a ${features.medianCycleHours}-hour median cycle.`,
+        },
+        {
+          label: "Limited verified history",
+          direction: "lowers" as const,
+          detail: `${features.confirmedEventCount} confirmed events are available; 20 are required before statistical promotion.`,
+        },
+        {
+          label: features.activeIncident ? "Active official incident" : "No active official incident",
+          direction: features.activeIncident ? "raises" as const : "neutral" as const,
+          detail: features.activeIncident
+            ? "An official Codex-relevant incident is active. It is context, not evidence of a personal reset."
+            : "No active Codex-relevant incident is represented in the current snapshot.",
+        },
+      ]
+    : [
+        {
+          label: "No verified reset history",
+          direction: "lowers" as const,
+          detail: "No timing pattern has been learned. The displayed probabilities are a broad published prior.",
+        },
+        {
+          label: "Community collection is active",
+          direction: "neutral" as const,
+          detail: "Only administrator-verified GitHub reports can enter the reset history.",
+        },
+        {
+          label: features.activeIncident ? "Active official incident" : "Official incident context",
+          direction: "neutral" as const,
+          detail: features.activeIncident
+            ? "An official Codex-relevant incident is active, but incidents are not personal reset confirmations."
+            : "Official OpenAI status is monitored separately from personal reset observations.",
+        },
+      ];
 
   return {
     id: `fc_${now.toISOString().replace(/\D/g, "").slice(0, 14)}`,
     forecastAtUtc: now.toISOString(),
     probabilities,
-    likelyStartUtc: new Date(center - halfWidth).toISOString(),
-    likelyEndUtc: new Date(center + halfWidth).toISOString(),
+    likelyStartUtc: hasTimingHistory ? new Date(center - halfWidth).toISOString() : null,
+    likelyEndUtc: hasTimingHistory ? new Date(center + halfWidth).toISOString() : null,
     confidenceGrade,
     featureSnapshot: features,
-    explanationFactors: [
-      {
-        label: "Time since the last confirmed reset",
-        direction: remaining <= 12 ? "raises" : "lowers",
-        detail: `${Math.round(elapsed)} hours have elapsed against a ${features.medianCycleHours}-hour median cycle.`,
-      },
-      {
-        label: "Limited verified history",
-        direction: "lowers",
-        detail: `${features.confirmedEventCount} confirmed events are available; 20 are required before statistical promotion.`,
-      },
-      {
-        label: features.activeIncident ? "Active official incident" : "No active official incident",
-        direction: features.activeIncident ? "raises" : "neutral",
-        detail: features.activeIncident
-          ? "An official Codex-relevant incident is active, which modestly raises the estimate."
-          : "No active Codex-relevant incident is represented in the current snapshot.",
-      },
-    ],
-    modelVersion: "candidate-logistic-0.1.0",
-    datasetVersion: `events-${features.confirmedEventCount}-cutoff-${now.toISOString().slice(0, 10)}`,
-    dataSufficiencyLabel: features.confirmedEventCount < 20
-      ? "Experimental—limited history"
+    explanationFactors,
+    modelVersion: features.confirmedEventCount < 2 ? "published-prior-0.1.0" : "schedule-baseline-0.2.0",
+    datasetVersion: `events-${features.confirmedEventCount}-cutoff-${now.toISOString().slice(0, 10)}-${featureTag(features)}`,
+    dataSufficiencyLabel: features.confirmedEventCount === 0
+      ? "Experimental—no verified reset history"
+      : features.confirmedEventCount < 20
+        ? "Experimental—limited history"
       : "Experimental estimate",
   };
 }

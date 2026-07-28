@@ -2,39 +2,51 @@
 
 import { useState } from "react";
 
-const apiBase = process.env.NEXT_PUBLIC_API_BASE ?? "";
+const issueUrl = "https://github.com/KyleStay/codex-reset-monitor/issues/new";
 
 export function ObservationForm() {
   const [status, setStatus] = useState<{ kind: "idle" | "busy" | "success" | "error"; message: string }>({ kind: "idle", message: "" });
 
-  async function submit(event: React.FormEvent<HTMLFormElement>) {
+  function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!apiBase) {
-      setStatus({ kind: "error", message: "Submissions are unavailable in this static demonstration. Configure the write API to enable them." });
-      return;
-    }
     const form = new FormData(event.currentTarget);
-    const payload = {
-      limitReachedAtUtc: new Date(String(form.get("limitReachedAtUtc"))).toISOString(),
-      observedResetAtUtc: new Date(String(form.get("observedResetAtUtc"))).toISOString(),
-      statedTimeZone: String(form.get("statedTimeZone")),
-      codexSurface: String(form.get("codexSurface")),
-      planTier: String(form.get("planTier")),
-      detectionMethod: String(form.get("detectionMethod")),
-      confidence: Number(form.get("confidence")),
-      submitterNotes: String(form.get("submitterNotes") ?? ""),
-      relatedIncidentIds: [],
-      relatedSourceIds: [],
-    };
-    setStatus({ kind: "busy", message: "Submitting…" });
     try {
-      const response = await fetch(`${apiBase}/observations`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(payload) });
-      const result = await response.json() as { error?: string };
-      if (!response.ok) throw new Error(result.error ?? "Submission failed");
-      event.currentTarget.reset();
-      setStatus({ kind: "success", message: "Observation received for review. It will not affect the public forecast until verified." });
+      const limitReached = new Date(String(form.get("limitReachedAtUtc")));
+      const resetAt = new Date(String(form.get("observedResetAtUtc")));
+      if (resetAt <= limitReached) throw new Error("Access-returned time must be later than the limit-reached time.");
+      const surfaceLabels: Record<string, string> = {
+        cli: "CLI",
+        ide: "IDE extension",
+        cloud: "Cloud tasks",
+        web: "Web",
+        other: "Other",
+      };
+      const tierLabels: Record<string, string> = {
+        unknown: "Prefer not to say / unknown",
+        free: "Free",
+        "individual-paid": "Individual paid",
+        "team-or-enterprise": "Team or enterprise",
+      };
+      const methodLabels: Record<string, string> = {
+        "manual-retry": "Manual retry",
+        "scheduled-check": "Scheduled check",
+        other: "Other",
+      };
+      const params = new URLSearchParams({
+        template: "reset-observation.yml",
+        limit_reached: limitReached.toISOString(),
+        access_returned: resetAt.toISOString(),
+        time_zone: String(form.get("statedTimeZone")),
+        surface: surfaceLabels[String(form.get("codexSurface"))] ?? "Other",
+        plan_tier: tierLabels[String(form.get("planTier"))] ?? "Prefer not to say / unknown",
+        detection_method: methodLabels[String(form.get("detectionMethod"))] ?? "Other",
+        confidence: `${Math.round(Number(form.get("confidence")) * 100)}%`,
+        notes: String(form.get("submitterNotes") ?? ""),
+      });
+      setStatus({ kind: "busy", message: "Opening the protected GitHub submission form…" });
+      window.location.assign(`${issueUrl}?${params.toString()}`);
     } catch (error) {
-      setStatus({ kind: "error", message: error instanceof Error ? error.message : "Submission failed" });
+      setStatus({ kind: "error", message: error instanceof Error ? error.message : "The report could not be prepared." });
     }
   }
 
@@ -50,7 +62,7 @@ export function ObservationForm() {
         <div className="field full"><label htmlFor="confidence">How confident are you? <output id="confidence-output">80%</output></label><input id="confidence" name="confidence" type="range" min="0.1" max="1" step="0.1" defaultValue="0.8" onInput={(event) => { const output = document.getElementById("confidence-output"); if (output) output.textContent = `${Math.round(Number(event.currentTarget.value) * 100)}%`; }} /></div>
         <div className="field full"><label htmlFor="notes">Notes <span className="muted">(optional, 500 characters)</span></label><textarea id="notes" name="submitterNotes" maxLength={500} placeholder="Timing context only. Do not paste account content." /></div>
       </div>
-      <div className="form-actions"><button className="button" type="submit" disabled={status.kind === "busy"}>Submit for review</button><p className={`form-status ${status.kind === "error" ? "error" : ""}`} role="status">{status.message}</p></div>
+      <div className="form-actions"><button className="button" type="submit" disabled={status.kind === "busy"}>Continue on GitHub</button><p className={`form-status ${status.kind === "error" ? "error" : ""}`} role="status">{status.message}</p></div>
     </form>
   );
 }

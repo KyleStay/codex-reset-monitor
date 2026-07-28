@@ -1,79 +1,86 @@
-import { buildForecast } from "./forecast";
-import type { FeatureSnapshot } from "./domain";
-import snapshot from "../data/generated/snapshot.json";
+import snapshotJson from "../data/generated/snapshot.json";
 import generatedHistory from "../data/generated/forecast-history.json";
+import observationsJson from "../data/observations.json";
+import type {
+  Forecast,
+  ForecastHistoryRow,
+  SourceRecord,
+  StoredObservation,
+} from "./domain";
 
-export const DEMO_NOW = "2026-07-28T14:00:00.000Z";
-
-export const resetHistory = [
-  { id: "rst-006", date: "2026-07-27T18:20:00.000Z", surface: "CLI", state: "Confirmed", cycle: "27.8h", note: "Verified demonstration observation" },
-  { id: "rst-005", date: "2026-07-26T14:33:00.000Z", surface: "IDE", state: "Confirmed", cycle: "25.4h", note: "Verified demonstration observation" },
-  { id: "rst-004", date: "2026-07-25T13:10:00.000Z", surface: "Cloud", state: "Confirmed", cycle: "31.1h", note: "Verified demonstration observation" },
-  { id: "rst-003", date: "2026-07-24T06:04:00.000Z", surface: "CLI", state: "Corrected", cycle: "23.7h", note: "Time corrected; original remains in audit history" },
-  { id: "rst-002", date: "2026-07-23T06:22:00.000Z", surface: "Web", state: "Confirmed", cycle: "26.5h", note: "Verified demonstration observation" },
-  { id: "rst-001", date: "2026-07-22T03:51:00.000Z", surface: "CLI", state: "Confirmed", cycle: "—", note: "Earliest seeded observation" },
-];
-
-export const incidents = [
-  { id: "inc-3", date: "2026-07-19T14:08:00.000Z", state: "Resolved", title: "Elevated errors affecting ChatGPT", detail: "Official write-up noted that some Codex requests failed.", url: "https://status.openai.com/" },
-  { id: "inc-2", date: "2026-06-26T21:04:00.000Z", state: "Resolved", title: "Codex usage limits depleting faster than expected", detail: "Official incident; fixture only in this build.", url: "https://status.openai.com/" },
-  { id: "inc-1", date: "2026-05-27T21:57:00.000Z", state: "Resolved", title: "Codex context compaction latency", detail: "Official Codex-related service incident.", url: "https://status.openai.com/" },
-];
-
-export const publicSignals = [
-  { id: "sig-2", date: "2026-07-21T16:10:00.000Z", state: "Approved", title: "Official status write-up published", detail: "Metadata only; visitors are linked to the original.", url: "https://status.openai.com/" },
-  { id: "sig-1", date: "2026-07-10T12:30:00.000Z", state: "Manual URL", title: "Administrator-approved announcement placeholder", detail: "No social account is guessed or scraped.", url: "https://openai.com/news/" },
-];
-
-export const features: FeatureSnapshot = {
-  cutoffUtc: DEMO_NOW,
-  confirmedEventCount: 6,
-  hoursSinceLastConfirmedReset: 19.7,
-  medianCycleHours: 26.5,
-  cycleDispersionHours: 4.2,
-  activeIncident: false,
-  incidentRecencyHours: 218,
-  approvedPostCount24h: 0,
-  weightedReportVolume6h: 0.3,
-  sourceTrustMean: 0.74,
-  dataQuality: 0.58,
+const snapshot = snapshotJson as unknown as {
+  generatedAtUtc: string;
+  sourceMode: string;
+  officialStatusHealth: { status: "healthy" | "degraded"; checkedAtUtc: string; message: string };
+  observationSourceHealth: {
+    status: "healthy" | "degraded" | "disabled";
+    checkedAtUtc: string;
+    message: string;
+    rejectedRecordCount: number;
+    duplicateCount: number;
+  };
+  officialIncidents: SourceRecord[];
+  approvedPublicSources: SourceRecord[];
+  verifiedObservationCount: number;
+  forecast: Forecast;
+  performance: {
+    sampleCount: number;
+    brier: number | null;
+    baselineBrier: number | null;
+    precision6h: number | null;
+    recall6h: number | null;
+    falseAlarmRate: number | null;
+    missedEventRate: number | null;
+    medianTimingErrorMinutes: number | null;
+    calibration: Array<{ bucket: string; predicted: number; observed: number; n: number }>;
+  };
 };
+const observations = observationsJson as unknown as StoredObservation[];
+const chronological = [...observations].sort(
+  (a, b) => Date.parse(a.observedResetAtUtc) - Date.parse(b.observedResetAtUtc),
+);
 
-const generated = snapshot.forecast;
-const baselineForecast = buildForecast({ ...features, cutoffUtc: snapshot.generatedAtUtc }, new Date(snapshot.generatedAtUtc));
-export const currentForecast = {
-  ...baselineForecast,
-  forecastAtUtc: snapshot.generatedAtUtc,
-  probabilities: {
-    1: generated.probabilities["1"],
-    3: generated.probabilities["3"],
-    6: generated.probabilities["6"],
-    12: generated.probabilities["12"],
-    24: generated.probabilities["24"],
-  },
-  likelyStartUtc: generated.likelyStartUtc,
-  likelyEndUtc: generated.likelyEndUtc,
-  modelVersion: generated.modelVersion,
-  datasetVersion: generated.datasetVersion,
-  dataSufficiencyLabel: generated.dataSufficiencyLabel,
-};
+export const resetHistory = chronological.map((row, index) => {
+  const previous = chronological[index - 1];
+  const cycle = previous
+    ? `${((Date.parse(row.observedResetAtUtc) - Date.parse(previous.observedResetAtUtc)) / 3_600_000).toFixed(1)}h`
+    : undefined;
+  return {
+    id: row.id,
+    date: row.observedResetAtUtc,
+    surface: row.codexSurface.toUpperCase(),
+    state: "Confirmed",
+    cycle,
+    note: "Administrator-verified community observation.",
+    url: row.sourceUrl,
+  };
+}).reverse();
 
-export const forecastHistory = generatedHistory;
+export const incidents = snapshot.officialIncidents.map((record) => ({
+  id: record.id,
+  date: record.publicationTimeUtc,
+  state: String(record.metadata.status ?? "Official"),
+  title: record.title,
+  detail: record.excerpt ?? "Official OpenAI status record.",
+  url: record.canonicalUrl,
+}));
 
-export const performance = {
-  sampleCount: 5,
-  brier: 0.214,
-  baselineBrier: 0.227,
-  precision6h: 0.67,
-  recall6h: 0.5,
-  falseAlarmRate: 0.33,
-  missedEventRate: 0.5,
-  medianTimingErrorMinutes: 96,
-  calibration: [
-    { bucket: "0–20%", predicted: 0.15, observed: 0.2, n: 5 },
-    { bucket: "21–40%", predicted: 0.32, observed: 0.25, n: 4 },
-    { bucket: "41–60%", predicted: 0.51, observed: 0.5, n: 4 },
-    { bucket: "61–80%", predicted: 0.69, observed: 0.67, n: 3 },
-    { bucket: "81–100%", predicted: 0.86, observed: 1, n: 1 },
-  ],
+export const publicSignals = snapshot.approvedPublicSources.map((record) => ({
+  id: record.id,
+  date: record.publicationTimeUtc,
+  state: "Approved",
+  title: record.title,
+  detail: record.excerpt ?? "Administrator-approved public source metadata.",
+  url: record.canonicalUrl,
+}));
+
+export const currentForecast = snapshot.forecast;
+export const forecastHistory = generatedHistory as unknown as ForecastHistoryRow[];
+export const performance = snapshot.performance;
+export const collectionHealth = {
+  generatedAtUtc: snapshot.generatedAtUtc,
+  sourceMode: snapshot.sourceMode,
+  officialStatus: snapshot.officialStatusHealth,
+  observations: snapshot.observationSourceHealth,
+  verifiedObservationCount: snapshot.verifiedObservationCount,
 };

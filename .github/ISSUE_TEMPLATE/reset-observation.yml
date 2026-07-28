@@ -1,0 +1,123 @@
+name: Report a Codex reset
+description: Report when access returned after you reached a Codex usage limit.
+title: "[Reset observation] "
+labels:
+  - reset-observation
+  - pending-review
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue is public. Submit event timing and broad context only.
+        Never include prompts, responses, source code, credentials, cookies,
+        tokens, account identifiers, private links, screenshots, or logs.
+        A maintainer must add `verified-observation` before this report can
+        enter the published dataset.
+  - type: input
+    id: limit_reached
+    attributes:
+      label: Limit reached time
+      description: ISO 8601 with UTC offset, for example 2026-07-28T14:30:00-04:00.
+      placeholder: "2026-07-28T14:30:00-04:00"
+    validations:
+      required: true
+  - type: input
+    id: access_returned
+    attributes:
+      label: Access returned time
+      description: The first time you observed Codex becoming available again, in ISO 8601 with UTC offset.
+      placeholder: "2026-07-28T18:45:00-04:00"
+    validations:
+      required: true
+  - type: input
+    id: time_zone
+    attributes:
+      label: Time zone
+      description: Preserve the stated IANA time zone even though timestamps are normalized to UTC.
+      placeholder: America/New_York
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Codex surface
+      options:
+        - CLI
+        - IDE extension
+        - Cloud tasks
+        - Web
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: plan_tier
+    attributes:
+      label: Generalized plan tier
+      options:
+        - Prefer not to say / unknown
+        - Free
+        - Individual paid
+        - Team or enterprise
+    validations:
+      required: true
+  - type: dropdown
+    id: detection_method
+    attributes:
+      label: Detection method
+      options:
+        - Manual retry
+        - Scheduled check
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: confidence
+    attributes:
+      label: Confidence
+      description: How confident are you in the access-returned time?
+      options:
+        - 100%
+        - 90%
+        - 80%
+        - 70%
+        - 60%
+        - 50%
+        - 40%
+        - 30%
+        - 20%
+        - 10%
+      default: 2
+    validations:
+      required: true
+  - type: input
+    id: preceding_forecast
+    attributes:
+      label: Preceding forecast ID
+      description: Optional forecast ID visible on the dashboard.
+  - type: input
+    id: related_incidents
+    attributes:
+      label: Related incident IDs
+      description: Optional comma-separated official incident IDs.
+  - type: input
+    id: related_sources
+    attributes:
+      label: Related public-source IDs
+      description: Optional comma-separated approved source IDs.
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Optional timing context only, maximum 500 characters. Do not attach files.
+      placeholder: Timing context only.
+    validations:
+      required: false
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: I have not included prompts, responses, code, credentials, tokens, account identifiers, private links, screenshots, or logs.
+          required: true
+        - label: I understand this report is public and will not affect the forecast unless a maintainer verifies it.
+          required: true

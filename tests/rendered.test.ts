@@ -13,7 +13,8 @@ test("static export contains critical public and administrator journeys", async 
   assert.match(home, /experimental estimate, never a guarantee/i);
   assert.match(home, /Reset history/);
   assert.match(home, /Forecast history/);
+  assert.doesNotMatch(home, /Seeded demonstration data/i);
   const submit = await readFile(new URL("../out/submit/index.html", import.meta.url), "utf8");
   assert.match(submit, /No prompts or responses/);
-  assert.match(submit, /Submit for review/);
+  assert.match(submit, /Continue on GitHub/);
 });

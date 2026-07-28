@@ -5,6 +5,11 @@ import { OpenAIStatusAdapter } from "../lib/sources/openai-status";
 import { buildForecast } from "../lib/forecast";
 import { scoreForecast } from "../lib/scoring";
 import { validateObservation } from "../lib/validation";
+import {
+  collectGitHubIssueData,
+  normalizeVerifiedObservation,
+  parseIssueFormBody,
+} from "../lib/sources/github-issues";
 import type { FeatureSnapshot } from "../lib/domain";
 
 test("fixture ingestion is idempotent and retains required provenance", async () => {
@@ -56,4 +61,133 @@ test("correction schema is append-only by contract", async () => {
   assert.ok(schema.observationAudit);
   assert.ok(schema.resetObservations);
   assert.notEqual(schema.observationAudit, schema.resetObservations);
+});
+
+const observationBody = `### Limit reached time
+
+2026-07-27T08:00:00Z
+
+### Access returned time
+
+2026-07-27T12:00:00Z
+
+### Time zone
+
+UTC
+
+### Codex surface
+
+CLI
+
+### Generalized plan tier
+
+Prefer not to say / unknown
+
+### Detection method
+
+Manual retry
+
+### Confidence
+
+90%
+
+### Preceding forecast ID
+
+_No response_
+
+### Related incident IDs
+
+_No response_
+
+### Related public-source IDs
+
+_No response_
+
+### Notes
+
+Timing only
+Second line`;
+
+test("GitHub issue form parsing retains only validated observation fields", async () => {
+  const fields = parseIssueFormBody(observationBody);
+  assert.equal(fields.get("Codex surface"), "CLI");
+  assert.equal(fields.get("Notes"), "Timing only\nSecond line");
+  const normalized = await normalizeVerifiedObservation({
+    number: 42,
+    html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/42",
+    body: observationBody,
+    created_at: "2026-07-27T12:05:00Z",
+    updated_at: "2026-07-27T13:00:00Z",
+  }, [{
+    event: "labeled",
+    created_at: "2026-07-27T13:00:00Z",
+    label: { name: "verified-observation" },
+  }], "2026-07-28T04:17:00Z");
+  assert.equal(normalized.codexSurface, "cli");
+  assert.equal(normalized.verifiedAtUtc, "2026-07-27T13:00:00.000Z");
+  assert.equal(normalized.trustWeight, 0.54);
+  assert.equal(normalized.auditHistory[0].action, "verified");
+  assert.equal("author" in normalized, false);
+});
+
+test("GitHub collection deduplicates verified reports and ingests only approved source metadata", async () => {
+  const issues = [
+    {
+      number: 42,
+      html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/42",
+      body: observationBody,
+      created_at: "2026-07-27T12:05:00Z",
+      updated_at: "2026-07-27T13:00:00Z",
+    },
+    {
+      number: 43,
+      html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/43",
+      body: observationBody,
+      created_at: "2026-07-27T12:06:00Z",
+      updated_at: "2026-07-27T13:01:00Z",
+    },
+  ];
+  const sourceBody = `### Canonical URL
+
+https://openai.com/news/
+
+### Publication time
+
+2026-07-27T10:00:00Z
+
+### Title
+
+Official announcement
+
+### Minimal excerpt
+
+Minimal public metadata`;
+  const mockFetch = (async (input: string | URL | Request) => {
+    const url = String(input);
+    if (url.includes("labels=verified-observation")) return new Response(JSON.stringify(issues));
+    if (url.includes("labels=approved-public-source")) return new Response(JSON.stringify([{
+      number: 50,
+      html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/50",
+      body: sourceBody,
+      created_at: "2026-07-27T10:01:00Z",
+      updated_at: "2026-07-27T10:02:00Z",
+    }]));
+    if (url.includes("/events")) return new Response(JSON.stringify([{
+      event: "labeled",
+      created_at: "2026-07-27T13:00:00Z",
+      label: { name: "verified-observation" },
+    }]));
+    return new Response("not found", { status: 404 });
+  }) as typeof fetch;
+  const result = await collectGitHubIssueData({
+    repository: "KyleStay/codex-reset-monitor",
+    token: "test-token",
+    previousObservations: [],
+    fetcher: mockFetch,
+    now: new Date("2026-07-28T04:17:00Z"),
+  });
+  assert.equal(result.observations.length, 1);
+  assert.equal(result.duplicateCount, 1);
+  assert.equal(result.publicSources.length, 1);
+  assert.equal(result.publicSources[0].provenance, "administrator_approved");
 });

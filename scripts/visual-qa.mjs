@@ -65,11 +65,16 @@ for (const route of ["/performance", "/methodology", "/admin"]) {
   await desktop.screenshot({ path: `${outputDir}/${route.slice(1)}.png` });
 }
 await check("admin protection language", async () => {
-  if (!(await desktop.getByText(/protected area/i).isVisible())) throw new Error("Protected label missing");
-  if (!(await desktop.getByText(/read-only demonstration/i).isVisible())) throw new Error("Read-only explanation missing");
+  if (!(await desktop.getByText(/GitHub-protected actions/i).isVisible())) throw new Error("Protected label missing");
+  if (!(await desktop.getByText(/only repository collaborators/i).isVisible())) throw new Error("Protection explanation missing");
 });
 
 await desktop.goto(`${baseUrl}/submit`, { waitUntil: "networkidle" });
+let preparedSubmissionUrl = "";
+await desktop.route("https://github.com/**", async (route) => {
+  preparedSubmissionUrl = route.request().url();
+  await route.abort();
+});
 for (const id of ["limitReached", "resetAt", "timezone", "surface", "tier", "method", "confidence", "notes"]) {
   await check(`form label ${id}`, async () => {
     if (!(await desktop.locator(`label[for="${id}"]`).isVisible())) throw new Error(`Missing visible label for ${id}`);
@@ -78,11 +83,13 @@ for (const id of ["limitReached", "resetAt", "timezone", "surface", "tier", "met
 await desktop.locator("#limitReached").fill("2026-07-27T10:00");
 await desktop.locator("#resetAt").fill("2026-07-27T12:00");
 await desktop.locator("#notes").fill("Synthetic QA timing note.");
-await desktop.getByRole("button", { name: "Submit for review" }).click();
-await check("static submission fails honestly", async () => {
-  if (!(await desktop.getByText(/submissions are unavailable/i).isVisible())) throw new Error("Static-demo unavailability message missing");
+await desktop.screenshot({ path: `${outputDir}/submit-form.png` });
+await desktop.getByRole("button", { name: "Continue on GitHub" }).click();
+await check("submission prepares structured GitHub issue", async () => {
+  if (!preparedSubmissionUrl.includes("template=reset-observation.yml")) throw new Error("Issue template was not selected");
+  if (!preparedSubmissionUrl.includes("limit_reached=")) throw new Error("Limit time was not prefilled");
+  if (!preparedSubmissionUrl.includes("access_returned=")) throw new Error("Reset time was not prefilled");
 });
-await desktop.screenshot({ path: `${outputDir}/submit-unavailable.png` });
 
 await browser.close();
 console.log(JSON.stringify({ status: results.every((row) => row.status === "pass") ? "pass" : "fail", outputDir, results }, null, 2));

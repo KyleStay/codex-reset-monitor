@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { baselineProbability, buildForecast, candidateProbability } from "../lib/forecast";
+import { baselineProbability, buildForecast, candidateProbability, NO_DATA_PRIOR } from "../lib/forecast";
 import { scoreForecast } from "../lib/scoring";
 import type { FeatureSnapshot } from "../lib/domain";
 
@@ -33,6 +33,21 @@ test("an active incident modestly raises candidate probability", () => {
   assert.ok(active > calm);
   assert.ok(active - calm < 0.2);
   assert.ok(baselineProbability(24, features) > baselineProbability(1, features));
+});
+
+test("zero observations use the published prior and do not invent a likely interval", () => {
+  const forecast = buildForecast({
+    ...features,
+    confirmedEventCount: 0,
+    hoursSinceLastConfirmedReset: null,
+    sourceTrustMean: 0,
+    dataQuality: 0,
+  });
+  assert.deepEqual(forecast.probabilities, NO_DATA_PRIOR);
+  assert.equal(forecast.likelyStartUtc, null);
+  assert.equal(forecast.likelyEndUtc, null);
+  assert.equal(forecast.modelVersion, "published-prior-0.1.0");
+  assert.match(forecast.dataSufficiencyLabel, /no verified reset history/i);
 });
 
 test("scoring uses only events after forecast cutoff and within each horizon", () => {

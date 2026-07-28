@@ -1,77 +1,188 @@
 {
-  "generatedAtUtc": "2026-07-28T16:04:32.872Z",
-  "sourceRetrievedAtUtc": "2026-07-28T16:04:32.872Z",
-  "sourceMode": "official-public-json",
-  "sourceHealth": "healthy",
+  "generatedAtUtc": "2026-07-28T16:30:55.347Z",
+  "sourceMode": "live-official-status-and-verified-github-issues",
+  "officialStatusHealth": {
+    "status": "healthy",
+    "checkedAtUtc": "2026-07-28T16:30:55.847Z",
+    "message": "Collected 5 Codex-relevant official incident record(s)."
+  },
+  "observationSourceHealth": {
+    "status": "healthy",
+    "checkedAtUtc": "2026-07-28T16:30:55.347Z",
+    "message": "Verified observations and approved public sources were collected from GitHub Issues.",
+    "rejectedRecordCount": 0,
+    "duplicateCount": 0
+  },
   "officialIncidents": [
     {
-      "id": "01KY9HYHCMK8AND23B4X17XQEK",
-      "title": "Elevated Errors in Codex Review",
-      "status": "resolved",
-      "impact": "minor",
+      "id": "src_236013eebe7307e9",
+      "sourceAdapterId": "openai-status-v1",
+      "sourceKind": "official_status",
+      "provenance": "official",
       "publicationTimeUtc": "2026-07-24T07:55:28.000Z",
-      "retrievalTimeUtc": "2026-07-28T16:04:32.872Z",
+      "retrievalTimeUtc": "2026-07-28T16:30:55.847Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KY9HYHCMK8AND23B4X17XQEK",
-      "excerpt": "All impacted services have now fully recovered.",
-      "contentHash": "6f1fb5042708fbf23d5ea6f1c7004b478bbfce794c0233d2086bd4cb410f16e6"
+      "title": "Elevated Errors in Codex Review",
+      "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We are investigating the issue for the listed services.",
+      "metadata": {
+        "externalId": "01KY9HYHCMK8AND23B4X17XQEK",
+        "status": "resolved",
+        "impact": "minor"
+      },
+      "normalizedFeatures": {
+        "codexRelevant": true,
+        "active": false,
+        "impact": "minor"
+      },
+      "contentHash": "410dcdaa7f3a1c1e0bf59dab32f6c306a59b8542fc69f8277b3a722fda08fc54"
     },
     {
-      "id": "01KXYF4BTCV9DTZ5NDSFN716FH",
-      "title": "Elevated errors for GitHub-dependent ChatGPT and Codex workflows",
-      "status": "resolved",
-      "impact": "minor",
+      "id": "src_d36e9e895ce89ee6",
+      "sourceAdapterId": "openai-status-v1",
+      "sourceKind": "official_status",
+      "provenance": "official",
       "publicationTimeUtc": "2026-07-20T00:34:34.000Z",
-      "retrievalTimeUtc": "2026-07-28T16:04:32.872Z",
+      "retrievalTimeUtc": "2026-07-28T16:30:55.847Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXYF4BTCV9DTZ5NDSFN716FH",
-      "excerpt": "All impacted services have now fully recovered.",
-      "contentHash": "e7614a9e31ca392d20cd682199336aa2f9ac772e2e33e5573a69273f4ffe3d19"
+      "title": "Elevated errors for GitHub-dependent ChatGPT and Codex workflows",
+      "excerpt": "All impacted services have now fully recovered. We are monitoring the recovery. Users may experience failures or delays in ChatGPT and Codex workflows that depend on GitHub. This mostly should impact Codex web and code review for PRs on Git",
+      "metadata": {
+        "externalId": "01KXYF4BTCV9DTZ5NDSFN716FH",
+        "status": "resolved",
+        "impact": "minor"
+      },
+      "normalizedFeatures": {
+        "codexRelevant": true,
+        "active": false,
+        "impact": "minor"
+      },
+      "contentHash": "aeb5df87770a87093026e823806f046d5e4be0a7f258437fd03794d63a8cfdc1"
     },
     {
-      "id": "01KXT44TAQQ2R0AZDDVSJGAC4H",
-      "title": "Some users are unable to access Codex",
-      "status": "resolved",
-      "impact": "minor",
+      "id": "src_a304d75d499326df",
+      "sourceAdapterId": "openai-status-v1",
+      "sourceKind": "official_status",
+      "provenance": "official",
       "publicationTimeUtc": "2026-07-18T08:05:37.000Z",
-      "retrievalTimeUtc": "2026-07-28T16:04:32.872Z",
+      "retrievalTimeUtc": "2026-07-28T16:30:55.847Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXT44TAQQ2R0AZDDVSJGAC4H",
-      "excerpt": "All impacted services have now fully recovered.",
-      "contentHash": "660ad0c27179cf0cfd6ba478923a6d10221c99bc08128553e68ac02e6c14730f"
+      "title": "Some users are unable to access Codex",
+      "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We have identified an issue causing some users to receive access-denied errors when using the Codex desktop app and CLI.",
+      "metadata": {
+        "externalId": "01KXT44TAQQ2R0AZDDVSJGAC4H",
+        "status": "resolved",
+        "impact": "minor"
+      },
+      "normalizedFeatures": {
+        "codexRelevant": true,
+        "active": false,
+        "impact": "minor"
+      },
+      "contentHash": "cb15b7846d3f0a6e41a6ed2b792c573278a68bead86a3ad879ef06e539cffac1"
     },
     {
-      "id": "01KXRBA8B98QHMMVP3M86NHFZ1",
-      "title": "New ChatGPT App Not Available For Enterprise Users Without Codex Permissions",
-      "status": "resolved",
-      "impact": "major",
-      "publicationTimeUtc": "2026-07-17T15:32:26.000Z",
-      "retrievalTimeUtc": "2026-07-28T16:04:32.872Z",
-      "canonicalUrl": "https://status.openai.com/incidents/01KXRBA8B98QHMMVP3M86NHFZ1",
-      "excerpt": "All impacted services have now fully recovered.",
-      "contentHash": "f9988b799d6eaf8314f2eac93ad8c8ece9897e9261786ba57c2f4d05196d065c"
-    },
-    {
-      "id": "01KXRHE25717D2WQ1WFMT2B7WZ",
-      "title": "Codex 5.6-sol Experiencing Increased Server-Overload Errors",
-      "status": "resolved",
-      "impact": "none",
+      "id": "src_ff7f1986e875ea0a",
+      "sourceAdapterId": "openai-status-v1",
+      "sourceKind": "official_status",
+      "provenance": "official",
       "publicationTimeUtc": "2026-07-17T17:19:22.000Z",
-      "retrievalTimeUtc": "2026-07-28T16:04:32.872Z",
+      "retrievalTimeUtc": "2026-07-28T16:30:55.847Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXRHE25717D2WQ1WFMT2B7WZ",
-      "excerpt": "All impacted services have now fully recovered.",
-      "contentHash": "9cae1994a195f6df735f7e0fa8c8c12600fe2de6e0d3333413516b68855bf3ba"
+      "title": "Codex 5.6-sol Experiencing Increased Server-Overload Errors",
+      "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We have identified that users are experiencing elevated errors for the impacted services. We are working on implementing a mitig",
+      "metadata": {
+        "externalId": "01KXRHE25717D2WQ1WFMT2B7WZ",
+        "status": "resolved",
+        "impact": "none"
+      },
+      "normalizedFeatures": {
+        "codexRelevant": true,
+        "active": false,
+        "impact": "none"
+      },
+      "contentHash": "6497e8d2418ebdacf5a9aa252991a816725af8bbef0783354437d2ef8da30d48"
+    },
+    {
+      "id": "src_064a7dff0f4d5519",
+      "sourceAdapterId": "openai-status-v1",
+      "sourceKind": "official_status",
+      "provenance": "official",
+      "publicationTimeUtc": "2026-07-17T15:32:26.000Z",
+      "retrievalTimeUtc": "2026-07-28T16:30:55.847Z",
+      "canonicalUrl": "https://status.openai.com/incidents/01KXRBA8B98QHMMVP3M86NHFZ1",
+      "title": "New ChatGPT App Not Available For Enterprise Users Without Codex Permissions",
+      "excerpt": "All impacted services have now fully recovered. We have identified that this issue has recurred for some Enterprise users. We are working to resolve this. A fix has been released. Please update to the latest version of the ChatGPT app to re",
+      "metadata": {
+        "externalId": "01KXRBA8B98QHMMVP3M86NHFZ1",
+        "status": "resolved",
+        "impact": "major"
+      },
+      "normalizedFeatures": {
+        "codexRelevant": true,
+        "active": false,
+        "impact": "major"
+      },
+      "contentHash": "fd644b9d3c366d0dc24cc0a9c35d4fc4f3633b7346c7105ec1405f8d0b23eca5"
     }
   ],
+  "approvedPublicSources": [],
+  "verifiedObservationCount": 0,
   "forecast": {
-    "modelVersion": "schedule-baseline-0.1.0",
-    "datasetVersion": "events-6-cutoff-2026-07-28",
+    "id": "fc_20260728163055",
+    "forecastAtUtc": "2026-07-28T16:30:55.347Z",
     "probabilities": {
-      "1": 0.1205,
-      "3": 0.2672,
-      "6": 0.5941,
-      "12": 0.8919,
-      "24": 0.9159
+      "1": 0.04,
+      "3": 0.12,
+      "6": 0.22,
+      "12": 0.39,
+      "24": 0.63
     },
-    "likelyStartUtc": "2026-07-28T19:21:00.000Z",
-    "likelyEndUtc": "2026-07-28T22:21:00.000Z",
-    "dataSufficiencyLabel": "Experimental—limited history"
+    "likelyStartUtc": null,
+    "likelyEndUtc": null,
+    "confidenceGrade": "D",
+    "featureSnapshot": {
+      "cutoffUtc": "2026-07-28T16:30:55.347Z",
+      "confirmedEventCount": 0,
+      "hoursSinceLastConfirmedReset": null,
+      "medianCycleHours": 24,
+      "cycleDispersionHours": 12,
+      "activeIncident": false,
+      "incidentRecencyHours": 104.59092972222223,
+      "approvedPostCount24h": 0,
+      "weightedReportVolume6h": 0,
+      "sourceTrustMean": 0,
+      "dataQuality": 0
+    },
+    "explanationFactors": [
+      {
+        "label": "No verified reset history",
+        "direction": "lowers",
+        "detail": "No timing pattern has been learned. The displayed probabilities are a broad published prior."
+      },
+      {
+        "label": "Community collection is active",
+        "direction": "neutral",
+        "detail": "Only administrator-verified GitHub reports can enter the reset history."
+      },
+      {
+        "label": "Official incident context",
+        "direction": "neutral",
+        "detail": "Official OpenAI status is monitored separately from personal reset observations."
+      }
+    ],
+    "modelVersion": "published-prior-0.1.0",
+    "datasetVersion": "events-0-cutoff-2026-07-28-0d76d739",
+    "dataSufficiencyLabel": "Experimental—no verified reset history"
+  },
+  "performance": {
+    "sampleCount": 0,
+    "brier": null,
+    "baselineBrier": null,
+    "precision6h": null,
+    "recall6h": null,
+    "falseAlarmRate": null,
+    "missedEventRate": null,
+    "medianTimingErrorMinutes": null,
+    "calibration": []
   }
 }

@@ -17,11 +17,15 @@ export function scoreForecast(forecast: Forecast, actualResetAtUtc: string | nul
     const error = forecast.probabilities[hours] - Number(outcomes[hours]);
     return sum + error * error;
   }, 0) / HORIZONS.length;
-  const intervalCenter = (Date.parse(forecast.likelyStartUtc) + Date.parse(forecast.likelyEndUtc)) / 2;
+  const intervalCenter = forecast.likelyStartUtc && forecast.likelyEndUtc
+    ? (Date.parse(forecast.likelyStartUtc) + Date.parse(forecast.likelyEndUtc)) / 2
+    : null;
   return {
     outcomes,
     brierScore,
-    absoluteTimingErrorMinutes: actual === null ? null : Math.round(Math.abs(actual - intervalCenter) / 60_000),
+    absoluteTimingErrorMinutes: actual === null || intervalCenter === null
+      ? null
+      : Math.round(Math.abs(actual - intervalCenter) / 60_000),
   };
 }
 

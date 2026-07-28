@@ -36,14 +36,50 @@ export interface Forecast {
   id: string;
   forecastAtUtc: string;
   probabilities: Record<Horizon, number>;
-  likelyStartUtc: string;
-  likelyEndUtc: string;
+  likelyStartUtc: string | null;
+  likelyEndUtc: string | null;
   confidenceGrade: "A" | "B" | "C" | "D";
   featureSnapshot: FeatureSnapshot;
   explanationFactors: Array<{ label: string; direction: "raises" | "lowers" | "neutral"; detail: string }>;
   modelVersion: string;
   datasetVersion: string;
   dataSufficiencyLabel: string;
+}
+
+export interface ObservationAuditEntry {
+  recordedAtUtc: string;
+  action: "verified" | "corrected";
+  sourceContentHash: string;
+  sourceIssueUpdatedAtUtc: string;
+}
+
+export interface StoredObservation extends ObservationInput {
+  id: string;
+  verificationState: "confirmed";
+  trustWeight: number;
+  createdAtUtc: string;
+  verifiedAtUtc: string;
+  sourceUrl: string;
+  sourceIssueNumber: number;
+  sourceIssueUpdatedAtUtc: string;
+  sourceContentHash: string;
+  auditHistory: ObservationAuditEntry[];
+}
+
+export interface ForecastHistoryRow {
+  id: string;
+  at: string;
+  probabilities: Record<Horizon, number>;
+  p6: number;
+  likelyStartUtc: string | null;
+  likelyEndUtc: string | null;
+  interval: string | null;
+  outcome: string;
+  outcomes: Record<Horizon, boolean> | null;
+  brier: number | null;
+  timingErrorMinutes: number | null;
+  modelVersion: string;
+  datasetVersion: string;
 }
 
 export interface SourceRecord {

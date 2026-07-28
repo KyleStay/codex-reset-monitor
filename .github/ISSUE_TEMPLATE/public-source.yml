@@ -1,0 +1,49 @@
+name: Suggest a public source
+description: Suggest a compliant public post or announcement for administrator approval.
+title: "[Public source] "
+labels:
+  - public-source
+  - pending-review
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Submit only a canonical public URL and minimal metadata. Do not paste
+        full posts, private material, screenshots, credentials, or account data.
+        A maintainer must add `approved-public-source` before publication.
+  - type: input
+    id: canonical_url
+    attributes:
+      label: Canonical URL
+      placeholder: https://example.com/original-post
+    validations:
+      required: true
+  - type: input
+    id: publication_time
+    attributes:
+      label: Publication time
+      description: ISO 8601 with UTC offset.
+      placeholder: "2026-07-28T14:30:00Z"
+    validations:
+      required: true
+  - type: input
+    id: source_title
+    attributes:
+      label: Title
+      description: A neutral title, maximum 160 characters.
+    validations:
+      required: true
+  - type: textarea
+    id: minimal_excerpt
+    attributes:
+      label: Minimal excerpt
+      description: Optional short excerpt or summary, maximum 240 characters.
+    validations:
+      required: false
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Source confirmation
+      options:
+        - label: This is a public canonical URL and contains no private account material.
+          required: true
