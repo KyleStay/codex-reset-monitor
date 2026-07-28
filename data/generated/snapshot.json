@@ -1,6 +1,6 @@
 {
-  "generatedAtUtc": "2026-07-28T15:12:17.201Z",
-  "sourceRetrievedAtUtc": "2026-07-28T15:12:17.201Z",
+  "generatedAtUtc": "2026-07-28T15:53:11.625Z",
+  "sourceRetrievedAtUtc": "2026-07-28T15:53:11.625Z",
   "sourceMode": "official-public-json",
   "sourceHealth": "healthy",
   "officialIncidents": [
@@ -10,7 +10,7 @@
       "status": "resolved",
       "impact": "minor",
       "publicationTimeUtc": "2026-07-24T07:55:28.000Z",
-      "retrievalTimeUtc": "2026-07-28T15:12:17.201Z",
+      "retrievalTimeUtc": "2026-07-28T15:53:11.625Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KY9HYHCMK8AND23B4X17XQEK",
       "excerpt": "All impacted services have now fully recovered.",
       "contentHash": "6f1fb5042708fbf23d5ea6f1c7004b478bbfce794c0233d2086bd4cb410f16e6"
@@ -21,7 +21,7 @@
       "status": "resolved",
       "impact": "minor",
       "publicationTimeUtc": "2026-07-20T00:34:34.000Z",
-      "retrievalTimeUtc": "2026-07-28T15:12:17.201Z",
+      "retrievalTimeUtc": "2026-07-28T15:53:11.625Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXYF4BTCV9DTZ5NDSFN716FH",
       "excerpt": "All impacted services have now fully recovered.",
       "contentHash": "e7614a9e31ca392d20cd682199336aa2f9ac772e2e33e5573a69273f4ffe3d19"
@@ -32,7 +32,7 @@
       "status": "resolved",
       "impact": "minor",
       "publicationTimeUtc": "2026-07-18T08:05:37.000Z",
-      "retrievalTimeUtc": "2026-07-28T15:12:17.201Z",
+      "retrievalTimeUtc": "2026-07-28T15:53:11.625Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXT44TAQQ2R0AZDDVSJGAC4H",
       "excerpt": "All impacted services have now fully recovered.",
       "contentHash": "660ad0c27179cf0cfd6ba478923a6d10221c99bc08128553e68ac02e6c14730f"
@@ -43,7 +43,7 @@
       "status": "resolved",
       "impact": "major",
       "publicationTimeUtc": "2026-07-17T15:32:26.000Z",
-      "retrievalTimeUtc": "2026-07-28T15:12:17.201Z",
+      "retrievalTimeUtc": "2026-07-28T15:53:11.625Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXRBA8B98QHMMVP3M86NHFZ1",
       "excerpt": "All impacted services have now fully recovered.",
       "contentHash": "f9988b799d6eaf8314f2eac93ad8c8ece9897e9261786ba57c2f4d05196d065c"
@@ -54,7 +54,7 @@
       "status": "resolved",
       "impact": "none",
       "publicationTimeUtc": "2026-07-17T17:19:22.000Z",
-      "retrievalTimeUtc": "2026-07-28T15:12:17.201Z",
+      "retrievalTimeUtc": "2026-07-28T15:53:11.625Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXRHE25717D2WQ1WFMT2B7WZ",
       "excerpt": "All impacted services have now fully recovered.",
       "contentHash": "9cae1994a195f6df735f7e0fa8c8c12600fe2de6e0d3333413516b68855bf3ba"
@@ -64,10 +64,10 @@
     "modelVersion": "schedule-baseline-0.1.0",
     "datasetVersion": "events-6-cutoff-2026-07-28",
     "probabilities": {
-      "1": 0.0818,
-      "3": 0.1927,
-      "6": 0.4985,
-      "12": 0.8793,
+      "1": 0.111,
+      "3": 0.2497,
+      "6": 0.5741,
+      "12": 0.8896,
       "24": 0.9159
     },
     "likelyStartUtc": "2026-07-28T19:21:00.000Z",
