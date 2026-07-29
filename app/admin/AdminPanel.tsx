@@ -20,7 +20,7 @@ export function AdminPanel() {
         <h1 style={{ fontSize: "3.2rem" }}>Real reports, reviewed in GitHub</h1>
         <div className="notice">
           The queue is publicly auditable, but only repository collaborators can
-          apply verification labels or run the publishing workflow. No admin
+          apply verification labels or push publishing commits. No admin
           secret is embedded in this static site.
         </div>
         <div id="review" className="admin-link-grid">
@@ -60,7 +60,7 @@ export function AdminPanel() {
             No model can be promoted or rolled back from client-side code.
           </div>
           <div className="form-actions">
-            <a className="button" href={`${repo}/actions/workflows/pages.yml`}>Open protected workflow console</a>
+            <a className="button" href={`${repo}/actions/workflows/pages.yml`}>View Pages deployments</a>
             <a className="button secondary" href={`${repo}/commits/main/data/generated/forecast-history.json`}>Review forecast history</a>
           </div>
         </section>

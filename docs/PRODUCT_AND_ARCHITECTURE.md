@@ -4,8 +4,9 @@ Last verified: 2026-07-28
 
 ## Current direction
 
-The live product uses a recurring Codex research agent, GitHub Pages, Actions,
-Issues, and repository-backed JSON. It contains no demonstration observations.
+The live product uses a recurring local Codex research agent, GitHub Pages,
+GitHub Issues, and repository-backed JSON. GitHub Actions is only the Pages
+artifact deployment transport. It contains no demonstration observations.
 OpenAI does not expose a public feed of individual Codex account reset times, so
 real reset evidence must come from explicit user observations. The system keeps
 those observations distinct from official service incidents and approved
@@ -74,9 +75,9 @@ The prior is not adjusted by official incidents.
 | --- | --- | --- | --- |
 | Public site | GitHub Pages | Public repository Pages and custom Actions workflow | Last successful artifact remains available after a failed refresh. |
 | Daily research and refresh | Recurring local Codex agent | Can browse approved public sources, review evidence, run deterministic code, and publish through authenticated Git | Depends on the configured host, Codex availability/usage, credentials, and a clean checkout; failures leave the prior site intact. |
-| Test and deploy | GitHub Actions | Push-triggered standard hosted runners are free for public repositories | Actions does not gather evidence or modify datasets; the last successful artifact remains available after failure. |
+| Pages artifact deployment | GitHub Actions | A push to `main` builds, uploads, and deploys the static artifact | This is the only permitted workflow; it does not research, refresh, test, modify datasets, handle issues, commit, or push. |
 | Observation input | GitHub Issue Forms | Structured required fields in public repositories | Requires a GitHub account; forms are public preview. |
-| Administrative protection | GitHub repository permissions | Only collaborators can apply labels or dispatch workflows | Public users can read the audit queue but cannot approve records. |
+| Administrative protection | GitHub repository permissions | Only collaborators can apply verification labels and push publishing commits | Public users can read the audit queue but cannot approve records. |
 | Persistent data and rollback | Git repository | Versioned JSON, issue history, commit history | Repository scale is suitable only for a small public dataset; migrate behind interfaces if it grows materially. |
 
 No payment card or paid service is required by the public site architecture,

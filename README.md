@@ -24,9 +24,10 @@ no seeded or fabricated observations.
   verified observations, the site shows a documented broad prior and no likely
   time interval.
 
-The daily agent gathers compliant evidence and runs the repository's
-deterministic pipeline. GitHub Issues provide the review queue, and GitHub
-Actions only tests and deploys the committed static site.
+The daily agent gathers compliant evidence, runs the deterministic pipeline,
+verifies the result, commits, and pushes from its local Codex workspace. GitHub
+Issues provide the review queue. The sole GitHub Actions workflow only builds,
+uploads, and deploys the committed GitHub Pages site.
 
 ## Submit and verify a reset
 
@@ -52,9 +53,9 @@ npm run dev
 ```
 
 Local `update:data` collects live official status and public GitHub issues.
-Actions supplies its scoped repository token; local collection can use GitHub's
-low-volume unauthenticated public API. An optional token may be supplied only in
-the process environment for higher rate limits. Never store a token in the
+GitHub Actions never runs this command. Local collection can use GitHub's
+low-volume unauthenticated public API. An optional token may be supplied only
+in the process environment for higher rate limits. Never store a token in the
 repository or an environment file.
 
 Run the full suite:
@@ -75,10 +76,11 @@ The recurring Codex agent follows
 5. reviews the diff, runs the verification suite, commits, and pushes;
 6. checks the GitHub Pages deployment and public site.
 
-The agent does not make up reset events or probabilities. GitHub Actions runs
-on the resulting push and only tests, builds, and deploys the static site. The
-generated snapshot shows collection time and source health so stale or degraded
-sources are not presented as fresh.
+The agent does not make up reset events or probabilities. A push to `main`
+automatically triggers the only permitted workflow, which only builds, uploads,
+and deploys the GitHub Pages artifact. It has no manual or scheduled trigger.
+The generated snapshot shows collection time and source health so stale or
+degraded sources are not presented as fresh.
 
 See [operations](docs/OPERATIONS.md) and
 [product and architecture](docs/PRODUCT_AND_ARCHITECTURE.md).

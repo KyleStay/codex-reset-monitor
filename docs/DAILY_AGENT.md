@@ -22,6 +22,10 @@ probability calculation, scoring, and generated forecast history.
 6. Do not weaken verification, privacy, provenance, backtesting, or model
    promotion gates. Model changes require reproducible evaluation and the
    declared promotion criteria; an agent's judgment alone is insufficient.
+7. Perform the complete run in the local Codex workspace. GitHub Actions is
+   prohibited for research, scheduling, source collection, issue review,
+   refreshes, tests, verification, forecasts, scoring, RSS, commits, or pushes.
+   Never create or dispatch a workflow for agent work.
 
 ## Evidence research
 
@@ -77,10 +81,16 @@ Read `docs/HISTORICAL_RESEARCH.md` before researching.
    Use a dated `data: agent daily refresh` commit message. Never create an empty
    commit.
 5. Push `main` normally. Never force-push.
-6. Monitor **Test and deploy GitHub Pages** to completion. Verify the live home,
-   performance, history timelines, source health, timestamp, and feed over
-   HTTPS. Do not claim publication if the deployment or live check was not
-   verified.
+6. The push to `main` automatically triggers the sole permitted workflow,
+   **Deploy GitHub Pages**. Monitor that deployment to completion; never
+   dispatch it manually. Verify the live home, performance, history timelines,
+   source health, timestamp, and feed over HTTPS. Do not claim publication if
+   the deployment or live check was not verified.
+
+The Pages workflow is a deployment transport only. It may install build
+dependencies, build the static artifact, upload it, and deploy it. It must not
+replace any local agent step or change repository, issue, research, dataset,
+forecast, or RSS state.
 
 The run report must state which sources and historical ranges were checked,
 newly accepted and pending evidence, inferred events and cause assessments,

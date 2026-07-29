@@ -11,9 +11,20 @@ authentication and sandbox-access rules apply here.
   sources, backfill source-backed historical reset research and possible causes,
   improve the product when needed, refresh deterministic data and forecasts,
   verify, commit, and push.
-- GitHub Pages deploys through `.github/workflows/pages.yml`. The workflow only
-  tests, builds, and deploys commits; it must not research, rewrite data, or
-  create forecast commits.
+- All research, maintenance, source collection, data refreshes, forecast
+  calculation, scoring, tests, verification, issue review, commits, and pushes
+  run in the agent's local Codex workspace. Never delegate any of that work to
+  GitHub Actions.
+- The only permitted GitHub Actions workflow is
+  `.github/workflows/pages.yml`. It may trigger only when a finished commit is
+  pushed to `main`, and may only check out that commit, install build
+  dependencies, build the static site, upload the Pages artifact, and deploy
+  GitHub Pages.
+- Never add another workflow or add `schedule`, `workflow_dispatch`,
+  `pull_request`, research, `update:data`, tests, repository writes, issue
+  mutations, forecast generation, RSS generation, commits, or pushes to the
+  Pages workflow. Local `npm run verify` is the required verification gate
+  before a publishing commit is pushed.
 - Before editing or publishing, fetch the remote and reconcile commits with a
   fast-forward update. Never force-push over generated history.
 - A sandboxed GitHub authentication, credential, keychain, or network failure
@@ -29,5 +40,6 @@ authentication and sandbox-access rules apply here.
 ## Verification
 
 - Run `npm run verify` for code changes.
-- For deployment changes, verify the GitHub Actions run and check the live
-  Pages routes and metadata over HTTPS.
+- After a push, monitor the automatically triggered **Deploy GitHub Pages** run
+  and check the live Pages routes and metadata over HTTPS. Do not manually
+  dispatch a workflow.

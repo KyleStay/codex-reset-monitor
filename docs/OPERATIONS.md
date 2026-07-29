@@ -16,8 +16,12 @@ recurring Codex agent performs the daily research and publishing work.
 5. The agent reviews and verifies changed data, commits it to `main`, pushes,
    and checks the resulting GitHub Pages deployment.
 
-The GitHub Actions workflow never gathers evidence or writes data. It tests,
-builds, and deploys the exact commit pushed by the agent or a maintainer.
+All research, refresh, verification, and publishing decisions happen in the
+local Codex workspace. The sole GitHub Actions workflow only builds and deploys
+the exact finished commit pushed by the agent or a maintainer to GitHub Pages.
+It never gathers evidence, runs the research pipeline or test suite, writes
+repository data, handles issues, calculates forecasts, generates RSS, commits,
+or pushes.
 
 ## Maintainer review
 
@@ -72,8 +76,8 @@ The configured production repository is
 4. Ensure workflow permissions allow `contents: read`, `pages: write`, and
    `id-token: write`.
 5. Create the labels listed below.
-6. Run **Test and deploy GitHub Pages** manually, or push a verified agent
-   refresh.
+6. Push a locally verified commit to `main`; this automatically runs
+   **Deploy GitHub Pages**. Manual dispatch is intentionally unavailable.
 7. Verify `/`, `/performance/`, `/submit/`, `/methodology/`, `/admin/`, and
    `/feed.xml` over HTTPS.
 
@@ -94,10 +98,10 @@ always-on server and its availability or model usage is not covered by GitHub
 Pages' free hosting allowance. A dirty working tree, failed validation,
 ambiguous evidence, or unavailable source must fail closed without a push.
 
-GitHub Actions standard hosted runners are free for public repositories and are
-used only after a push for testing and Pages deployment. If either the agent or
-deployment fails, the last valid site remains public. Timestamps and source
-health must make stale data visible.
+GitHub Actions is used only after a push to build, upload, and deploy the Pages
+artifact. It is not an agent runtime or verification service. If either the
+local agent or deployment fails, the last valid site remains public.
+Timestamps and source health must make stale data visible.
 
 References:
 
