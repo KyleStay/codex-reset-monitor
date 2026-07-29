@@ -85,5 +85,94 @@
     ],
     "firstRecordedAtUtc": "2026-07-28T17:00:00Z",
     "lastReviewedAtUtc": "2026-07-28T17:00:00Z"
+  },
+  {
+    "id": "research-reset-2026-03-04",
+    "eventDate": "2026-03-04",
+    "datePrecision": "hour",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "selected_plans",
+    "title": "Plus and Pro limits reset after a promotional-limit application bug",
+    "summary": "An OpenAI repository contributor reported that a defect had prevented a two-times promotional limit increase from applying for an estimated subset of Plus and Pro users. After public reports and attempted mitigations, the contributor stated that the issue was fixed and that rate limits were being reset for all Plus and Pro users as compensation. This remains inferred history because it was not submitted and verified through this project's observation process.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "Compensation after a promotional-limit application bug",
+      "confidence": "confirmed",
+      "rationale": "An OpenAI repository contributor explicitly identified the defect, affected plan tiers, estimated affected share, fix, and compensating reset."
+    },
+    "detectionSignals": [
+      "A staff statement identifies a usage-entitlement defect and announces a compensating reset.",
+      "Plus and Pro users see remaining rate limits restored after the fix.",
+      "The reset timestamp or usage window restarts near the staff announcement.",
+      "Reports of unexpectedly rapid limit consumption decline after the fix."
+    ],
+    "contradictions": [
+      "The staff statement estimated that the underlying defect affected 9% of Plus and Pro users, while the compensating reset was described as applying to all users on those two plans.",
+      "The public record does not provide a machine-verifiable completion timestamp for every affected account."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/13186",
+        "publicationTimeUtc": "2026-03-01T20:32:04Z",
+        "title": "Possible Codex usage metering anomaly on Plus",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/13186#issuecomment-4000418998",
+        "publicationTimeUtc": "2026-03-04T21:30:36Z",
+        "title": "OpenAI repository contributor fix and reset statement",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-07-29T13:15:36Z",
+    "lastReviewedAtUtc": "2026-07-29T13:15:36Z"
+  },
+  {
+    "id": "research-reset-2026-03-03",
+    "eventDate": "2026-03-03",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "unknown",
+    "title": "Weekly usage reset to compensate for a user-impacting incident",
+    "summary": "A public Codex issue reported a weekly reset occurring earlier than the displayed time. An OpenAI repository contributor explained that an incident had affected some users earlier that day and that weekly usage was reset for all users as compensation, restoring remaining usage and restarting the weekly window on next use. The event is retained as inferred history rather than a confirmed model label.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "Compensation for a user-impacting incident",
+      "confidence": "confirmed",
+      "rationale": "An OpenAI repository contributor explicitly attributed the reset to compensation for an incident, but the public comment did not identify a corresponding permanent OpenAI Status incident URL."
+    },
+    "detectionSignals": [
+      "Weekly usage remaining returns to 100% before the displayed reset time.",
+      "The weekly usage window restarts on the next Codex use.",
+      "A staff statement links the reset to incident compensation.",
+      "A matching official incident transition would strengthen future attribution."
+    ],
+    "contradictions": [
+      "The public report supplied approximate local times without a stated time zone.",
+      "No permanent OpenAI Status incident record was located for the incident referenced by the contributor.",
+      "The contributor described the incident as affecting some users but the compensating reset as applying to all users; affected-plan scope was not stated."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/13330",
+        "publicationTimeUtc": "2026-03-03T05:02:54Z",
+        "title": "Codex app reseting weekly usage not at reported time from /status",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/13330#issuecomment-3988712564",
+        "publicationTimeUtc": "2026-03-03T05:15:21Z",
+        "title": "OpenAI repository contributor incident-compensation explanation",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-07-29T13:15:36Z",
+    "lastReviewedAtUtc": "2026-07-29T13:15:36Z"
   }
 ]
