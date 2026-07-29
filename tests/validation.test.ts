@@ -41,4 +41,17 @@ test("historical research remains explicitly inferred and source-backed", () => 
   assert.ok(rows.length >= 2);
   assert.ok(rows.every((row) => row.verificationState === "inferred"));
   assert.ok(rows.every((row) => row.sources.length > 0 && row.detectionSignals.length > 0));
+  assert.ok(rows.every((row) => row.datePrecision === "day" || row.eventTimeUtc?.startsWith(row.eventDate)));
+  assert.throws(
+    () =>
+      validateHistoricalResearch([
+        {
+          ...rows[0],
+          id: "missing-precise-time",
+          datePrecision: "hour",
+          eventTimeUtc: undefined,
+        },
+      ]),
+    /requires a UTC eventTimeUtc/,
+  );
 });

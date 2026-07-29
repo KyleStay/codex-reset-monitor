@@ -78,23 +78,39 @@ export const publicSignals = snapshot.approvedPublicSources.map((record) => ({
 
 export const historicalResearch = validateHistoricalResearch(researchHistoryJson)
   .sort((a, b) => b.eventDate.localeCompare(a.eventDate))
-  .map((event) => ({
-    id: event.id,
-    date: event.eventDate,
-    dateLabel: new Intl.DateTimeFormat("en", {
+  .map((event) => {
+    const sourceLabels = {
+      official_status: "Official status",
+      official_announcement: "Official announcement",
+      official_support: "OpenAI Support",
+      official_repository_staff: "Repository staff",
+      public_report: "Public report",
+    } as const;
+    const displayTime = event.eventTimeUtc ?? `${event.eventDate}T00:00:00Z`;
+    const dateOptions: Intl.DateTimeFormatOptions = {
       month: "short",
       day: "numeric",
       year: "numeric",
       timeZone: "UTC",
-    }).format(new Date(`${event.eventDate}T00:00:00Z`)),
-    state: `Inferred · grade ${event.evidenceGrade}`,
-    title: event.title,
-    detail: `${event.summary} Cause: ${event.cause.assessment} (${event.cause.confidence}). Detection: ${event.detectionSignals.join(" ")}`,
-    links: event.sources.map((source) => ({
-      href: source.canonicalUrl,
-      label: source.provenance === "official_repository_staff" ? "Staff corroboration" : "Public report",
-    })),
-  }));
+    };
+    if (event.datePrecision !== "day") {
+      dateOptions.hour = "numeric";
+      dateOptions.minute = "2-digit";
+      dateOptions.timeZoneName = "short";
+    }
+    return {
+      id: event.id,
+      date: event.eventDate,
+      dateLabel: new Intl.DateTimeFormat("en", dateOptions).format(new Date(displayTime)),
+      state: `${event.classification === "reset_mechanism_change" ? "Mechanism change" : "Inferred reset"} · grade ${event.evidenceGrade}`,
+      title: event.title,
+      detail: `${event.summary} Cause: ${event.cause.assessment} (${event.cause.confidence}). Detection: ${event.detectionSignals.join(" ")}`,
+      links: event.sources.map((source) => ({
+        href: source.canonicalUrl,
+        label: sourceLabels[source.provenance],
+      })),
+    };
+  });
 
 export const currentForecast = snapshot.forecast;
 export const forecastHistory = generatedHistory as unknown as ForecastHistoryRow[];

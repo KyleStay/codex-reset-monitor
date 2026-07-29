@@ -101,9 +101,10 @@ export interface HistoricalResearchEvent {
   id: string;
   eventDate: string;
   datePrecision: "day" | "hour" | "exact";
+  eventTimeUtc?: string;
   classification: "inferred_reset" | "reset_mechanism_change";
   verificationState: "inferred";
-  scope: "unknown" | "paid_plans" | "selected_plans";
+  scope: "unknown" | "all_accounts" | "paid_plans" | "selected_plans";
   title: string;
   summary: string;
   evidenceGrade: "A" | "B" | "C" | "D";
@@ -118,7 +119,12 @@ export interface HistoricalResearchEvent {
     canonicalUrl: string;
     publicationTimeUtc: string;
     title: string;
-    provenance: "official_repository_staff" | "public_report";
+    provenance:
+      | "official_status"
+      | "official_announcement"
+      | "official_support"
+      | "official_repository_staff"
+      | "public_report";
     role: "primary" | "corroborating";
   }>;
   firstRecordedAtUtc: string;

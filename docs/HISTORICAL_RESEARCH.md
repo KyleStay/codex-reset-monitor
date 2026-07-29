@@ -26,8 +26,11 @@ Each run should make bounded progress on both recent monitoring and historical
 backfill:
 
 1. Search official OpenAI Status, Help, developer documentation, announcements,
-   and the public `openai/codex` repository.
-2. Search administrator-configured public sources for corroborating reports.
+   support statements, and the public `openai/codex` repository.
+2. Search administrator-configured public sources, including permanent
+   OpenAI Community archive URLs, for corroborating reports. An archived social
+   post remains a public report unless the account identity and statement are
+   independently established by an approved official source.
    Do not evade access controls, automate prohibited scraping, or infer the
    identity of an unnamed account.
 3. Work backwards through uncovered date ranges. Prefer precise source-native
@@ -46,6 +49,11 @@ backfill:
    product launches, and unrelated incidents distinct.
 8. Run schema validation and tests. Historical research must never be inserted
    into `data/observations.json` or used as a confirmed model label.
+
+For hour or exact precision, `eventTimeUtc` is required and must be a
+source-backed UTC timestamp on `eventDate`. Date-only events must omit it.
+Source provenance labels distinguish official Status, official announcements,
+OpenAI Support, repository staff, and public reports.
 
 ## Coverage and stopping rule
 

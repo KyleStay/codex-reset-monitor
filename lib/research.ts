@@ -14,9 +14,19 @@ export function validateHistoricalResearch(value: unknown): HistoricalResearchEv
     ids.add(row.id);
     if (!row.eventDate || !isoDate.test(row.eventDate)) throw new Error(`${row.id} must use a date-only eventDate`);
     if (!["day", "hour", "exact"].includes(row.datePrecision ?? "")) throw new Error(`${row.id} has invalid date precision`);
+    if (row.datePrecision !== "day") {
+      if (!row.eventTimeUtc || Number.isNaN(Date.parse(row.eventTimeUtc)) || !row.eventTimeUtc.endsWith("Z")) {
+        throw new Error(`${row.id} requires a UTC eventTimeUtc for hour or exact precision`);
+      }
+      if (!row.eventTimeUtc.startsWith(row.eventDate)) {
+        throw new Error(`${row.id} eventTimeUtc must match eventDate`);
+      }
+    } else if (row.eventTimeUtc !== undefined) {
+      throw new Error(`${row.id} must omit eventTimeUtc when precision is day`);
+    }
     if (!["inferred_reset", "reset_mechanism_change"].includes(row.classification ?? "")) throw new Error(`${row.id} has invalid classification`);
     if (row.verificationState !== "inferred") throw new Error(`${row.id} must remain explicitly inferred`);
-    if (!["unknown", "paid_plans", "selected_plans"].includes(row.scope ?? "")) throw new Error(`${row.id} has invalid scope`);
+    if (!["unknown", "all_accounts", "paid_plans", "selected_plans"].includes(row.scope ?? "")) throw new Error(`${row.id} has invalid scope`);
     if (!row.title || !row.summary) throw new Error(`${row.id} requires a title and summary`);
     if (!["A", "B", "C", "D"].includes(row.evidenceGrade ?? "")) throw new Error(`${row.id} has invalid evidence grade`);
     if (!row.cause || !["confirmed", "attributed", "hypothesis", "unknown"].includes(row.cause.confidence)) {
@@ -29,7 +39,17 @@ export function validateHistoricalResearch(value: unknown): HistoricalResearchEv
       throw new Error(`${row.id} requires source and contradiction arrays`);
     }
     for (const source of row.sources) {
-      if (!source.canonicalUrl.startsWith("https://") || Number.isNaN(Date.parse(source.publicationTimeUtc))) {
+      if (
+        !source.canonicalUrl.startsWith("https://") ||
+        Number.isNaN(Date.parse(source.publicationTimeUtc)) ||
+        ![
+          "official_status",
+          "official_announcement",
+          "official_support",
+          "official_repository_staff",
+          "public_report",
+        ].includes(source.provenance)
+      ) {
         throw new Error(`${row.id} has an invalid source`);
       }
     }

@@ -2,7 +2,7 @@
 <rss version="2.0"><channel>
 <title>Codex Reset Monitor</title><link>https://kylestay.github.io/codex-reset-monitor</link>
 <description>Meaningful changes to experimental Codex reset forecasts.</description>
-<lastBuildDate>Wed, 29 Jul 2026 13:17:17 GMT</lastBuildDate>
+<lastBuildDate>Wed, 29 Jul 2026 15:02:30 GMT</lastBuildDate>
 <item><guid>events-0-cutoff-2026-07-29-0d76d739</guid><title>Experimental 24h estimate: 63%</title><link>https://kylestay.github.io/codex-reset-monitor</link><pubDate>Wed, 29 Jul 2026 13:10:01 GMT</pubDate><description>No likely interval is available without verified timing history. Experimental estimate, never a guarantee. Model published-prior-0.1.0.</description></item>
 <item><guid>events-0-cutoff-2026-07-28-0d76d739</guid><title>Experimental 24h estimate: 63%</title><link>https://kylestay.github.io/codex-reset-monitor</link><pubDate>Tue, 28 Jul 2026 16:30:55 GMT</pubDate><description>No likely interval is available without verified timing history. Experimental estimate, never a guarantee. Model published-prior-0.1.0.</description></item>
 </channel></rss>
