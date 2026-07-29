@@ -1,5 +1,26 @@
 [
   {
+    "id": "events-0-cutoff-2026-07-29-0d76d739",
+    "at": "2026-07-29T13:10:01.659Z",
+    "probabilities": {
+      "1": 0.04,
+      "3": 0.12,
+      "6": 0.22,
+      "12": 0.39,
+      "24": 0.63
+    },
+    "p6": 0.22,
+    "likelyStartUtc": null,
+    "likelyEndUtc": null,
+    "interval": null,
+    "outcome": "Awaiting 24-hour outcome",
+    "outcomes": null,
+    "brier": null,
+    "timingErrorMinutes": null,
+    "modelVersion": "published-prior-0.1.0",
+    "datasetVersion": "events-0-cutoff-2026-07-29-0d76d739"
+  },
+  {
     "id": "events-0-cutoff-2026-07-28-0d76d739",
     "at": "2026-07-28T16:30:55.347Z",
     "probabilities": {
