@@ -802,6 +802,161 @@
     "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
   },
   {
+    "id": "research-mechanism-2025-10-22",
+    "eventDate": "2025-10-22",
+    "datePrecision": "exact",
+    "eventTimeUtc": "2025-10-22T20:12:41Z",
+    "classification": "reset_mechanism_change",
+    "verificationState": "inferred",
+    "scope": "selected_plans",
+    "title": "App-server gained stable, on-demand rate-limit telemetry",
+    "summary": "Merged openai/codex changes stopped recomputing displayed reset times from relative offsets, added an app-server read method that did not require sending a model request, and emitted notifications when rate limits changed. These changes improved the observability and stability of reset timestamps; they do not establish that an operator reset occurred.",
+    "evidenceGrade": "A",
+    "cause": {
+      "assessment": "Product rollout of stable rate-limit telemetry",
+      "confidence": "confirmed",
+      "rationale": "OpenAI repository pull requests explicitly describe the absolute-timestamp fix, on-demand read API, and update notification behavior."
+    },
+    "detectionSignals": [
+      "Reset timestamps remain stable across resumed sessions instead of moving relative to the current time.",
+      "Clients can read current rate limits without first sending a model request.",
+      "App-server clients receive a notification when the backend rate-limit state changes."
+    ],
+    "contradictions": [
+      "This telemetry rollout changed visibility and transport, not the underlying allowance schedule.",
+      "Availability depended on client version and app-server adoption."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/pull/5304",
+        "publicationTimeUtc": "2025-10-17T23:00:03Z",
+        "title": "Store absolute rate-limit reset timestamps",
+        "provenance": "official_repository_staff",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/pull/5302",
+        "publicationTimeUtc": "2025-10-17T22:12:50Z",
+        "title": "Add the app-server rate-limit read method",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/pull/5477",
+        "publicationTimeUtc": "2025-10-21T23:47:15Z",
+        "title": "Send app-server rate-limit update notifications",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-01T09:27:25Z",
+    "lastReviewedAtUtc": "2026-08-01T09:27:25Z"
+  },
+  {
+    "id": "research-reset-2025-09-24",
+    "eventDate": "2025-09-24",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "selected_plans",
+    "title": "Some Pro accounts reported a weekly meter reset",
+    "summary": "Two independent public reports described weekly usage returning to zero used on September 24. Other reports in the same thread showed zero usage while enforcement still blocked requests or said no reset had occurred, and an OpenAI repository contributor stated that the client release had not itself reset limits. The record is therefore a low-confidence inferred meter or normal-window reset, not evidence of an operator-initiated action.",
+    "evidenceGrade": "C",
+    "cause": {
+      "assessment": "Unknown; normal rollover, stale display state, or backend action remain possible",
+      "confidence": "unknown",
+      "rationale": "The reports meet the two-independent-report threshold, but staff ruled out a client-triggered reset and the contradictory enforcement state prevents stronger attribution."
+    },
+    "detectionSignals": [
+      "Independent accounts move from high weekly usage to zero used within the same several-hour window.",
+      "Enforcement is tested separately from the displayed usage meter.",
+      "The absolute reset timestamp is checked for a corresponding advance.",
+      "A staff statement identifying a server-side action would distinguish an operator reset from normal rollover."
+    ],
+    "contradictions": [
+      "One account remained blocked while the display showed zero weekly usage.",
+      "Another account reported that no reset occurred.",
+      "Repository staff said version 0.40.0 did not itself reset rate limits and that a high percentage could simply be near its normal reset time.",
+      "Exact event time and affected-account breadth were not established."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/4103#issuecomment-3326418406",
+        "publicationTimeUtc": "2025-09-24T04:23:59Z",
+        "title": "Public report of the weekly meter returning to zero",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/4103#issuecomment-3326922963",
+        "publicationTimeUtc": "2025-09-24T07:13:57Z",
+        "title": "Independent report confirming a meter reset",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/4103#issuecomment-3329774794",
+        "publicationTimeUtc": "2025-09-24T16:27:21Z",
+        "title": "OpenAI contributor rules out a client-triggered reset",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-01T09:27:25Z",
+    "lastReviewedAtUtc": "2026-08-01T09:27:25Z"
+  },
+  {
+    "id": "research-mechanism-2025-09-24",
+    "eventDate": "2025-09-24",
+    "datePrecision": "exact",
+    "eventTimeUtc": "2025-09-24T15:31:08Z",
+    "classification": "reset_mechanism_change",
+    "verificationState": "inferred",
+    "scope": "selected_plans",
+    "title": "The TUI began displaying rate-limit windows and reset timing",
+    "summary": "A sequence of merged openai/codex pull requests forwarded backend rate-limit headers to clients, added TUI graphs and warnings, and displayed reset timing. This established durable client-side detection signals for primary and secondary windows but did not change or trigger the underlying reset mechanism.",
+    "evidenceGrade": "A",
+    "cause": {
+      "assessment": "Product rollout of rate-limit visibility",
+      "confidence": "confirmed",
+      "rationale": "OpenAI repository pull requests directly document the telemetry forwarding, TUI presentation, and reset-time display changes."
+    },
+    "detectionSignals": [
+      "The client displays primary and secondary rate-limit usage separately.",
+      "Near-limit warnings appear before enforcement blocks requests.",
+      "The TUI displays a reset time sourced from backend headers."
+    ],
+    "contradictions": [
+      "The changes expose client-side telemetry and do not prove any operator-initiated reset.",
+      "Early cached displays could diverge from server-side enforcement."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/pull/3965",
+        "publicationTimeUtc": "2025-09-20T05:10:03Z",
+        "title": "Forward rate limits to the UI",
+        "provenance": "official_repository_staff",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/pull/3977",
+        "publicationTimeUtc": "2025-09-20T09:47:55Z",
+        "title": "Add TUI rate-limit graphs and warnings",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/pull/4111",
+        "publicationTimeUtc": "2025-09-23T22:08:15Z",
+        "title": "Display rate-limit reset timing in the TUI",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-01T09:27:25Z",
+    "lastReviewedAtUtc": "2026-08-01T09:27:25Z"
+  },
+  {
     "id": "research-mechanism-2025-09-03",
     "eventDate": "2025-09-03",
     "datePrecision": "exact",
