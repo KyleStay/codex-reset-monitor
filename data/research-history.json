@@ -1,5 +1,58 @@
 [
   {
+    "id": "research-reset-2026-08-01",
+    "eventDate": "2026-08-01",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "paid_plans",
+    "title": "Independent paid-plan reports show August 1 window restarts",
+    "summary": "Independent Plus and Pro reports described weekly usage returning to zero used on August 1, including two reports that place the transition around 03:00-03:36 UTC and show a newly anchored seven-day reset timestamp. A third Pro report also began the day at a full allowance. The evidence supports a day-precision inferred reset affecting some paid accounts, but it does not establish a universal action, a banked-credit redemption, or any operator-supplied cause.",
+    "evidenceGrade": "C",
+    "cause": {
+      "assessment": "Unknown; a broad reset, banked-credit action, or account-side window replacement remain possible",
+      "confidence": "unknown",
+      "rationale": "The independent telemetry reports establish allowance restoration and new window anchors, but no configured official or repository-staff source identified the trigger or affected population."
+    },
+    "detectionSignals": [
+      "Independent paid accounts move from nonzero weekly usage to zero used within the same UTC hour.",
+      "The backend-provided reset timestamp advances to a newly anchored seven-day window.",
+      "Banked reset-credit balances and explicit consume calls are checked separately from the active usage window.",
+      "An official or staff statement with an effective timestamp would distinguish a broad operator reset from account-specific credit actions."
+    ],
+    "contradictions": [
+      "One report found no local reset-credit consume call, but client-visible telemetry cannot identify the server-side actor or transaction type.",
+      "Other August 1 reports described disappearing credits, rapid post-reset usage, or additional window replacements rather than a single uniform outcome.",
+      "No configured official announcement, Help record, Status incident, or repository-staff statement confirmed the scope or cause.",
+      "The reports do not establish that every eligible paid account received the same reset."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/36436",
+        "publicationTimeUtc": "2026-08-01T05:32:16Z",
+        "title": "Pro account records a newly anchored weekly window around 03:36 UTC",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/36481",
+        "publicationTimeUtc": "2026-08-01T14:23:14Z",
+        "title": "Plus account reports weekly usage returning to zero around 03:00 UTC",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/36468",
+        "publicationTimeUtc": "2026-08-01T11:50:12Z",
+        "title": "Independent Pro account reports a full allowance on August 1",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-02T09:18:45Z",
+    "lastReviewedAtUtc": "2026-08-02T09:18:45Z"
+  },
+  {
     "id": "research-reset-2026-07-14",
     "eventDate": "2026-07-14",
     "datePrecision": "day",
@@ -999,5 +1052,63 @@
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
     "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
+  },
+  {
+    "id": "research-mechanism-2025-08-08",
+    "eventDate": "2025-08-08",
+    "datePrecision": "day",
+    "classification": "reset_mechanism_change",
+    "verificationState": "inferred",
+    "scope": "selected_plans",
+    "title": "ChatGPT-plan Codex CLI launched with five-hour and weekly limits",
+    "summary": "OpenAI repository documentation added ChatGPT sign-in for Plus, Pro, and Team users on August 7, release 0.19.0 followed early on August 8, and two independent launch-day issues recorded the client message that limits reset every five hours and every week. This establishes the source-backed public launch boundary for the subscription usage-limit mechanism, not a completed reset event.",
+    "evidenceGrade": "A",
+    "cause": {
+      "assessment": "Product launch of subscription-backed Codex CLI usage",
+      "confidence": "confirmed",
+      "rationale": "The merged OpenAI repository documentation and official release establish ChatGPT-plan CLI availability, while independent launch-day reports directly record the five-hour and weekly reset-window message."
+    },
+    "detectionSignals": [
+      "Codex CLI accepts ChatGPT sign-in for eligible subscription plans.",
+      "The client reports separate five-hour and weekly usage windows.",
+      "Limit exhaustion produces a wait message tied to those recurring windows."
+    ],
+    "contradictions": [
+      "Launch-day clients did not expose global usage counters or exact reset timestamps.",
+      "Early reports disagreed about whether allowances restored on time and did not establish identical budgets across plans.",
+      "This record establishes the mechanism launch boundary and does not prove that a reset occurred on August 8."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/pull/1948",
+        "publicationTimeUtc": "2025-08-07T18:09:26Z",
+        "title": "OpenAI repository documentation adds ChatGPT-plan Codex CLI sign-in",
+        "provenance": "official_repository_staff",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/releases/tag/rust-v0.19.0",
+        "publicationTimeUtc": "2025-08-08T01:40:16Z",
+        "title": "Codex CLI 0.19.0 release",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/1985",
+        "publicationTimeUtc": "2025-08-08T01:55:10Z",
+        "title": "Launch-day report records five-hour and weekly reset windows",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/1986",
+        "publicationTimeUtc": "2025-08-08T02:17:41Z",
+        "title": "Independent request for usage and reset timing for both windows",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-02T09:22:00Z",
+    "lastReviewedAtUtc": "2026-08-02T09:22:00Z"
   }
 ]
