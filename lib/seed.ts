@@ -50,10 +50,14 @@ export const resetHistory = chronological.map((row, index) => {
   return {
     id: row.id,
     date: row.observedResetAtUtc,
-    surface: row.codexSurface.toUpperCase(),
+    surface: row.detectionMethod === "local-observer" ? "LOCAL" : row.codexSurface.toUpperCase(),
     state: "Confirmed",
     cycle,
-    note: "Administrator-verified community observation.",
+    note: row.detectionMethod === "local-observer"
+      ? row.observationKind === "meter-reset"
+        ? "Automatically verified from a privacy-minimized local meter transition."
+        : "Automatically verified from a privacy-minimized local access-recovery transition."
+      : "Administrator-verified community observation.",
     url: row.sourceUrl,
   };
 }).reverse();

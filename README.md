@@ -10,7 +10,8 @@ no seeded or fabricated observations.
 ## Live data
 
 - **Reset observations:** public GitHub Issue Forms reviewed by a repository
-  maintainer. Only issues carrying `verified-observation` enter the dataset.
+  maintainer, plus optional privacy-minimized observations from the maintainer's
+  own device. Only issues carrying `verified-observation` enter the dataset.
 - **Official incidents:** OpenAI's public Status JSON, collected directly each
   day with provenance, publication/retrieval times, canonical URL, minimal
   excerpt, normalized features, and content hash.
@@ -41,6 +42,17 @@ uploads, and deploys the committed GitHub Pages site.
 Editing a verified issue changes its content hash. The next collection appends a
 correction entry to that observation's audit history; Git preserves the prior
 dataset revision.
+
+### Automatic local observations
+
+On macOS, the maintainer can install the opt-in five-minute observer with
+`npm run observe:local:install`. It reads only the primary usage percentage and
+reset metadata from Codex's official read-only rate-limit method. It never reads
+task history, prompts, responses, code, logs, screenshots, account identifiers,
+or device locale. A deterministic reset transition creates a deduplicated
+public issue carrying `verified-observation`; the daily refresh then imports it.
+See [operations](docs/OPERATIONS.md#local-reset-observer) for the exact data
+contract, detection rules, and uninstall command.
 
 ## Run locally
 

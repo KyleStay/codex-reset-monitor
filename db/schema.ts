@@ -2,8 +2,14 @@ import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-or
 
 export const resetObservations = sqliteTable("reset_observations", {
   id: text("id").primaryKey(),
-  limitReachedAtUtc: text("limit_reached_at_utc").notNull(),
-  observedResetAtUtc: text("observed_reset_at_utc"),
+  observationKind: text("observation_kind").notNull().default("access-restored"),
+  limitReachedAtUtc: text("limit_reached_at_utc"),
+  priorSampleAtUtc: text("prior_sample_at_utc"),
+  observedResetAtUtc: text("observed_reset_at_utc").notNull(),
+  previousUsedPercent: real("previous_used_percent"),
+  currentUsedPercent: real("current_used_percent"),
+  previousResetsAtUtc: text("previous_resets_at_utc"),
+  currentResetsAtUtc: text("current_resets_at_utc"),
   statedTimeZone: text("stated_time_zone").notNull(),
   precedingForecastId: text("preceding_forecast_id"),
   codexSurface: text("codex_surface").notNull(),

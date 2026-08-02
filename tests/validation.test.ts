@@ -5,6 +5,7 @@ import { validateHistoricalResearch } from "../lib/research";
 import { observationDedupeKey, validateObservation } from "../lib/validation";
 
 const valid = {
+  observationKind: "access-restored",
   limitReachedAtUtc: "2026-07-27T10:00:00-04:00",
   observedResetAtUtc: "2026-07-27T12:00:00-04:00",
   statedTimeZone: "America/New_York",
@@ -28,6 +29,32 @@ test("validation rejects unexpected or sensitive fields", () => {
   assert.throws(() => validateObservation({ ...valid, prompt: "private" }), /Unexpected field/);
   assert.throws(() => validateObservation({ ...valid, submitterNotes: "Authorization: bearer secret" }), /credential or session/);
   assert.throws(() => validateObservation({ ...valid, observedResetAtUtc: valid.limitReachedAtUtc }), /later/);
+});
+
+test("validation accepts only source-backed local meter-reset transitions", () => {
+  const result = validateObservation({
+    observationKind: "meter-reset",
+    priorSampleAtUtc: "2026-08-01T10:00:00Z",
+    observedResetAtUtc: "2026-08-01T10:05:00Z",
+    previousUsedPercent: 37,
+    currentUsedPercent: 0,
+    previousResetsAtUtc: "2026-08-03T10:00:00Z",
+    currentResetsAtUtc: "2026-08-08T10:05:00Z",
+    statedTimeZone: "America/New_York",
+    codexSurface: "other",
+    planTier: "individual-paid",
+    relatedIncidentIds: [],
+    relatedSourceIds: [],
+    detectionMethod: "local-observer",
+    confidence: 0.95,
+  });
+  assert.equal(result.limitReachedAtUtc, undefined);
+  assert.equal(result.observationKind, "meter-reset");
+  assert.equal(result.previousUsedPercent, 37);
+  assert.throws(
+    () => validateObservation({ ...result, currentResetsAtUtc: result.previousResetsAtUtc }),
+    /advanced reset timestamp/,
+  );
 });
 
 test("dedupe key collapses matching surface, timezone, and 15-minute reset bucket", async () => {

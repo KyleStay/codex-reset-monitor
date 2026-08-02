@@ -27,6 +27,7 @@ test("fixture ingestion is idempotent and retains required provenance", async ()
 
 test("submission-to-forecast-to-score pipeline is reproducible", async () => {
   const observation = validateObservation({
+    observationKind: "access-restored",
     limitReachedAtUtc: "2026-07-28T08:00:00.000Z",
     observedResetAtUtc: "2026-07-28T12:00:00.000Z",
     statedTimeZone: "UTC",
@@ -124,10 +125,76 @@ test("GitHub issue form parsing retains only validated observation fields", asyn
     label: { name: "verified-observation" },
   }], "2026-07-28T04:17:00Z");
   assert.equal(normalized.codexSurface, "cli");
+  assert.equal(normalized.observationKind, "access-restored");
   assert.equal(normalized.verifiedAtUtc, "2026-07-27T13:00:00.000Z");
   assert.equal(normalized.trustWeight, 0.54);
   assert.equal(normalized.auditHistory[0].action, "verified");
   assert.equal("author" in normalized, false);
+});
+
+test("GitHub normalization accepts privacy-safe local meter resets without a fabricated limit time", async () => {
+  const body = `### Observation kind
+
+Locally observed meter reset
+
+### Prior sample time
+
+2026-08-01T10:00:00Z
+
+### Observed reset time
+
+2026-08-01T10:05:00Z
+
+### Previous used percent
+
+37%
+
+### Current used percent
+
+0%
+
+### Previous reset time
+
+2026-08-03T10:00:00Z
+
+### Current reset time
+
+2026-08-08T10:05:00Z
+
+### Time zone
+
+America/New_York
+
+### Codex surface
+
+Other — account-level local telemetry
+
+### Generalized plan tier
+
+Individual paid
+
+### Detection method
+
+Local observer
+
+### Confidence
+
+95%
+
+### Notes
+
+Privacy-safe local observation.`;
+  const normalized = await normalizeVerifiedObservation({
+    number: 44,
+    html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/44",
+    body,
+    created_at: "2026-08-01T10:06:00Z",
+    updated_at: "2026-08-01T10:06:00Z",
+  }, [{ event: "labeled", created_at: "2026-08-01T10:06:00Z", label: { name: "verified-observation" } }], "2026-08-01T10:07:00Z");
+  assert.equal(normalized.observationKind, "meter-reset");
+  assert.equal(normalized.limitReachedAtUtc, undefined);
+  assert.equal(normalized.detectionMethod, "local-observer");
+  assert.equal(normalized.previousUsedPercent, 37);
 });
 
 test("GitHub collection deduplicates verified reports and ingests only approved source metadata", async () => {

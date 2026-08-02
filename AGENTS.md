@@ -33,6 +33,15 @@ authentication and sandbox-access rules apply here.
 - Reset reports come from GitHub Issue Forms. Only issues labeled
   `verified-observation` by a repository maintainer enter the public dataset.
   Do not add seeded or fabricated reset records.
+- The operator may opt in to the repository's local reset observer. It may call
+  only the official Codex app-server `account/rateLimits/read` method and retain
+  only sampling time, primary-window used percentage, reset timestamp, window
+  duration, exhausted state, and a generalized plan tier. It must never read or
+  retain conversations, prompts, responses, code, session history, logs,
+  account identifiers, or device locale. A deterministic exhausted-to-available
+  transition, or a simultaneous used-percentage drop and reset-timestamp
+  advance, may be published by the authenticated maintainer as a
+  `verified-observation` issue. No other local signal may self-verify.
 - An agent may classify evidence but must never invent probabilities, promote a
   model, convert public chatter into a confirmed reset, or guess an account
   identity. Forecast calculations remain deterministic repository code.

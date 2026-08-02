@@ -70,8 +70,12 @@ const detectionMethod = (value: string | undefined) => {
   const normalized = value?.toLowerCase() ?? "";
   if (normalized.startsWith("manual")) return "manual-retry";
   if (normalized.startsWith("scheduled")) return "scheduled-check";
+  if (normalized.startsWith("local")) return "local-observer";
   return "other";
 };
+
+const observationKind = (value: string | undefined) =>
+  value?.toLowerCase().includes("meter") ? "meter-reset" : "access-restored";
 
 export async function normalizeVerifiedObservation(
   issue: GitHubIssue,
@@ -81,8 +85,14 @@ export async function normalizeVerifiedObservation(
 ): Promise<StoredObservation> {
   const fields = parseIssueFormBody(issue.body ?? "");
   const input = validateObservation({
+    observationKind: observationKind(field(fields, "Observation kind")),
     limitReachedAtUtc: field(fields, "Limit reached time"),
-    observedResetAtUtc: field(fields, "Access returned time"),
+    priorSampleAtUtc: field(fields, "Prior sample time"),
+    observedResetAtUtc: field(fields, "Observed reset time") ?? field(fields, "Access returned time"),
+    previousUsedPercent: field(fields, "Previous used percent"),
+    currentUsedPercent: field(fields, "Current used percent"),
+    previousResetsAtUtc: field(fields, "Previous reset time"),
+    currentResetsAtUtc: field(fields, "Current reset time"),
     statedTimeZone: field(fields, "Time zone"),
     precedingForecastId: field(fields, "Preceding forecast ID"),
     codexSurface: surface(field(fields, "Codex surface")),

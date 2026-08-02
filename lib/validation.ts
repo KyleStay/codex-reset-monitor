@@ -1,8 +1,9 @@
-import type { ObservationInput, Surface } from "./domain";
+import type { ObservationInput, ObservationKind, Surface } from "./domain";
 
 const SURFACES = new Set<Surface>(["cli", "ide", "cloud", "web", "other"]);
 const PLAN_TIERS = new Set(["free", "individual-paid", "team-or-enterprise", "unknown"]);
-const DETECTION_METHODS = new Set(["manual-retry", "scheduled-check", "other"]);
+const OBSERVATION_KINDS = new Set<ObservationKind>(["access-restored", "meter-reset"]);
+const DETECTION_METHODS = new Set(["manual-retry", "scheduled-check", "local-observer", "other"]);
 
 function iso(value: unknown, field: string): string {
   if (typeof value !== "string" || !value || Number.isNaN(Date.parse(value))) {
@@ -16,21 +17,58 @@ function strings(value: unknown): string[] {
   return value.filter((item): item is string => typeof item === "string").map((item) => item.trim()).filter(Boolean).slice(0, 10);
 }
 
+function optionalIso(value: unknown, field: string): string | undefined {
+  return value === undefined || value === null || value === "" ? undefined : iso(value, field);
+}
+
+function optionalPercent(value: unknown, field: string): number | undefined {
+  if (value === undefined || value === null || value === "") return undefined;
+  const parsed = Number(typeof value === "string" ? value.replace("%", "") : value);
+  if (!Number.isFinite(parsed) || parsed < 0 || parsed > 100) throw new Error(`${field} must be between 0 and 100`);
+  return parsed;
+}
+
 export function validateObservation(payload: unknown): ObservationInput {
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) throw new Error("A submission object is required");
   const input = payload as Record<string, unknown>;
   const allowed = new Set([
-    "limitReachedAtUtc", "observedResetAtUtc", "statedTimeZone", "precedingForecastId",
+    "observationKind", "limitReachedAtUtc", "priorSampleAtUtc", "observedResetAtUtc",
+    "previousUsedPercent", "currentUsedPercent", "previousResetsAtUtc", "currentResetsAtUtc",
+    "statedTimeZone", "precedingForecastId",
     "codexSurface", "planTier", "relatedIncidentIds", "relatedSourceIds", "submitterNotes",
     "detectionMethod", "confidence",
   ]);
   const unexpected = Object.keys(input).filter((key) => !allowed.has(key));
   if (unexpected.length) throw new Error(`Unexpected field: ${unexpected[0]}`);
 
-  const limitReachedAtUtc = iso(input.limitReachedAtUtc, "Limit-reached time");
+  const observationKind = (input.observationKind ?? "access-restored") as ObservationKind;
+  if (!OBSERVATION_KINDS.has(observationKind)) throw new Error("Select a supported observation kind");
+  const limitReachedAtUtc = optionalIso(input.limitReachedAtUtc, "Limit-reached time");
+  const priorSampleAtUtc = optionalIso(input.priorSampleAtUtc, "Prior sample time");
   const observedResetAtUtc = iso(input.observedResetAtUtc, "Observed reset time");
-  if (Date.parse(observedResetAtUtc) <= Date.parse(limitReachedAtUtc)) {
+  if (observationKind === "access-restored" && !limitReachedAtUtc) {
+    throw new Error("Access-restored observations require a limit-reached time");
+  }
+  if (limitReachedAtUtc && Date.parse(observedResetAtUtc) <= Date.parse(limitReachedAtUtc)) {
     throw new Error("Observed reset time must be later than the limit-reached time");
+  }
+  const previousUsedPercent = optionalPercent(input.previousUsedPercent, "Previous used percent");
+  const currentUsedPercent = optionalPercent(input.currentUsedPercent, "Current used percent");
+  const previousResetsAtUtc = optionalIso(input.previousResetsAtUtc, "Previous reset time");
+  const currentResetsAtUtc = optionalIso(input.currentResetsAtUtc, "Current reset time");
+  if (observationKind === "meter-reset") {
+    if (!priorSampleAtUtc || Date.parse(observedResetAtUtc) <= Date.parse(priorSampleAtUtc)) {
+      throw new Error("Meter-reset observations require an earlier prior sample time");
+    }
+    if (previousUsedPercent === undefined || currentUsedPercent === undefined || currentUsedPercent >= previousUsedPercent) {
+      throw new Error("Meter-reset observations require a lower current used percentage");
+    }
+    if (!previousResetsAtUtc || !currentResetsAtUtc || Date.parse(currentResetsAtUtc) - Date.parse(previousResetsAtUtc) < 60_000) {
+      throw new Error("Meter-reset observations require a materially advanced reset timestamp");
+    }
+    if (input.detectionMethod !== "local-observer") {
+      throw new Error("Meter-reset observations require the local observer detection method");
+    }
   }
   if (Date.parse(observedResetAtUtc) > Date.now() + 5 * 60_000) {
     throw new Error("Observed reset time cannot be in the future");
@@ -52,8 +90,14 @@ export function validateObservation(payload: unknown): ObservationInput {
   if (sensitive.test(notes)) throw new Error("Notes appear to contain a credential or session value. Remove it before submitting");
 
   return {
+    observationKind,
     limitReachedAtUtc,
+    priorSampleAtUtc,
     observedResetAtUtc,
+    previousUsedPercent,
+    currentUsedPercent,
+    previousResetsAtUtc,
+    currentResetsAtUtc,
     statedTimeZone: timeZone,
     precedingForecastId: typeof input.precedingForecastId === "string" ? input.precedingForecastId.trim().slice(0, 80) : undefined,
     codexSurface: input.codexSurface as Surface,

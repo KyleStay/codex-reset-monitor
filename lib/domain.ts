@@ -3,10 +3,17 @@ export type Horizon = (typeof HORIZONS)[number];
 
 export type VerificationState = "pending" | "confirmed" | "inferred" | "rejected" | "corrected";
 export type Surface = "cli" | "ide" | "cloud" | "web" | "other";
+export type ObservationKind = "access-restored" | "meter-reset";
 
 export interface ObservationInput {
-  limitReachedAtUtc: string;
+  observationKind: ObservationKind;
+  limitReachedAtUtc?: string;
+  priorSampleAtUtc?: string;
   observedResetAtUtc: string;
+  previousUsedPercent?: number;
+  currentUsedPercent?: number;
+  previousResetsAtUtc?: string;
+  currentResetsAtUtc?: string;
   statedTimeZone: string;
   precedingForecastId?: string;
   codexSurface: Surface;
@@ -14,7 +21,7 @@ export interface ObservationInput {
   relatedIncidentIds: string[];
   relatedSourceIds: string[];
   submitterNotes?: string;
-  detectionMethod: "manual-retry" | "scheduled-check" | "other";
+  detectionMethod: "manual-retry" | "scheduled-check" | "local-observer" | "other";
   confidence: number;
 }
 

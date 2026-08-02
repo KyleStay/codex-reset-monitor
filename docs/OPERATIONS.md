@@ -5,7 +5,9 @@
 The deployed system has no private database or application-time AI call. A
 recurring Codex agent performs the daily research and publishing work.
 
-1. GitHub Issue Forms collect public reset reports and suggested source URLs.
+1. GitHub Issue Forms collect public reset reports and suggested source URLs;
+   an optional local observer can create privacy-minimized reset issues for the
+   maintainer's own device.
 2. Maintainers review reports in GitHub. Only `verified-observation` and
    `approved-public-source` labels authorize ingestion.
 3. Each day, the agent reviews terms-compliant sources, reads labeled issues,
@@ -44,6 +46,50 @@ For a valid reset observation:
 For a compliant public source, verify the canonical public HTTPS URL,
 publication time, neutral title, and minimal excerpt; then replace
 `pending-review` with `approved-public-source`.
+
+## Local reset observer
+
+The opt-in macOS observer samples the primary Codex usage window every five
+minutes. It calls only the official app-server `account/rateLimits/read`
+method. It does not open Codex databases, conversations, task history, prompts,
+responses, repositories, screenshots, or logs.
+
+It stores only the sample time, used percentage, reset timestamp, window
+duration, exhaustion flag, generalized plan tier, pending event, and published
+deduplication keys. The state file is private to the local user at
+`~/Library/Application Support/Codex Reset Monitor/local-observer.json`.
+Device locale is not published; observations use UTC.
+
+Two deterministic transitions can create an issue already carrying
+`verified-observation` under the authenticated maintainer account:
+
+- access becomes available after the observer recorded an exhausted window;
+- between adjacent non-exhausted samples, usage decreases while the official
+  reset timestamp advances by at least one minute. This rejects harmless
+  sub-minute timestamp jitter.
+
+The second form bounds the reset to a five-minute interval rather than
+inventing a limit-reached time. Failed reads or failed GitHub publication fail
+closed; a pending candidate remains in private state for the next run. Issue
+keys and a repository search prevent duplicate publication.
+
+Install or refresh the LaunchAgent:
+
+```bash
+npm run observe:local:install
+```
+
+Run a one-time read without publishing:
+
+```bash
+npm run observe:local
+```
+
+Uninstall it with `node scripts/install-local-observer.mjs --uninstall`.
+Safe process output is written under `~/Library/Logs/Codex Reset Monitor/`.
+Removing the LaunchAgent does not remove the private state or any public issue.
+The daily data refresh remains responsible for importing verified issues into
+the versioned dataset and forecast.
 
 GitHub repository permissions protect label changes. The
 static `/admin/` page contains no embedded administrator credential.

@@ -56,13 +56,17 @@ async function submitObservation(request: Request, env: Env) {
     const dedupeKey = await observationDedupeKey(input);
     const insert = env.DB.prepare(`
       INSERT INTO reset_observations (
-        id, limit_reached_at_utc, observed_reset_at_utc, stated_time_zone,
+        id, observation_kind, limit_reached_at_utc, prior_sample_at_utc,
+        observed_reset_at_utc, previous_used_percent, current_used_percent,
+        previous_resets_at_utc, current_resets_at_utc, stated_time_zone,
         preceding_forecast_id, codex_surface, plan_tier, incident_ids_json,
         source_ids_json, submitter_notes, detection_method, verification_state,
         confidence, trust_weight, dedupe_key, created_at_utc
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, 0.15, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, 0.15, ?, ?)
     `).bind(
-      id, input.limitReachedAtUtc, input.observedResetAtUtc, input.statedTimeZone,
+      id, input.observationKind, input.limitReachedAtUtc ?? null, input.priorSampleAtUtc ?? null,
+      input.observedResetAtUtc, input.previousUsedPercent ?? null, input.currentUsedPercent ?? null,
+      input.previousResetsAtUtc ?? null, input.currentResetsAtUtc ?? null, input.statedTimeZone,
       input.precedingForecastId ?? null, input.codexSurface, input.planTier ?? null,
       JSON.stringify(input.relatedIncidentIds), JSON.stringify(input.relatedSourceIds),
       input.submitterNotes ?? null, input.detectionMethod, input.confidence, dedupeKey, createdAt,
