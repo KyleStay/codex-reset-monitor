@@ -1,14 +1,14 @@
 {
-  "generatedAtUtc": "2026-08-02T09:18:45.787Z",
+  "generatedAtUtc": "2026-08-03T09:21:57.570Z",
   "sourceMode": "live-official-status-and-verified-github-issues",
   "officialStatusHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-02T09:18:46.200Z",
+    "checkedAtUtc": "2026-08-03T09:21:57.700Z",
     "message": "Collected 5 Codex-relevant official incident record(s)."
   },
   "observationSourceHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-02T09:18:45.787Z",
+    "checkedAtUtc": "2026-08-03T09:21:57.570Z",
     "message": "Verified observations and approved public sources were collected from GitHub Issues.",
     "rejectedRecordCount": 0,
     "duplicateCount": 0
@@ -20,7 +20,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-24T07:55:28.000Z",
-      "retrievalTimeUtc": "2026-08-02T09:18:46.200Z",
+      "retrievalTimeUtc": "2026-08-03T09:21:57.700Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KY9HYHCMK8AND23B4X17XQEK",
       "title": "Elevated Errors in Codex Review",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We are investigating the issue for the listed services.",
@@ -42,7 +42,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-20T00:34:34.000Z",
-      "retrievalTimeUtc": "2026-08-02T09:18:46.200Z",
+      "retrievalTimeUtc": "2026-08-03T09:21:57.700Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXYF4BTCV9DTZ5NDSFN716FH",
       "title": "Elevated errors for GitHub-dependent ChatGPT and Codex workflows",
       "excerpt": "All impacted services have now fully recovered. We are monitoring the recovery. Users may experience failures or delays in ChatGPT and Codex workflows that depend on GitHub. This mostly should impact Codex web and code review for PRs on Git",
@@ -64,7 +64,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-18T08:05:37.000Z",
-      "retrievalTimeUtc": "2026-08-02T09:18:46.200Z",
+      "retrievalTimeUtc": "2026-08-03T09:21:57.700Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXT44TAQQ2R0AZDDVSJGAC4H",
       "title": "Some users are unable to access Codex",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We have identified an issue causing some users to receive access-denied errors when using the Codex desktop app and CLI.",
@@ -86,7 +86,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-17T17:19:22.000Z",
-      "retrievalTimeUtc": "2026-08-02T09:18:46.200Z",
+      "retrievalTimeUtc": "2026-08-03T09:21:57.700Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXRHE25717D2WQ1WFMT2B7WZ",
       "title": "Codex 5.6-sol Experiencing Increased Server-Overload Errors",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We have identified that users are experiencing elevated errors for the impacted services. We are working on implementing a mitig",
@@ -108,7 +108,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-17T15:32:26.000Z",
-      "retrievalTimeUtc": "2026-08-02T09:18:46.200Z",
+      "retrievalTimeUtc": "2026-08-03T09:21:57.700Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXRBA8B98QHMMVP3M86NHFZ1",
       "title": "New ChatGPT App Not Available For Enterprise Users Without Codex Permissions",
       "excerpt": "All impacted services have now fully recovered. We have identified that this issue has recurred for some Enterprise users. We are working to resolve this. A fix has been released. Please update to the latest version of the ChatGPT app to re",
@@ -128,8 +128,8 @@
   "approvedPublicSources": [],
   "verifiedObservationCount": 0,
   "forecast": {
-    "id": "fc_20260802091845",
-    "forecastAtUtc": "2026-08-02T09:18:45.787Z",
+    "id": "fc_20260803092157",
+    "forecastAtUtc": "2026-08-03T09:21:57.570Z",
     "probabilities": {
       "1": 0.04,
       "3": 0.12,
@@ -141,13 +141,13 @@
     "likelyEndUtc": null,
     "confidenceGrade": "D",
     "featureSnapshot": {
-      "cutoffUtc": "2026-08-02T09:18:45.787Z",
+      "cutoffUtc": "2026-08-03T09:21:57.570Z",
       "confirmedEventCount": 0,
       "hoursSinceLastConfirmedReset": null,
       "medianCycleHours": 24,
       "cycleDispersionHours": 12,
       "activeIncident": false,
-      "incidentRecencyHours": 217.38827416666666,
+      "incidentRecencyHours": 241.44154722222223,
       "approvedPostCount24h": 0,
       "weightedReportVolume6h": 0,
       "sourceTrustMean": 0,
@@ -171,11 +171,11 @@
       }
     ],
     "modelVersion": "published-prior-0.1.0",
-    "datasetVersion": "events-0-cutoff-2026-08-02-0d76d739",
+    "datasetVersion": "events-0-cutoff-2026-08-03-0d76d739",
     "dataSufficiencyLabel": "Experimental—no verified reset history"
   },
   "performance": {
-    "sampleCount": 2,
+    "sampleCount": 4,
     "brier": 0.1227,
     "baselineBrier": 0.1227,
     "precision6h": null,
@@ -188,7 +188,7 @@
         "bucket": "21–40%",
         "predicted": 0.22,
         "observed": 0,
-        "n": 2
+        "n": 4
       }
     ]
   }

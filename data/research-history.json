@@ -768,6 +768,52 @@
     "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
   },
   {
+    "id": "research-mechanism-2025-11-11",
+    "eventDate": "2025-11-11",
+    "datePrecision": "exact",
+    "eventTimeUtc": "2025-11-11T01:13:10Z",
+    "classification": "reset_mechanism_change",
+    "verificationState": "inferred",
+    "scope": "unknown",
+    "title": "Usage meters changed from percent used to percent remaining",
+    "summary": "A merged Codex pull request changed the CLI status card from percent used to percent remaining, and an OpenAI repository contributor later confirmed that CLI, VS Code, and web had been aligned on remaining-usage semantics. This presentation change can invert the displayed percentage without changing allowance state, so historical reports must retain their surface, version, and explicit used-versus-left label.",
+    "evidenceGrade": "A",
+    "cause": {
+      "assessment": "Cross-surface normalization of usage display semantics",
+      "confidence": "confirmed",
+      "rationale": "The merged repository change explicitly flips the CLI labels, and a repository contributor confirms the intended remaining-usage convention across three Codex surfaces."
+    },
+    "detectionSignals": [
+      "Retain the source surface and client version with every reported percentage.",
+      "Normalize explicit percent-used and percent-remaining labels before comparing values.",
+      "Compare raw server percent-used telemetry separately from rendered progress bars.",
+      "Require enforcement recovery or reset-timestamp movement before treating an inverted percentage as a reset."
+    ],
+    "contradictions": [
+      "A contemporaneous report still showed a fallback-model prompt while displaying a full remaining allowance, so consistent labels did not eliminate enforcement or accounting mismatches.",
+      "The sources establish presentation semantics, not an allowance reset or a change to limit size or schedule.",
+      "Adoption timing could vary by client version and surface."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/pull/6482",
+        "publicationTimeUtc": "2025-11-11T01:13:10Z",
+        "title": "Change usage status from percent used to percent remaining",
+        "provenance": "official_repository_staff",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/6635#issuecomment-3530366186",
+        "publicationTimeUtc": "2025-11-14T01:00:47Z",
+        "title": "OpenAI contributor confirms consistent remaining-usage semantics",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-03T09:24:44Z",
+    "lastReviewedAtUtc": "2026-08-03T09:24:44Z"
+  },
+  {
     "id": "research-reset-2025-11-05",
     "eventDate": "2025-11-05",
     "datePrecision": "day",
