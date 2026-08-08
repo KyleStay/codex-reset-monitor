@@ -5,10 +5,11 @@
 The deployed system has no private database or application-time AI call. A
 recurring Codex agent performs the daily research and publishing work.
 
-1. GitHub Issue Forms collect public reset reports and suggested source URLs;
-   an optional local observer can create privacy-minimized reset issues for the
-   maintainer's own device.
-2. Maintainers review reports in GitHub. Only `verified-observation` and
+1. The installed local telemetry bridge samples official quota and reset-credit
+   metadata and can create privacy-minimized reset issues for deterministic full
+   transitions. GitHub Issue Forms remain optional corroboration and collect
+   suggested source URLs.
+2. Maintainers review optional reports in GitHub. Only `verified-observation` and
    `approved-public-source` labels authorize ingestion.
 3. Each day, the agent reviews terms-compliant sources, reads labeled issues,
    and runs the live OpenAI Status adapter.
@@ -49,14 +50,16 @@ publication time, neutral title, and minimal excerpt; then replace
 
 ## Local reset observer
 
-The opt-in macOS observer samples the primary Codex usage window every five
-minutes. It calls only the official app-server `account/rateLimits/read`
-method. It does not open Codex databases, conversations, task history, prompts,
-responses, repositories, screenshots, or logs.
+The macOS telemetry bridge samples Codex every five minutes. It calls only the
+official app-server `account/rateLimits/read` method.
+It does not open Codex databases, conversations, task or thread history,
+prompts, responses, repositories, screenshots, session files, or logs.
 
-It stores only the sample time, used percentage, reset timestamp, window
-duration, exhaustion flag, generalized plan tier, pending event, and published
-deduplication keys. The state file is private to the local user at
+It stores only the sample time, quota bucket ID/name, used percentage, reset
+timestamp, window duration, exhaustion flag, generalized plan tier,
+OpenAI-issued reset-credit count/status/grant/expiry metadata, detected event
+metadata, pending event, and published deduplication keys. Quota
+samples are retained for at most 90 days. The state file is private to the local user at
 `~/Library/Application Support/Codex Reset Monitor/local-observer.json`.
 Device locale is not published; observations use UTC.
 
@@ -64,9 +67,13 @@ Two deterministic transitions can create an issue already carrying
 `verified-observation` under the authenticated maintainer account:
 
 - access becomes available after the observer recorded an exhausted window;
-- between adjacent non-exhausted samples, usage decreases while the official
-  reset timestamp advances by at least one minute. This rejects harmless
-  sub-minute timestamp jitter.
+- between adjacent non-exhausted samples, usage falls to 5% or less by at least
+  five percentage points while the official reset timestamp advances by at
+  least one minute. This rejects partial adjustments and timestamp jitter.
+
+An available `rateLimitResetCredits` count is shown as queued reset capacity. It
+does not prove that a reset has happened and is never published as a completed
+full-reset observation.
 
 The second form bounds the reset to a five-minute interval rather than
 inventing a limit-reached time. Failed reads or failed GitHub publication fail
@@ -84,6 +91,17 @@ Run a one-time read without publishing:
 ```bash
 npm run observe:local
 ```
+
+Read the sanitized local telemetry bridge without contacting Codex or GitHub:
+
+```bash
+npm run observe:local:status
+```
+
+The status payload contains the latest quota sample, current quota buckets,
+OpenAI-issued queued reset-credit metadata, retained-sample range, deterministic
+full-reset ledger, and publication state. It contains no aggregate usage,
+conversation, or account identity fields.
 
 Uninstall it with `node scripts/install-local-observer.mjs --uninstall`.
 Safe process output is written under `~/Library/Logs/Codex Reset Monitor/`.

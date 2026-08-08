@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": "github-issue-1",
+    "observationKind": "access-restored",
+    "limitReachedAtUtc": "2026-08-03T22:43:57.949Z",
+    "observedResetAtUtc": "2026-08-08T09:23:05.496Z",
+    "statedTimeZone": "UTC",
+    "codexSurface": "other",
+    "planTier": "individual-paid",
+    "relatedIncidentIds": [],
+    "relatedSourceIds": [],
+    "submitterNotes": "Automatically observed through the read-only Codex rate-limit API. No prompts, responses, account identifiers, screenshots, session files, or logs were accessed.",
+    "detectionMethod": "local-observer",
+    "confidence": 1,
+    "verificationState": "confirmed",
+    "trustWeight": 0.6,
+    "createdAtUtc": "2026-08-08T09:23:07.000Z",
+    "verifiedAtUtc": "2026-08-08T09:23:09.000Z",
+    "sourceUrl": "https://github.com/KyleStay/codex-reset-monitor/issues/1",
+    "sourceIssueNumber": 1,
+    "sourceIssueUpdatedAtUtc": "2026-08-08T09:23:07.000Z",
+    "sourceContentHash": "d1d6463d62e23d07450e87bbe5e3c080418a8b0d66ee70d4887c099c86a57032",
+    "auditHistory": [
+      {
+        "recordedAtUtc": "2026-08-08T16:23:29.393Z",
+        "action": "verified",
+        "sourceContentHash": "d1d6463d62e23d07450e87bbe5e3c080418a8b0d66ee70d4887c099c86a57032",
+        "sourceIssueUpdatedAtUtc": "2026-08-08T09:23:07.000Z"
+      }
+    ]
+  }
+]

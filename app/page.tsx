@@ -41,7 +41,9 @@ export default function Home() {
                 </p>
               ) : (
                 <p className="lede">
-                  No verified reset observations are available, so a likely time range is not published.
+                  {confirmedCount === 0
+                    ? "No verified reset observations are available, so a likely time range is not published. "
+                    : "One verified reset is available, but at least two are required to estimate a timing pattern, so a likely time range is not published. "}
                   The probabilities below are an explicitly labeled broad prior—not a result learned from demo or account data.
                   This is an experimental estimate, never a guarantee.
                 </p>
@@ -89,11 +91,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section section-tint">
+      <section className="section section-tint" id="evidence">
         <div className="shell">
           <div className="section-heading">
             <div><p className="section-label">Observed evidence</p><h2>Reset history</h2></div>
-            <Link className="text-link" href="/submit">Report an observation <span aria-hidden="true">→</span></Link>
+            <Link className="text-link" href="/methodology">How events are assessed <span aria-hidden="true">→</span></Link>
           </div>
           <Timeline items={resetHistory} empty="No reset observations yet." />
         </div>
@@ -162,8 +164,8 @@ export default function Home() {
 
       <section className="cta-section">
         <div className="shell cta">
-          <div><p className="section-label">Help improve the evidence</p><h2>Reached a limit, then regained access?</h2><p>Share only the event timing. Never include prompts, responses, code, credentials, or account contents.</p></div>
-          <Link className="button" href="/submit">Report a reset</Link>
+          <div><p className="section-label">Automatic by default</p><h2>Reset evidence should not depend on memory.</h2><p>The local telemetry bridge watches official quota counters, while the research agent reconstructs earlier events from durable sources. Manual reports remain optional corroboration.</p></div>
+          <Link className="button" href="/methodology">See the method</Link>
         </div>
       </section>
     </>

@@ -7,28 +7,61 @@ import {
   advanceLocalObserver,
   emptyLocalObserverState,
   markLocalCandidatePublished,
+  normalizeLocalObserverState,
+  recordLocalTelemetry,
+  rememberLocalCandidate,
   type LocalObserverState,
   type LocalResetCandidate,
+  type SafeRateLimitBucket,
   type SafeRateLimitSample,
+  type SafeResetCreditSnapshot,
 } from "../lib/local-observer";
 import { validateObservation } from "../lib/validation";
 
 const args = new Set(process.argv.slice(2));
 const publish = args.has("--publish");
+const statusOnly = args.has("--status");
 const repository = process.env.GITHUB_REPOSITORY ?? "KyleStay/codex-reset-monitor";
 const statePath = process.env.CODEX_RESET_MONITOR_STATE_PATH
   ?? join(homedir(), "Library", "Application Support", "Codex Reset Monitor", "local-observer.json");
 const lockPath = `${statePath}.lock`;
 // UTC satisfies the observation schema without publishing the device's locale.
 const timeZone = "UTC";
-console.log(JSON.stringify({ status: "starting", mode: publish ? "publish" : "read-only" }));
+
+interface RateLimitWindowResponse {
+  usedPercent?: number;
+  windowDurationMins?: number | null;
+  resetsAt?: number | null;
+}
+
+interface RateLimitBucketResponse {
+  limitId?: string | null;
+  limitName?: string | null;
+  primary?: RateLimitWindowResponse | null;
+  secondary?: RateLimitWindowResponse | null;
+  planType?: string | null;
+  rateLimitReachedType?: string | null;
+}
 
 interface AppServerRateLimitsResponse {
-  rateLimits?: {
-    primary?: { usedPercent?: number; windowDurationMins?: number | null; resetsAt?: number | null } | null;
-    planType?: string | null;
-    rateLimitReachedType?: string | null;
-  };
+  rateLimits?: RateLimitBucketResponse | null;
+  rateLimitsByLimitId?: Record<string, RateLimitBucketResponse> | null;
+  rateLimitResetCredits?: {
+    availableCount?: number;
+    credits?: Array<{
+      resetType?: string | null;
+      status?: string | null;
+      grantedAt?: number | null;
+      expiresAt?: number | null;
+      title?: string | null;
+    }> | null;
+  } | null;
+}
+
+interface SafeTelemetryRead {
+  sample: SafeRateLimitSample;
+  rateLimitBuckets: SafeRateLimitBucket[];
+  resetCredits: SafeResetCreditSnapshot | null;
 }
 
 async function acquireLock() {
@@ -46,9 +79,7 @@ async function acquireLock() {
 
 async function readState(): Promise<LocalObserverState> {
   try {
-    const parsed = JSON.parse(await readFile(statePath, "utf8")) as LocalObserverState;
-    if (parsed.schemaVersion !== 1) throw new Error("Unsupported local observer state version");
-    return parsed;
+    return normalizeLocalObserverState(JSON.parse(await readFile(statePath, "utf8")));
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return emptyLocalObserverState();
     throw error;
@@ -69,7 +100,72 @@ function generalizedPlanTier(value: string | null | undefined): SafeRateLimitSam
   return "unknown";
 }
 
-async function readRateLimitSample(): Promise<SafeRateLimitSample> {
+function optionalNonNegativeNumber(value: unknown): number | null {
+  return Number.isFinite(value) && Number(value) >= 0 ? Number(value) : null;
+}
+
+function safeWindow(
+  value: RateLimitWindowResponse | null | undefined,
+  exhausted: boolean,
+): SafeRateLimitBucket["primary"] {
+  if (!value || !Number.isFinite(value.usedPercent)) return null;
+  return {
+    usedPercent: Number(value.usedPercent),
+    resetsAtUtc: Number.isFinite(value.resetsAt) && Number(value.resetsAt) > 0
+      ? new Date(Number(value.resetsAt) * 1000).toISOString()
+      : null,
+    windowDurationMinutes: optionalNonNegativeNumber(value.windowDurationMins),
+    exhausted: exhausted || Number(value.usedPercent) >= 100,
+  };
+}
+
+function safeLimitId(value: string | null | undefined, fallback: string) {
+  const candidate = value ?? fallback;
+  return /^[A-Za-z0-9_.:-]{1,80}$/.test(candidate) ? candidate : "unknown";
+}
+
+function parseRateLimitBuckets(result: AppServerRateLimitsResponse): SafeRateLimitBucket[] {
+  const entries = result.rateLimitsByLimitId && Object.keys(result.rateLimitsByLimitId).length
+    ? Object.entries(result.rateLimitsByLimitId)
+    : result.rateLimits
+      ? [[result.rateLimits.limitId ?? "codex", result.rateLimits] as const]
+      : [];
+  return entries.map(([key, bucket]) => {
+    const exhausted = bucket.rateLimitReachedType === "rate_limit_reached";
+    return {
+      limitId: safeLimitId(bucket.limitId, key),
+      limitName: typeof bucket.limitName === "string" && bucket.limitName.length <= 80 ? bucket.limitName : null,
+      primary: safeWindow(bucket.primary, exhausted),
+      secondary: safeWindow(bucket.secondary, exhausted),
+    };
+  });
+}
+
+function safeUnixTimestamp(value: number | null | undefined) {
+  return Number.isFinite(value) && Number(value) > 0 ? new Date(Number(value) * 1000).toISOString() : null;
+}
+
+function safeLabel(value: string | null | undefined) {
+  return typeof value === "string" && value.length <= 80 ? value : null;
+}
+
+function parseResetCredits(result: AppServerRateLimitsResponse, sampledAtUtc: string): SafeResetCreditSnapshot | null {
+  const snapshot = result.rateLimitResetCredits;
+  if (!snapshot || !Number.isFinite(snapshot.availableCount)) return null;
+  return {
+    sampledAtUtc,
+    availableCount: Math.floor(Number(snapshot.availableCount)),
+    credits: (snapshot.credits ?? []).map((credit) => ({
+      resetType: safeLabel(credit.resetType) ?? "unknown",
+      status: safeLabel(credit.status) ?? "unknown",
+      grantedAtUtc: safeUnixTimestamp(credit.grantedAt),
+      expiresAtUtc: safeUnixTimestamp(credit.expiresAt),
+      title: safeLabel(credit.title),
+    })),
+  };
+}
+
+async function readTelemetry(): Promise<SafeTelemetryRead> {
   const executable = process.env.CODEX_BIN ?? "codex";
   const child = spawn(executable, ["app-server", "--stdio"], {
     stdio: ["pipe", "pipe", "ignore"],
@@ -79,7 +175,7 @@ async function readRateLimitSample(): Promise<SafeRateLimitSample> {
 
   const result = await new Promise<AppServerRateLimitsResponse>((resolve, reject) => {
     let settled = false;
-    const timer = setTimeout(() => finish(() => reject(new Error("Codex rate-limit read timed out"))), 20_000);
+    const timer = setTimeout(() => finish(() => reject(new Error("Codex telemetry read timed out"))), 20_000);
     const finish = (callback: () => void) => {
       if (settled) return;
       settled = true;
@@ -133,13 +229,32 @@ async function readRateLimitSample(): Promise<SafeRateLimitSample> {
     ? new Date(Number(primary.resetsAt) * 1000).toISOString()
     : null;
   const usedPercent = Number(primary.usedPercent);
+  const sampledAtUtc = new Date().toISOString();
   return {
-    sampledAtUtc: new Date().toISOString(),
-    usedPercent,
-    resetsAtUtc: resetsAt,
-    windowDurationMinutes: Number.isFinite(primary.windowDurationMins) ? Number(primary.windowDurationMins) : null,
-    exhausted: snapshot?.rateLimitReachedType === "rate_limit_reached" || usedPercent >= 100,
-    planTier: generalizedPlanTier(snapshot?.planType),
+    sample: {
+      sampledAtUtc,
+      usedPercent,
+      resetsAtUtc: resetsAt,
+      windowDurationMinutes: Number.isFinite(primary.windowDurationMins) ? Number(primary.windowDurationMins) : null,
+      exhausted: snapshot?.rateLimitReachedType === "rate_limit_reached" || usedPercent >= 100,
+      planTier: generalizedPlanTier(snapshot?.planType),
+    },
+    rateLimitBuckets: parseRateLimitBuckets(result),
+    resetCredits: parseResetCredits(result, sampledAtUtc),
+  };
+}
+
+function statusPayload(state: LocalObserverState) {
+  return {
+    schemaVersion: state.schemaVersion,
+    latestSample: state.lastSample,
+    retainedSampleCount: state.recentSamples.length,
+    retainedFromUtc: state.recentSamples.at(0)?.sampledAtUtc ?? null,
+    rateLimitBuckets: state.latestRateLimitBuckets,
+    resetCredits: state.latestResetCredits,
+    detectedResets: state.detectedResets,
+    pendingPublication: Boolean(state.pendingCandidate),
+    publishedResetCount: state.publishedKeys.length,
   };
 }
 
@@ -238,6 +353,13 @@ async function publishCandidate(candidate: LocalResetCandidate, key: string) {
   return { number: created.number, url: created.html_url, reused: false };
 }
 
+if (statusOnly) {
+  console.log(JSON.stringify(statusPayload(await readState()), null, 2));
+  process.exit(0);
+}
+
+console.log(JSON.stringify({ status: "starting", mode: publish ? "publish" : "read-only" }));
+
 const lock = await acquireLock();
 if (!lock) {
   console.log(JSON.stringify({ status: "skipped", reason: "observer already running" }));
@@ -255,13 +377,15 @@ try {
     await writeState(state);
   }
 
-  const sample = await readRateLimitSample();
+  const telemetry = await readTelemetry();
+  const sample = telemetry.sample;
   const advanced = advanceLocalObserver(state, sample, timeZone);
-  state = advanced.state;
+  state = recordLocalTelemetry(advanced.state, telemetry.rateLimitBuckets, telemetry.resetCredits);
   if (advanced.candidate) {
     const validated = validateObservation(advanced.candidate);
     const candidate = { ...advanced.candidate, ...validated };
     const key = candidateKey(candidate);
+    state = rememberLocalCandidate(state, candidate, key);
     if (!state.publishedKeys.includes(key)) state.pendingCandidate = { ...candidate, key };
   }
   await writeState(state);
@@ -278,6 +402,9 @@ try {
     usedPercent: sample.usedPercent,
     exhausted: sample.exhausted,
     resetsAtUtc: sample.resetsAtUtc,
+    rateLimitBucketCount: state.latestRateLimitBuckets.length,
+    queuedResetCount: state.latestResetCredits?.availableCount ?? 0,
+    detectedResetCount: state.detectedResets.length,
     pendingPublication: Boolean(state.pendingCandidate),
     publishedIssue,
   }));

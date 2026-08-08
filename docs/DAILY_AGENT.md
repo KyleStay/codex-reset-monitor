@@ -14,9 +14,10 @@ probability calculation, scoring, and generated forecast history.
    blocker without changing files.
 3. Never collect or reproduce prompts, responses, code, credentials, cookies,
    session tokens, account identifiers, private links, screenshots, or logs.
-   The separately installed, opt-in local observer is limited to the official
-   Codex `account/rateLimits/read` response and the privacy-minimized fields
-   documented in Operations. Do not broaden that allowlist.
+   The separately installed local observer is limited to the official Codex
+   `account/rateLimits/read` response and the privacy-minimized quota and reset-
+   credit fields documented in Operations. Do not broaden that allowlist or
+   inspect aggregate usage, conversation, or session storage.
 4. Never fabricate an observation, publication time, excerpt, model result, or
    source. Never treat a service incident or public claim as a confirmed
    personal reset.
@@ -41,7 +42,11 @@ Read `docs/HISTORICAL_RESEARCH.md` before researching.
 - Treat authenticated local-observer issues carrying `verified-observation` as
   confirmed only when their structured fields pass the dedicated transition
   validation. The observer can confirm either access returning after exhaustion
-  or a meter reset bounded by two samples; it never reconstructs past events.
+  or a near-zero full meter reset bounded by two samples; it never reconstructs
+  past events. Treat available reset credits as queued, not completed, resets.
+- Do not wait for community reports. Treat the automatic observer as the
+  primary future account-level signal and make source-backed historical
+  inference progress independently on every run.
 - Review current issues labeled `approved-public-source`; only those issues may
   enter the public-source dataset.
 - Search official domains for newly published, Codex-reset-relevant

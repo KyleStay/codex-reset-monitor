@@ -4,6 +4,9 @@ import {
   advanceLocalObserver,
   emptyLocalObserverState,
   markLocalCandidatePublished,
+  normalizeLocalObserverState,
+  recordLocalTelemetry,
+  rememberLocalCandidate,
   type SafeRateLimitSample,
 } from "../lib/local-observer";
 
@@ -66,7 +69,7 @@ test("local observer ignores sub-minute reset timestamp jitter", () => {
   assert.equal(jittered.candidate, null);
 });
 
-test("local observer emits a meter reset when usage drops and reset time advances", () => {
+test("local observer emits a full meter reset when usage reaches near zero and reset time advances", () => {
   const first = advanceLocalObserver(
     emptyLocalObserverState(),
     sample({ usedPercent: 37, resetsAtUtc: "2026-08-03T10:00:00.000Z" }),
@@ -96,4 +99,72 @@ test("published local candidates are cleared and deduplicated", () => {
   const published = markLocalCandidatePublished(state, "abc");
   assert.equal(published.pendingCandidate, null);
   assert.deepEqual(published.publishedKeys, ["abc"]);
+});
+
+test("older observer state migrates without losing safe reset samples", () => {
+  const migrated = normalizeLocalObserverState({
+    schemaVersion: 1,
+    lastSample: sample(),
+    openExhaustion: null,
+    pendingCandidate: null,
+    publishedKeys: ["old"],
+  });
+  assert.equal(migrated.schemaVersion, 3);
+  assert.equal(migrated.recentSamples.length, 1);
+  assert.equal(migrated.lastSample?.usedPercent, 42);
+  assert.deepEqual(migrated.publishedKeys, ["old"]);
+});
+
+test("observer retains privacy-safe telemetry and a deduplicated reset ledger", () => {
+  const initial = recordLocalTelemetry(emptyLocalObserverState(), [{
+    limitId: "codex",
+    limitName: null,
+    primary: {
+      usedPercent: 42,
+      resetsAtUtc: "2026-08-08T10:00:00.000Z",
+      windowDurationMinutes: 10080,
+      exhausted: false,
+    },
+    secondary: null,
+  }], {
+    sampledAtUtc: "2026-08-01T10:00:00.000Z",
+    availableCount: 2,
+    credits: [{
+      resetType: "codexRateLimits",
+      status: "available",
+      grantedAtUtc: "2026-08-01T09:00:00.000Z",
+      expiresAtUtc: "2026-08-08T09:00:00.000Z",
+      title: "Rate-limit reset",
+    }],
+  });
+  assert.equal(initial.latestRateLimitBuckets[0].limitId, "codex");
+  assert.equal(initial.latestResetCredits?.availableCount, 2);
+
+  const candidate = advanceLocalObserver(
+    advanceLocalObserver(initial, sample({ usedPercent: 100, exhausted: true }), "UTC").state,
+    sample({ sampledAtUtc: "2026-08-01T10:05:00.000Z", usedPercent: 0 }),
+    "UTC",
+  ).candidate!;
+  const remembered = rememberLocalCandidate(initial, candidate, "reset-key");
+  const duplicate = rememberLocalCandidate(remembered, candidate, "reset-key");
+  assert.equal(duplicate.detectedResets.length, 1);
+  assert.equal(duplicate.detectedResets[0].key, "reset-key");
+});
+
+test("observer does not classify a partial quota adjustment as a full reset", () => {
+  const first = advanceLocalObserver(
+    emptyLocalObserverState(),
+    sample({ usedPercent: 57, resetsAtUtc: "2026-08-08T10:00:00.000Z" }),
+    "UTC",
+  ).state;
+  const adjusted = advanceLocalObserver(
+    first,
+    sample({
+      sampledAtUtc: "2026-08-01T10:05:00.000Z",
+      usedPercent: 42,
+      resetsAtUtc: "2026-08-15T10:00:00.000Z",
+    }),
+    "UTC",
+  );
+  assert.equal(adjusted.candidate, null);
 });

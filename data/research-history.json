@@ -618,6 +618,105 @@
     "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
   },
   {
+    "id": "research-mechanism-2026-02-11-named-rate-limits",
+    "eventDate": "2026-02-11",
+    "datePrecision": "exact",
+    "eventTimeUtc": "2026-02-11T04:09:31Z",
+    "classification": "reset_mechanism_change",
+    "verificationState": "inferred",
+    "scope": "unknown",
+    "title": "Codex added support for multiple named rate-limit buckets",
+    "summary": "OpenAI repository PR #11260 added end-to-end support for independent named rate-limit buckets, including additional rate limits, per-name snapshots, app-server output, status rendering, and bucket-specific enforcement messages. A next-day follow-up fixed stale limit-name inheritance. This is a telemetry and enforcement mechanism change, not a reset event.",
+    "evidenceGrade": "A",
+    "cause": {
+      "assessment": "Codex client and app-server support for multiple independent quota buckets",
+      "confidence": "confirmed",
+      "rationale": "The merged OpenAI repository changes explicitly describe and implement named multi-limit parsing, storage, display, and enforcement behavior."
+    },
+    "detectionSignals": [
+      "Retain the limit name or identifier for every quota bucket.",
+      "Compare the bucket named by an enforcement error with the bucket shown by status telemetry.",
+      "Do not infer full restoration from one healthy bucket while another named bucket remains exhausted.",
+      "Detect stale inherited bucket names across partial consecutive snapshots."
+    ],
+    "contradictions": [
+      "The repository change establishes client support but does not identify the backend rollout date or account scope for every named bucket.",
+      "A follow-up fix on February 12 shows that partial snapshots could initially inherit a stale limit name.",
+      "This mechanism change does not establish that any allowance reset occurred on February 11."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://github.com/openai/codex/pull/11260",
+        "publicationTimeUtc": "2026-02-10T01:58:00Z",
+        "title": "OpenAI PR adds end-to-end multiple rate-limit support; merged 2026-02-11T04:09:31Z",
+        "provenance": "official_repository_staff",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/pull/11557",
+        "publicationTimeUtc": "2026-02-12T07:43:12Z",
+        "title": "OpenAI follow-up stops inheriting stale rate-limit names",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-08T16:23:02Z",
+    "lastReviewedAtUtc": "2026-08-08T16:23:02Z"
+  },
+  {
+    "id": "research-mechanism-2026-02-02-double-limits",
+    "eventDate": "2026-02-02",
+    "datePrecision": "day",
+    "classification": "reset_mechanism_change",
+    "verificationState": "inferred",
+    "scope": "selected_plans",
+    "title": "Codex launch promotion doubled limits for eligible plans",
+    "summary": "OpenAI's February 2 release notes announced a limited-time Codex promotion: included access for Free and Go and doubled Codex limits for Plus, Pro, and eligible Enterprise or Edu plans. Repository staff later clarified that the increase applied across clients, not only in the Codex app. This changes applicable allowance sizes; it is not evidence of a completed reset.",
+    "evidenceGrade": "A",
+    "cause": {
+      "assessment": "Limited-time product-launch promotion",
+      "confidence": "confirmed",
+      "rationale": "Dated official OpenAI release notes announced the promotion and an OpenAI repository contributor confirmed its cross-client scope."
+    },
+    "detectionSignals": [
+      "Retain the generalized plan and the promotion's effective period.",
+      "Compare absolute allowance when officially exposed rather than inferring a multiplier from percentages alone.",
+      "Track five-hour and seven-day windows separately.",
+      "Record the client, model, and reasoning level when comparing observed consumption under a promotion."
+    ],
+    "contradictions": [
+      "Some public reports said the promotion did not appear effective for an individual account, leaving rollout and accounting visibility uncertain.",
+      "Percentage-only displays cannot establish the absolute pre- and post-promotion allowance.",
+      "The Help sources provide a publication date but no time; their source timestamps are normalized to the documented UTC date boundary rather than treated as exact publication times.",
+      "The promotion announcement does not establish that an account reset occurred on February 2."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://help.openai.com/en/articles/6825453-chatgpt-release-notes",
+        "publicationTimeUtc": "2026-02-02T00:00:00Z",
+        "title": "OpenAI ChatGPT release notes dated February 2 announce the Codex launch promotion",
+        "provenance": "official_announcement",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://help.openai.com/en/articles/10128477-chatgpt-enterprise-edu-release-notes",
+        "publicationTimeUtc": "2026-02-02T00:00:00Z",
+        "title": "OpenAI Enterprise and Edu release notes dated February 2 describe eligible-plan doubled limits",
+        "provenance": "official_announcement",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/discussions/11406#discussioncomment-15764017",
+        "publicationTimeUtc": "2026-02-11T04:11:53Z",
+        "title": "OpenAI repository contributor confirms the increase applies regardless of client",
+        "provenance": "official_repository_staff",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-08T16:23:02Z",
+    "lastReviewedAtUtc": "2026-08-08T16:23:02Z"
+  },
+  {
     "id": "research-reset-2025-12-17",
     "eventDate": "2025-12-17",
     "datePrecision": "day",

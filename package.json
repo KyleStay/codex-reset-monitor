@@ -12,6 +12,7 @@
     "update:data": "node --import tsx scripts/update-data.ts",
     "observe:local": "node --import tsx scripts/local-reset-observer.ts",
     "observe:local:publish": "node --import tsx scripts/local-reset-observer.ts --publish",
+    "observe:local:status": "node --import tsx scripts/local-reset-observer.ts --status",
     "observe:local:install": "node scripts/install-local-observer.mjs",
     "qa:visual": "node scripts/visual-qa.mjs",
     "test": "npm run build && node --import tsx --test tests/*.test.ts",

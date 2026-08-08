@@ -80,14 +80,16 @@ export function buildForecast(features: FeatureSnapshot, now = new Date(features
       ]
     : [
         {
-          label: "No verified reset history",
+          label: features.confirmedEventCount === 0 ? "No verified reset history" : "One verified reset is not a schedule",
           direction: "lowers" as const,
-          detail: "No timing pattern has been learned. The displayed probabilities are a broad published prior.",
+          detail: features.confirmedEventCount === 0
+            ? "No timing pattern has been learned. The displayed probabilities are a broad published prior."
+            : "One confirmed event is available, but at least two are required to estimate a timing pattern. The displayed probabilities remain the broad published prior.",
         },
         {
-          label: "Community collection is active",
+          label: "Verified collection is active",
           direction: "neutral" as const,
-          detail: "Only administrator-verified GitHub reports can enter the reset history.",
+          detail: "Only deterministic local transitions or maintainer-verified reports can enter the confirmed reset history.",
         },
         {
           label: features.activeIncident ? "Active official incident" : "Official incident context",

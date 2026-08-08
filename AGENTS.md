@@ -30,18 +30,28 @@ authentication and sandbox-access rules apply here.
 - A sandboxed GitHub authentication, credential, keychain, or network failure
   is inconclusive. Retry the same read-only or user-authorized operation with
   narrow escalated access before reporting GitHub as unavailable.
-- Reset reports come from GitHub Issue Forms. Only issues labeled
-  `verified-observation` by a repository maintainer enter the public dataset.
-  Do not add seeded or fabricated reset records.
-- The operator may opt in to the repository's local reset observer. It may call
-  only the official Codex app-server `account/rateLimits/read` method and retain
-  only sampling time, primary-window used percentage, reset timestamp, window
-  duration, exhausted state, and a generalized plan tier. It must never read or
-  retain conversations, prompts, responses, code, session history, logs,
-  account identifiers, or device locale. A deterministic exhausted-to-available
-  transition, or a simultaneous used-percentage drop and reset-timestamp
-  advance, may be published by the authenticated maintainer as a
-  `verified-observation` issue. No other local signal may self-verify.
+- The installed local telemetry observer is the primary source for the
+  operator's future reset observations. Manual GitHub Issue Form reports are
+  optional corroboration, not an operational dependency. Only issues labeled
+  `verified-observation` by a repository maintainer enter the confirmed public
+  dataset. Do not add seeded or fabricated reset records.
+- The local observer may call only the official Codex app-server
+  `account/rateLimits/read` method. It may retain
+  sampling time, quota bucket ID/name, used percentage, reset timestamp, window
+  duration, exhausted state, generalized plan tier, OpenAI-issued reset-credit
+  count/status/grant/expiry metadata, deterministic full-reset records, and
+  publication deduplication state. Retain quota samples for at most 90 days. It
+  must never read or retain conversations, prompts, responses, code, thread or
+  session history, logs, account identifiers, credentials, or device locale.
+  A deterministic exhausted-to-available transition, or a near-zero
+  used-percentage transition with a reset-timestamp advance, may be published by
+  the authenticated maintainer as a `verified-observation` issue. Partial quota
+  adjustments and reset credits must not be labeled as completed full resets.
+  No other local signal may self-verify.
+- Historical resets should be reconstructed as best-effort, source-backed
+  inferences under `docs/HISTORICAL_RESEARCH.md`; do not wait for manual reports.
+  Preserve date precision, evidence grade, scope, contradictions, and cause
+  uncertainty. Inferred records remain distinct from confirmed observations.
 - An agent may classify evidence but must never invent probabilities, promote a
   model, convert public chatter into a confirmed reset, or guess an account
   identity. Forecast calculations remain deterministic repository code.

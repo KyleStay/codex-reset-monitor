@@ -5,6 +5,11 @@ ledger of possible historical resets, mechanism changes, causes, and future
 detection signals. This ledger is separate from verified reset observations and
 does not automatically change forecast probabilities.
 
+This backfill is a best-effort reconstruction and does not depend on manual
+submissions. The agent should infer only what durable sources support, preserve
+uncertainty explicitly, and prefer a coarse truthful date over a fabricated
+exact time. Private conversation history is neither required nor permitted.
+
 ## Evidence classes
 
 - **Confirmed observation:** only a project issue carrying

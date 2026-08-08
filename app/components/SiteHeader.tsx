@@ -38,7 +38,7 @@ export function SiteHeader() {
         <nav id="primary-nav" className={open ? "nav open" : "nav"} aria-label="Primary navigation">
           <Link href="/">Forecast</Link>
           <Link href="/performance">Performance</Link>
-          <Link href="/submit">Report a reset</Link>
+          <Link href="/#evidence">Evidence</Link>
           <Link href="/methodology">Methodology</Link>
           <Link href="/admin">Admin</Link>
         </nav>

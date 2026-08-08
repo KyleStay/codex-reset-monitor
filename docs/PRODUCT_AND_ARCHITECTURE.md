@@ -1,24 +1,25 @@
 # Codex Reset Monitor: product and architecture
 
-Last verified: 2026-08-01
+Last verified: 2026-08-08
 
 ## Current direction
 
 The live product uses a recurring local Codex research agent, GitHub Pages,
 GitHub Issues, and repository-backed JSON. GitHub Actions is only the Pages
 artifact deployment transport. It contains no demonstration observations.
-OpenAI does not expose a public feed of individual Codex account reset times, so
-real reset evidence must come from explicit user observations or an operator's
-opt-in, privacy-minimized local rate-limit observer. The system keeps those
-observations distinct from official service incidents and approved public-source
-context.
+OpenAI does not expose a public feed of individual Codex account reset times.
+The operator's privacy-minimized local telemetry bridge is therefore the
+primary source for future confirmed events; manual reports are optional
+corroboration. The agent reconstructs earlier events from durable public sources
+as explicitly inferred history. The system keeps confirmed observations,
+historical inferences, official incidents, and public context distinct.
 
 ## Evidence and trust
 
 - **Confirmed observation:** a public GitHub reset issue carrying the protected
-  `verified-observation` label. This is either maintainer-reviewed community
-  evidence or a deterministic transition published by the maintainer's
-  installed local observer.
+  `verified-observation` label. This is normally a deterministic transition
+  published by the installed local observer, with maintainer-reviewed community
+  evidence available as optional corroboration.
 - **Correction:** changed content from a previously verified issue, recorded
   with a new content hash and append-only audit entry.
 - **Incident:** an official OpenAI Status record. It is context, not a reset.
@@ -37,8 +38,8 @@ one record. One report cannot produce a high-confidence forecast.
 ## Architecture
 
 ```text
-Official public sources       opt-in local rate-limit read
-         |                    (privacy-minimized transitions)
+Official public sources       local telemetry bridge
+         |                    (quota + reset credits only)
  daily research agent                    |
          |                     verified GitHub reset issue
          |                               |
@@ -80,7 +81,7 @@ The prior is not adjusted by official incidents.
 | Public site | GitHub Pages | Public repository Pages and custom Actions workflow | Last successful artifact remains available after a failed refresh. |
 | Daily research and refresh | Recurring local Codex agent | Can browse approved public sources, review evidence, run deterministic code, and publish through authenticated Git | Depends on the configured host, Codex availability/usage, credentials, and a clean checkout; failures leave the prior site intact. |
 | Pages artifact deployment | GitHub Actions | A push to `main` builds, uploads, and deploys the static artifact | This is the only permitted workflow; it does not research, refresh, test, modify datasets, handle issues, commit, or push. |
-| Observation input | GitHub Issue Forms | Structured required fields in public repositories | Requires a GitHub account; forms are public preview. |
+| Observation input | Local Codex app-server bridge plus optional GitHub Issue Forms | Automatic deterministic transitions; structured public corroboration | The bridge begins recording only after installation and cannot reconstruct prior private quota states. |
 | Administrative protection | GitHub repository permissions | Only collaborators can apply verification labels and push publishing commits | Public users can read the audit queue but cannot approve records. |
 | Persistent data and rollback | Git repository | Versioned JSON, issue history, commit history | Repository scale is suitable only for a small public dataset; migrate behind interfaces if it grows materially. |
 
@@ -103,11 +104,14 @@ publication/retrieval time, canonical URL, minimal excerpt, metadata, normalized
 features, and content hash. Reset observations retain their evidence kind and
 UTC timing bounds, stated time zone, broad surface and tier, detection method,
 confidence, capped trust, verification time, source issue URL/number, content
-hash, and correction audit. Local meter observations also retain the
-before/after used percentages and official reset timestamps needed to audit the
-transition. Prompts, responses, code, credentials, cookies, tokens, private
-links, screenshots, logs, account identifiers, device locale, and copied
-GitHub author identity are excluded.
+hash, and correction audit. Local telemetry retains up to 90 days of quota
+samples, the latest multi-bucket quota view, OpenAI-issued reset-credit
+count/status/grant/expiry metadata, and the before/after percentages and
+official reset timestamps needed to audit detected full-reset transitions.
+Prompts, responses, code, credentials,
+cookies, auth tokens, private links, screenshots, logs,
+conversation/thread/session history, account identifiers, device locale, and
+copied GitHub author identity are excluded.
 
 ## Forecast and evaluation gates
 

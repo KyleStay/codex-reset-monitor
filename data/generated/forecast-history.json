@@ -1,7 +1,7 @@
 [
   {
-    "id": "events-0-cutoff-2026-08-03-0d76d739",
-    "at": "2026-08-03T09:21:57.570Z",
+    "id": "events-1-cutoff-2026-08-08-09e98390",
+    "at": "2026-08-08T16:23:29.393Z",
     "probabilities": {
       "1": 0.04,
       "3": 0.12,
@@ -16,6 +16,33 @@
     "outcome": "Awaiting 24-hour outcome",
     "outcomes": null,
     "brier": null,
+    "timingErrorMinutes": null,
+    "modelVersion": "published-prior-0.1.0",
+    "datasetVersion": "events-1-cutoff-2026-08-08-09e98390"
+  },
+  {
+    "id": "events-0-cutoff-2026-08-03-0d76d739",
+    "at": "2026-08-03T09:21:57.570Z",
+    "probabilities": {
+      "1": 0.04,
+      "3": 0.12,
+      "6": 0.22,
+      "12": 0.39,
+      "24": 0.63
+    },
+    "p6": 0.22,
+    "likelyStartUtc": null,
+    "likelyEndUtc": null,
+    "interval": null,
+    "outcome": "No verified reset within 24h",
+    "outcomes": {
+      "1": false,
+      "3": false,
+      "6": false,
+      "12": false,
+      "24": false
+    },
+    "brier": 0.1227,
     "timingErrorMinutes": null,
     "modelVersion": "published-prior-0.1.0",
     "datasetVersion": "events-0-cutoff-2026-08-03-0d76d739"

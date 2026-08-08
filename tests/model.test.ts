@@ -50,6 +50,22 @@ test("zero observations use the published prior and do not invent a likely inter
   assert.match(forecast.dataSufficiencyLabel, /no verified reset history/i);
 });
 
+test("one observation keeps the prior but acknowledges the confirmed event", () => {
+  const forecast = buildForecast({
+    ...features,
+    confirmedEventCount: 1,
+    hoursSinceLastConfirmedReset: 7,
+    sourceTrustMean: 0.6,
+    dataQuality: 0.04,
+  });
+  assert.deepEqual(forecast.probabilities, NO_DATA_PRIOR);
+  assert.equal(forecast.likelyStartUtc, null);
+  assert.equal(forecast.likelyEndUtc, null);
+  assert.match(forecast.explanationFactors[0].label, /one verified reset/i);
+  assert.match(forecast.explanationFactors[0].detail, /at least two/i);
+  assert.match(forecast.dataSufficiencyLabel, /limited history/i);
+});
+
 test("scoring uses only events after forecast cutoff and within each horizon", () => {
   const forecast = buildForecast(features);
   const scored = scoreForecast(forecast, "2026-07-28T19:00:00.000Z");
