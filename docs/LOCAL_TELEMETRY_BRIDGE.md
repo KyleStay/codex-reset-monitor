@@ -27,13 +27,13 @@ The supported interface is documented in the official
 
 The private state file is
 `~/Library/Application Support/Codex Reset Monitor/local-observer.json`. Schema
-version 3 contains:
+version 4 contains:
 
 - the latest primary quota sample;
 - up to 90 days of five-minute primary quota samples;
 - the latest safe multi-bucket quota response;
 - the latest OpenAI-issued queued reset-credit count and safe grant/expiry
-  metadata;
+  metadata, plus bounded before/after snapshots on newly detected resets;
 - open exhaustion state;
 - deterministic detected resets;
 - pending publication and deduplication keys.
@@ -57,6 +57,11 @@ published as confirmed.
 
 Available reset credits are queued capacity issued by OpenAI. They are surfaced
 separately and never treated as evidence that a full reset already completed.
+An event is classified as out of cycle when it occurs materially before the
+previous provider-issued reset anchor. Its new provider-issued anchor replaces
+the superseded anchor in forecasts, while the exceptional event is excluded
+from recurring-cadence estimation. Completion and cause remain separate: only
+a bounded credit-count decrease can support later credit-redemption analysis.
 
 ## Historical limit
 

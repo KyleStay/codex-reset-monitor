@@ -40,6 +40,10 @@ test("submission-to-forecast-to-score pipeline is reproducible", async () => {
   const features: FeatureSnapshot = {
     cutoffUtc: "2026-07-28T14:00:00.000Z",
     confirmedEventCount: 1,
+    scheduledEventCount: 0,
+    outOfCycleEventCount: 0,
+    lastResetTiming: "unknown",
+    scheduledResetAtUtc: null,
     hoursSinceLastConfirmedReset: 2,
     medianCycleHours: 24,
     cycleDispersionHours: 6,

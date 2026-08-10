@@ -1,14 +1,14 @@
 {
-  "generatedAtUtc": "2026-08-08T16:33:04.333Z",
+  "generatedAtUtc": "2026-08-10T02:09:01.229Z",
   "sourceMode": "live-official-status-and-verified-github-issues",
   "officialStatusHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-08T16:33:05.157Z",
+    "checkedAtUtc": "2026-08-10T02:09:02.184Z",
     "message": "Collected 3 Codex-relevant official incident record(s)."
   },
   "observationSourceHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-08T16:33:04.333Z",
+    "checkedAtUtc": "2026-08-10T02:09:01.229Z",
     "message": "Verified observations and approved public sources were collected from GitHub Issues.",
     "rejectedRecordCount": 0,
     "duplicateCount": 0
@@ -20,7 +20,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-24T07:55:28.000Z",
-      "retrievalTimeUtc": "2026-08-08T16:33:05.157Z",
+      "retrievalTimeUtc": "2026-08-10T02:09:02.184Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KY9HYHCMK8AND23B4X17XQEK",
       "title": "Elevated Errors in Codex Review",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We are investigating the issue for the listed services.",
@@ -42,7 +42,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-20T00:34:34.000Z",
-      "retrievalTimeUtc": "2026-08-08T16:33:05.157Z",
+      "retrievalTimeUtc": "2026-08-10T02:09:02.184Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXYF4BTCV9DTZ5NDSFN716FH",
       "title": "Elevated errors for GitHub-dependent ChatGPT and Codex workflows",
       "excerpt": "All impacted services have now fully recovered. We are monitoring the recovery. Users may experience failures or delays in ChatGPT and Codex workflows that depend on GitHub. This mostly should impact Codex web and code review for PRs on Git",
@@ -64,7 +64,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-18T08:05:37.000Z",
-      "retrievalTimeUtc": "2026-08-08T16:33:05.157Z",
+      "retrievalTimeUtc": "2026-08-10T02:09:02.184Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXT44TAQQ2R0AZDDVSJGAC4H",
       "title": "Some users are unable to access Codex",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We have identified an issue causing some users to receive access-denied errors when using the Codex desktop app and CLI.",
@@ -82,69 +82,79 @@
     }
   ],
   "approvedPublicSources": [],
-  "verifiedObservationCount": 1,
+  "verifiedObservationCount": 2,
   "forecast": {
-    "id": "fc_20260808163304",
-    "forecastAtUtc": "2026-08-08T16:33:04.333Z",
+    "id": "fc_20260810020901",
+    "forecastAtUtc": "2026-08-10T02:09:01.229Z",
     "probabilities": {
-      "1": 0.04,
-      "3": 0.12,
-      "6": 0.22,
-      "12": 0.39,
-      "24": 0.63
+      "1": 0.01,
+      "3": 0.01,
+      "6": 0.01,
+      "12": 0.01,
+      "24": 0.01
     },
-    "likelyStartUtc": null,
-    "likelyEndUtc": null,
+    "likelyStartUtc": "2026-08-15T16:17:18.000Z",
+    "likelyEndUtc": "2026-08-16T00:41:18.000Z",
     "confidenceGrade": "D",
     "featureSnapshot": {
-      "cutoffUtc": "2026-08-08T16:33:04.333Z",
-      "confirmedEventCount": 1,
-      "hoursSinceLastConfirmedReset": 7.166343611111111,
-      "medianCycleHours": 24,
-      "cycleDispersionHours": 12,
+      "cutoffUtc": "2026-08-10T02:09:01.229Z",
+      "confirmedEventCount": 2,
+      "scheduledEventCount": 0,
+      "outOfCycleEventCount": 1,
+      "lastResetTiming": "out-of-cycle",
+      "scheduledResetAtUtc": "2026-08-15T20:29:18.000Z",
+      "hoursSinceLastConfirmedReset": 29.603554444444445,
+      "medianCycleHours": 167.94,
+      "cycleDispersionHours": 8.4,
       "activeIncident": false,
-      "incidentRecencyHours": 368.62675916666666,
+      "incidentRecencyHours": 402.22589694444446,
       "approvedPostCount24h": 0,
       "weightedReportVolume6h": 0,
       "sourceTrustMean": 0.6,
-      "dataQuality": 0.04
+      "dataQuality": 0.08
     },
     "explanationFactors": [
       {
-        "label": "One verified reset is not a schedule",
+        "label": "Official next-reset anchor",
         "direction": "lowers",
-        "detail": "One confirmed event is available, but at least two are required to estimate a timing pattern. The displayed probabilities remain the broad published prior."
+        "detail": "The current quota window reports 138 hours until its next reset."
       },
       {
-        "label": "Verified collection is active",
+        "label": "Out-of-cycle reset isolated",
         "direction": "neutral",
-        "detail": "Only deterministic local transitions or maintainer-verified reports can enter the confirmed reset history."
+        "detail": "1 early reset event(s) re-anchored the current window but are excluded from recurring-cadence estimation."
       },
       {
-        "label": "Official incident context",
+        "label": "No active official incident",
         "direction": "neutral",
-        "detail": "Official OpenAI status is monitored separately from personal reset observations."
+        "detail": "No active Codex-relevant incident is represented in the current snapshot."
       }
     ],
-    "modelVersion": "published-prior-0.1.0",
-    "datasetVersion": "events-1-cutoff-2026-08-08-09e98390",
+    "modelVersion": "provider-anchor-baseline-0.3.0",
+    "datasetVersion": "events-2-cutoff-2026-08-10-34673297",
     "dataSufficiencyLabel": "Experimental—limited history"
   },
   "performance": {
-    "sampleCount": 5,
-    "brier": 0.1227,
-    "baselineBrier": 0.1227,
+    "sampleCount": 7,
+    "brier": 0.12004285714285716,
+    "baselineBrier": 0.12004285714285716,
     "precision6h": null,
-    "recall6h": null,
+    "recall6h": 0,
     "falseAlarmRate": null,
-    "missedEventRate": null,
+    "missedEventRate": 1,
     "medianTimingErrorMinutes": null,
     "calibration": [
       {
-        "bucket": "21–40%",
-        "predicted": 0.22000000000000003,
+        "bucket": "0–20%",
+        "predicted": 0.01,
         "observed": 0,
-        "n": 5
+        "n": 1
+      },
+      {
+        "bucket": "21–40%",
+        "predicted": 0.22,
+        "observed": 0.16666666666666666,
+        "n": 6
       }
     ]
   }

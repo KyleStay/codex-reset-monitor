@@ -5,6 +5,10 @@ const sigmoid = (value: number) => 1 / (1 + Math.exp(-value));
 const featureTag = (features: FeatureSnapshot) => {
   const value = [
     features.confirmedEventCount,
+    features.scheduledEventCount,
+    features.outOfCycleEventCount,
+    features.lastResetTiming,
+    features.scheduledResetAtUtc,
     features.medianCycleHours,
     features.cycleDispersionHours,
     features.activeIncident,
@@ -28,9 +32,12 @@ export const NO_DATA_PRIOR: Record<Horizon, number> = {
 };
 
 export function baselineProbability(hours: Horizon, features: FeatureSnapshot): number {
-  if (features.confirmedEventCount < 2) return NO_DATA_PRIOR[hours];
+  const anchoredRemaining = features.scheduledResetAtUtc
+    ? Math.max(0, (Date.parse(features.scheduledResetAtUtc) - Date.parse(features.cutoffUtc)) / 3_600_000)
+    : null;
+  if (features.confirmedEventCount < 2 && anchoredRemaining === null) return NO_DATA_PRIOR[hours];
   const elapsed = features.hoursSinceLastConfirmedReset ?? features.medianCycleHours * 0.5;
-  const remaining = Math.max(0, features.medianCycleHours - elapsed);
+  const remaining = anchoredRemaining ?? Math.max(0, features.medianCycleHours - elapsed);
   const scale = Math.max(2, features.cycleDispersionHours);
   const scheduleHazard = sigmoid((hours - remaining) / scale);
   const sparsePenalty = Math.min(0.12, Math.max(0, (20 - features.confirmedEventCount) * 0.006));
@@ -39,7 +46,7 @@ export function baselineProbability(hours: Horizon, features: FeatureSnapshot): 
 
 export function candidateProbability(hours: Horizon, features: FeatureSnapshot): number {
   const base = baselineProbability(hours, features);
-  if (features.confirmedEventCount < 2) return base;
+  if (features.confirmedEventCount < 2 && !features.scheduledResetAtUtc) return base;
   const logit = Math.log(base / (1 - base));
   const incident = features.activeIncident ? 0.28 : 0;
   const reports = Math.min(0.3, features.weightedReportVolume6h * 0.08);
@@ -52,23 +59,33 @@ export function buildForecast(features: FeatureSnapshot, now = new Date(features
   const probabilities = Object.fromEntries(
     HORIZONS.map((hours) => [hours, candidateProbability(hours, features)])
   ) as Record<Horizon, number>;
-  const hasTimingHistory = features.confirmedEventCount >= 2 && features.hoursSinceLastConfirmedReset !== null;
+  const hasProviderAnchor = Boolean(features.scheduledResetAtUtc && Date.parse(features.scheduledResetAtUtc) > now.getTime());
+  const hasTimingHistory = hasProviderAnchor
+    || (features.scheduledEventCount >= 2 && features.hoursSinceLastConfirmedReset !== null);
   const elapsed = features.hoursSinceLastConfirmedReset ?? 0;
-  const remaining = Math.max(1, features.medianCycleHours - elapsed);
-  const center = now.getTime() + remaining * 3_600_000;
+  const remaining = hasProviderAnchor
+    ? Math.max(1, (Date.parse(features.scheduledResetAtUtc!) - now.getTime()) / 3_600_000)
+    : Math.max(1, features.medianCycleHours - elapsed);
+  const center = hasProviderAnchor
+    ? Date.parse(features.scheduledResetAtUtc!)
+    : now.getTime() + remaining * 3_600_000;
   const halfWidth = Math.max(90 * 60_000, features.cycleDispersionHours * 1_800_000);
   const confidenceGrade = features.confirmedEventCount >= 50 ? "B" : features.confirmedEventCount >= 20 ? "C" : "D";
   const explanationFactors = hasTimingHistory
     ? [
         {
-          label: "Time since the last confirmed reset",
+          label: hasProviderAnchor ? "Official next-reset anchor" : "Time since the last scheduled reset",
           direction: remaining <= 12 ? "raises" as const : "lowers" as const,
-          detail: `${Math.round(elapsed)} hours have elapsed against a ${features.medianCycleHours}-hour median cycle.`,
+          detail: hasProviderAnchor
+            ? `The current quota window reports ${Math.round(remaining)} hours until its next reset.`
+            : `${Math.round(elapsed)} hours have elapsed against a ${features.medianCycleHours}-hour median scheduled cycle.`,
         },
         {
-          label: "Limited verified history",
-          direction: "lowers" as const,
-          detail: `${features.confirmedEventCount} confirmed events are available; 20 are required before statistical promotion.`,
+          label: features.outOfCycleEventCount ? "Out-of-cycle reset isolated" : "Limited verified history",
+          direction: features.outOfCycleEventCount ? "neutral" as const : "lowers" as const,
+          detail: features.outOfCycleEventCount
+            ? `${features.outOfCycleEventCount} early reset event(s) re-anchored the current window but are excluded from recurring-cadence estimation.`
+            : `${features.confirmedEventCount} confirmed events are available; 20 are required before statistical promotion.`,
         },
         {
           label: features.activeIncident ? "Active official incident" : "No active official incident",
@@ -109,7 +126,11 @@ export function buildForecast(features: FeatureSnapshot, now = new Date(features
     confidenceGrade,
     featureSnapshot: features,
     explanationFactors,
-    modelVersion: features.confirmedEventCount < 2 ? "published-prior-0.1.0" : "schedule-baseline-0.2.0",
+    modelVersion: hasProviderAnchor
+      ? "provider-anchor-baseline-0.3.0"
+      : features.scheduledEventCount < 2
+        ? "published-prior-0.1.0"
+        : "schedule-baseline-0.3.0",
     datasetVersion: `events-${features.confirmedEventCount}-cutoff-${now.toISOString().slice(0, 10)}-${featureTag(features)}`,
     dataSufficiencyLabel: features.confirmedEventCount === 0
       ? "Experimental—no verified reset history"

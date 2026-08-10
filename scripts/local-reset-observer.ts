@@ -287,10 +287,21 @@ function issueBody(candidate: LocalResetCandidate, key: string) {
     : [
       "### Limit reached time", candidate.limitReachedAtUtc ?? "_No response_",
       "### Access returned time", candidate.observedResetAtUtc,
+      "### Previous reset time", candidate.previousResetsAtUtc ?? "_No response_",
+      "### Current reset time", candidate.currentResetsAtUtc ?? "_No response_",
     ];
+  const classification = [
+    "### Reset timing", candidate.resetTiming,
+    "### Lead versus previous schedule", candidate.scheduledLeadMinutes === null
+      ? "_No response_"
+      : `${candidate.scheduledLeadMinutes} minutes`,
+    "### Reset credits before", candidate.previousResetCredits?.availableCount ?? "_No response_",
+    "### Reset credits after", candidate.currentResetCredits?.availableCount ?? "_No response_",
+  ];
   return [
     ...common,
     ...timing,
+    ...classification,
     "### Time zone", candidate.statedTimeZone,
     "### Codex surface", "Other — account-level local telemetry",
     "### Generalized plan tier", tier,
@@ -379,10 +390,28 @@ try {
 
   const telemetry = await readTelemetry();
   const sample = telemetry.sample;
-  const advanced = advanceLocalObserver(state, sample, timeZone);
+  const advanced = advanceLocalObserver(state, sample, timeZone, telemetry.resetCredits);
   state = recordLocalTelemetry(advanced.state, telemetry.rateLimitBuckets, telemetry.resetCredits);
   if (advanced.candidate) {
-    const validated = validateObservation(advanced.candidate);
+    const validated = validateObservation({
+      observationKind: advanced.candidate.observationKind,
+      limitReachedAtUtc: advanced.candidate.limitReachedAtUtc,
+      priorSampleAtUtc: advanced.candidate.priorSampleAtUtc,
+      observedResetAtUtc: advanced.candidate.observedResetAtUtc,
+      previousUsedPercent: advanced.candidate.previousUsedPercent,
+      currentUsedPercent: advanced.candidate.currentUsedPercent,
+      previousResetsAtUtc: advanced.candidate.previousResetsAtUtc,
+      currentResetsAtUtc: advanced.candidate.currentResetsAtUtc,
+      statedTimeZone: advanced.candidate.statedTimeZone,
+      precedingForecastId: advanced.candidate.precedingForecastId,
+      codexSurface: advanced.candidate.codexSurface,
+      planTier: advanced.candidate.planTier,
+      relatedIncidentIds: advanced.candidate.relatedIncidentIds,
+      relatedSourceIds: advanced.candidate.relatedSourceIds,
+      submitterNotes: advanced.candidate.submitterNotes,
+      detectionMethod: advanced.candidate.detectionMethod,
+      confidence: advanced.candidate.confidence,
+    });
     const candidate = { ...advanced.candidate, ...validated };
     const key = candidateKey(candidate);
     state = rememberLocalCandidate(state, candidate, key);

@@ -28,6 +28,10 @@ export interface ObservationInput {
 export interface FeatureSnapshot {
   cutoffUtc: string;
   confirmedEventCount: number;
+  scheduledEventCount: number;
+  outOfCycleEventCount: number;
+  lastResetTiming: "scheduled" | "out-of-cycle" | "unknown" | null;
+  scheduledResetAtUtc: string | null;
   hoursSinceLastConfirmedReset: number | null;
   medianCycleHours: number;
   cycleDispersionHours: number;

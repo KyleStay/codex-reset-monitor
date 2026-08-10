@@ -1,4 +1,5 @@
 import type { ObservationInput } from "./domain";
+import { classifyResetTiming, type ResetTiming } from "./reset-schedule";
 
 const SAMPLE_RETENTION_MS = 90 * 24 * 60 * 60_000;
 const MAX_SAMPLE_COUNT = 90 * 24 * 12;
@@ -34,6 +35,10 @@ export interface SafeResetCreditSnapshot {
 export interface LocalResetCandidate extends ObservationInput {
   previousUsedPercent: number;
   currentUsedPercent: number;
+  resetTiming: ResetTiming;
+  scheduledLeadMinutes: number | null;
+  previousResetCredits: SafeResetCreditSnapshot | null;
+  currentResetCredits: SafeResetCreditSnapshot | null;
 }
 
 export interface SafeDetectedReset {
@@ -46,10 +51,14 @@ export interface SafeDetectedReset {
   currentUsedPercent: number;
   previousResetsAtUtc?: string;
   currentResetsAtUtc?: string;
+  resetTiming: ResetTiming;
+  scheduledLeadMinutes: number | null;
+  previousResetCredits: SafeResetCreditSnapshot | null;
+  currentResetCredits: SafeResetCreditSnapshot | null;
 }
 
 export interface LocalObserverState {
-  schemaVersion: 3;
+  schemaVersion: 4;
   lastSample: SafeRateLimitSample | null;
   recentSamples: SafeRateLimitSample[];
   latestRateLimitBuckets: SafeRateLimitBucket[];
@@ -73,10 +82,11 @@ interface LegacyLocalObserverState {
 }
 
 interface VersionTwoLocalObserverState {
-  schemaVersion: 2;
+  schemaVersion: 2 | 3;
   lastSample?: SafeRateLimitSample | null;
   recentSamples?: SafeRateLimitSample[];
   latestRateLimitBuckets?: SafeRateLimitBucket[];
+  latestResetCredits?: SafeResetCreditSnapshot | null;
   latestUsage?: unknown;
   detectedResets?: SafeDetectedReset[];
   openExhaustion?: LocalObserverState["openExhaustion"];
@@ -85,7 +95,7 @@ interface VersionTwoLocalObserverState {
 }
 
 export const emptyLocalObserverState = (): LocalObserverState => ({
-  schemaVersion: 3,
+  schemaVersion: 4,
   lastSample: null,
   recentSamples: [],
   latestRateLimitBuckets: [],
@@ -96,10 +106,22 @@ export const emptyLocalObserverState = (): LocalObserverState => ({
   publishedKeys: [],
 });
 
+function normalizePendingCandidate(candidate: LocalObserverState["pendingCandidate"]) {
+  if (!candidate) return null;
+  const classification = classifyResetTiming(candidate);
+  return {
+    ...candidate,
+    resetTiming: candidate.resetTiming ?? classification.timing,
+    scheduledLeadMinutes: candidate.scheduledLeadMinutes ?? classification.scheduledLeadMinutes,
+    previousResetCredits: candidate.previousResetCredits ?? null,
+    currentResetCredits: candidate.currentResetCredits ?? null,
+  };
+}
+
 export function normalizeLocalObserverState(value: unknown): LocalObserverState {
   if (!value || typeof value !== "object") throw new Error("Invalid local observer state");
   const parsed = value as Partial<LocalObserverState> | LegacyLocalObserverState | VersionTwoLocalObserverState;
-  if (parsed.schemaVersion !== 1 && parsed.schemaVersion !== 2 && parsed.schemaVersion !== 3) {
+  if (parsed.schemaVersion !== 1 && parsed.schemaVersion !== 2 && parsed.schemaVersion !== 3 && parsed.schemaVersion !== 4) {
     throw new Error("Unsupported local observer state version");
   }
   const base = emptyLocalObserverState();
@@ -109,20 +131,31 @@ export function normalizeLocalObserverState(value: unknown): LocalObserverState 
       lastSample: parsed.lastSample ?? null,
       recentSamples: parsed.lastSample ? [parsed.lastSample] : [],
       openExhaustion: parsed.openExhaustion ?? null,
-      pendingCandidate: parsed.pendingCandidate ?? null,
+      pendingCandidate: normalizePendingCandidate(parsed.pendingCandidate ?? null),
       publishedKeys: parsed.publishedKeys ?? [],
     };
   }
   return {
     ...base,
-    schemaVersion: 3,
+    schemaVersion: 4,
     lastSample: parsed.lastSample ?? null,
     recentSamples: Array.isArray(parsed.recentSamples) ? parsed.recentSamples : [],
     latestRateLimitBuckets: Array.isArray(parsed.latestRateLimitBuckets) ? parsed.latestRateLimitBuckets : [],
-    latestResetCredits: parsed.schemaVersion === 3 ? parsed.latestResetCredits ?? null : null,
-    detectedResets: Array.isArray(parsed.detectedResets) ? parsed.detectedResets : [],
+    latestResetCredits: parsed.schemaVersion === 3 || parsed.schemaVersion === 4 ? parsed.latestResetCredits ?? null : null,
+    detectedResets: Array.isArray(parsed.detectedResets)
+      ? parsed.detectedResets.map((entry) => {
+          const classification = classifyResetTiming(entry);
+          return {
+            ...entry,
+            resetTiming: entry.resetTiming ?? classification.timing,
+            scheduledLeadMinutes: entry.scheduledLeadMinutes ?? classification.scheduledLeadMinutes,
+            previousResetCredits: entry.previousResetCredits ?? null,
+            currentResetCredits: entry.currentResetCredits ?? null,
+          };
+        })
+      : [],
     openExhaustion: parsed.openExhaustion ?? null,
-    pendingCandidate: parsed.pendingCandidate ?? null,
+    pendingCandidate: normalizePendingCandidate(parsed.pendingCandidate ?? null),
     publishedKeys: Array.isArray(parsed.publishedKeys) ? parsed.publishedKeys : [],
   };
 }
@@ -131,6 +164,7 @@ export function advanceLocalObserver(
   current: LocalObserverState,
   sample: SafeRateLimitSample,
   timeZone: string,
+  currentResetCredits: SafeResetCreditSnapshot | null = null,
 ): { state: LocalObserverState; candidate: LocalResetCandidate | null } {
   const retentionCutoff = Date.parse(sample.sampledAtUtc) - SAMPLE_RETENTION_MS;
   const recentSamples = [...current.recentSamples, sample]
@@ -156,6 +190,12 @@ export function advanceLocalObserver(
   if (state.openExhaustion) {
     const exhausted = state.openExhaustion;
     state.openExhaustion = null;
+    const classification = classifyResetTiming({
+      observedResetAtUtc: sample.sampledAtUtc,
+      previousResetsAtUtc: exhausted.resetsAtUtc ?? undefined,
+      currentResetsAtUtc: sample.resetsAtUtc ?? undefined,
+      windowDurationMinutes: sample.windowDurationMinutes,
+    });
     const candidate: LocalResetCandidate = {
       observationKind: "access-restored",
       limitReachedAtUtc: exhausted.firstObservedAtUtc,
@@ -170,6 +210,10 @@ export function advanceLocalObserver(
       confidence: 1,
       previousUsedPercent: exhausted.usedPercent,
       currentUsedPercent: sample.usedPercent,
+      resetTiming: classification.timing,
+      scheduledLeadMinutes: classification.scheduledLeadMinutes,
+      previousResetCredits: current.latestResetCredits,
+      currentResetCredits,
       previousResetsAtUtc: exhausted.resetsAtUtc ?? undefined,
       currentResetsAtUtc: sample.resetsAtUtc ?? undefined,
     };
@@ -182,7 +226,17 @@ export function advanceLocalObserver(
   const looksLikeFullReset = sample.usedPercent <= 5 && previous
     ? previous.usedPercent - sample.usedPercent >= 5
     : false;
-  if (previous && !previous.exhausted && resetTimestampAdvanced && looksLikeFullReset) {
+  const stableWindowDuration = previous?.windowDurationMinutes !== null
+    && previous?.windowDurationMinutes !== undefined
+    && sample.windowDurationMinutes !== null
+    && Math.abs(previous.windowDurationMinutes - sample.windowDurationMinutes) <= 1;
+  if (previous && !previous.exhausted && resetTimestampAdvanced && looksLikeFullReset && stableWindowDuration) {
+    const classification = classifyResetTiming({
+      observedResetAtUtc: sample.sampledAtUtc,
+      previousResetsAtUtc: previous.resetsAtUtc ?? undefined,
+      currentResetsAtUtc: sample.resetsAtUtc ?? undefined,
+      windowDurationMinutes: sample.windowDurationMinutes,
+    });
     const candidate: LocalResetCandidate = {
       observationKind: "meter-reset",
       priorSampleAtUtc: previous.sampledAtUtc,
@@ -199,6 +253,10 @@ export function advanceLocalObserver(
       submitterNotes: "Automatically observed a lower used percentage and an advanced reset timestamp through the read-only Codex rate-limit API. No prompts, responses, account identifiers, screenshots, session files, or logs were accessed.",
       detectionMethod: "local-observer",
       confidence: 1,
+      resetTiming: classification.timing,
+      scheduledLeadMinutes: classification.scheduledLeadMinutes,
+      previousResetCredits: current.latestResetCredits,
+      currentResetCredits,
     };
     return { state, candidate };
   }
@@ -232,6 +290,10 @@ export function rememberLocalCandidate(
     currentUsedPercent: candidate.currentUsedPercent,
     previousResetsAtUtc: candidate.previousResetsAtUtc,
     currentResetsAtUtc: candidate.currentResetsAtUtc,
+    resetTiming: candidate.resetTiming,
+    scheduledLeadMinutes: candidate.scheduledLeadMinutes,
+    previousResetCredits: candidate.previousResetCredits,
+    currentResetCredits: candidate.currentResetCredits,
   };
   return {
     ...current,

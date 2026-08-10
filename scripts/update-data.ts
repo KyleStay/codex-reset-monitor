@@ -1,6 +1,7 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { buildForecast } from "../lib/forecast";
 import { scoreForecast } from "../lib/scoring";
+import { classifyResetTiming, latestProviderAnchor } from "../lib/reset-schedule";
 import { collectGitHubIssueData } from "../lib/sources/github-issues";
 import { OpenAIStatusAdapter } from "../lib/sources/openai-status";
 import type {
@@ -113,15 +114,22 @@ const eligibleObservations = observations
   .filter((row) => row.verificationState === "confirmed" && Date.parse(row.verifiedAtUtc) <= now.getTime())
   .sort((a, b) => Date.parse(a.observedResetAtUtc) - Date.parse(b.observedResetAtUtc));
 const resetTimes = eligibleObservations.map((row) => Date.parse(row.observedResetAtUtc));
+const timing = eligibleObservations.map((row) => classifyResetTiming(row));
 const cycles = resetTimes
   .slice(1)
-  .map((time, index) => (time - resetTimes[index]) / 3_600_000)
+  .map((time, index) => timing[index + 1].timing === "scheduled" ? (time - resetTimes[index]) / 3_600_000 : Number.NaN)
   .filter((hours) => hours > 0 && Number.isFinite(hours))
   .sort((a, b) => a - b);
-const medianCycleHours = cycles.length ? cycles[Math.floor(cycles.length / 2)] : 24;
+const scheduledResetAtUtc = latestProviderAnchor(eligibleObservations, nowUtc);
+const latestObservation = eligibleObservations.at(-1);
+const providerWindowHours = latestObservation?.currentResetsAtUtc
+  ? (Date.parse(latestObservation.currentResetsAtUtc) - Date.parse(latestObservation.observedResetAtUtc)) / 3_600_000
+  : Number.NaN;
+const fallbackCycleHours = Number.isFinite(providerWindowHours) && providerWindowHours > 0 ? providerWindowHours : 24;
+const medianCycleHours = cycles.length ? cycles[Math.floor(cycles.length / 2)] : fallbackCycleHours;
 const cycleDispersionHours = cycles.length
   ? Math.max(2, cycles.reduce((sum, value) => sum + Math.abs(value - medianCycleHours), 0) / cycles.length)
-  : 12;
+  : Math.max(2, medianCycleHours * 0.05);
 const lastReset = resetTimes.at(-1);
 const activeIncident = officialIncidents.some((row) => row.normalizedFeatures.active === true);
 const mostRecentIncident = officialIncidents[0];
@@ -134,6 +142,10 @@ const trustMean = eligibleObservations.length
 const features: FeatureSnapshot = {
   cutoffUtc: nowUtc,
   confirmedEventCount: eligibleObservations.length,
+  scheduledEventCount: timing.filter((row) => row.timing === "scheduled").length,
+  outOfCycleEventCount: timing.filter((row) => row.timing === "out-of-cycle").length,
+  lastResetTiming: timing.at(-1)?.timing ?? null,
+  scheduledResetAtUtc,
   hoursSinceLastConfirmedReset: lastReset === undefined ? null : Math.max(0, (now.getTime() - lastReset) / 3_600_000),
   medianCycleHours: Number(medianCycleHours.toFixed(2)),
   cycleDispersionHours: Number(cycleDispersionHours.toFixed(2)),

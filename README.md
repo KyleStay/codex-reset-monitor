@@ -25,7 +25,9 @@ no seeded or fabricated observations.
 - **Forecasts:** deterministic snapshots refreshed by a daily agent and
   committed to Git. With no
   verified observations, the site shows a documented broad prior and no likely
-  time interval.
+  time interval. A verified future provider reset timestamp anchors the current
+  window; early out-of-cycle resets re-anchor it without teaching a false
+  recurring cadence.
 
 The daily agent gathers compliant evidence, runs the deterministic pipeline,
 verifies the result, commits, and pushes from its local Codex workspace. GitHub

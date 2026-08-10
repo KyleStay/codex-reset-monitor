@@ -75,6 +75,12 @@ An available `rateLimitResetCredits` count is shown as queued reset capacity. It
 does not prove that a reset has happened and is never published as a completed
 full-reset observation.
 
+The observer compares a completed reset with the prior official reset anchor.
+A materially early transition is labeled out of cycle. Its new official anchor
+drives the current forecast, while the event is excluded from cadence learning.
+New detections retain bounded before/after reset-credit snapshots; a missing
+historical snapshot leaves cause unknown.
+
 The second form bounds the reset to a five-minute interval rather than
 inventing a limit-reached time. Failed reads or failed GitHub publication fail
 closed; a pending candidate remains in private state for the next run. Issue
@@ -176,8 +182,10 @@ References:
 
 - Zero verified observations: fixed published prior, confidence D, no likely
   interval.
-- One verified observation: prior remains dominant; no cycle can be inferred.
-- Two to nineteen: schedule baseline only, always labeled limited history.
+- With a future official reset anchor: provider-anchor baseline, always labeled
+  limited history below 20 confirmed events.
+- Without an official anchor: at least two scheduled observations are required
+  to infer cadence; out-of-cycle observations are excluded from cycle lengths.
 - Twenty or more: candidate evaluation may run, but promotion requires a
   time-aware holdout win against the active model and baseline without
   unacceptable calibration, false-alarm, or missed-event regression.

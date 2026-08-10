@@ -44,6 +44,10 @@ Read `docs/HISTORICAL_RESEARCH.md` before researching.
   validation. The observer can confirm either access returning after exhaustion
   or a near-zero full meter reset bounded by two samples; it never reconstructs
   past events. Treat available reset credits as queued, not completed, resets.
+  Preserve scheduled versus out-of-cycle timing separately from cause. Use the
+  newest future provider reset timestamp as the active forecast anchor, exclude
+  out-of-cycle events from cadence estimation, and do not infer a recurring
+  special-reset probability from a single event.
 - Do not wait for community reports. Treat the automatic observer as the
   primary future account-level signal and make source-backed historical
   inference progress independently on every run.

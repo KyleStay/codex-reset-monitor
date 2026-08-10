@@ -22,6 +22,7 @@ const formatWindow = (start: string, end: string) => {
 export default function Home() {
   const confirmedCount = currentForecast.featureSnapshot.confirmedEventCount;
   const hasTimingHistory = currentForecast.likelyStartUtc && currentForecast.likelyEndUtc;
+  const anchored = Boolean(currentForecast.featureSnapshot.scheduledResetAtUtc);
   return (
     <>
       <section className="hero">
@@ -33,10 +34,10 @@ export default function Home() {
           <div className="hero-grid">
             <div className="hero-copy">
               <p className="kicker">Current estimate</p>
-              <h1>{hasTimingHistory ? <>A reset is most likely <em>within the next day.</em></> : <>There is <em>no learned reset schedule yet.</em></>}</h1>
+              <h1>{hasTimingHistory ? <>The next reset has <em>a current schedule anchor.</em></> : <>There is <em>no learned reset schedule yet.</em></>}</h1>
               {hasTimingHistory ? (
                 <p className="lede">
-                  Based on verified observations, the likely window is
+                  {anchored ? "Based on the quota window’s official next-reset timestamp" : "Based on scheduled verified observations"}, the likely window is
                   <strong> {formatWindow(currentForecast.likelyStartUtc!, currentForecast.likelyEndUtc!)}</strong>. This is an experimental estimate, never a guarantee.
                 </p>
               ) : (

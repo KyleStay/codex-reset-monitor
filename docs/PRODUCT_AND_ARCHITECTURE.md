@@ -106,7 +106,8 @@ UTC timing bounds, stated time zone, broad surface and tier, detection method,
 confidence, capped trust, verification time, source issue URL/number, content
 hash, and correction audit. Local telemetry retains up to 90 days of quota
 samples, the latest multi-bucket quota view, OpenAI-issued reset-credit
-count/status/grant/expiry metadata, and the before/after percentages and
+count/status/grant/expiry metadata, bounded before/after credit snapshots for
+new detections, and the before/after percentages and
 official reset timestamps needed to audit detected full-reset transitions.
 Prompts, responses, code, credentials,
 cookies, auth tokens, private links, screenshots, logs,
@@ -115,9 +116,12 @@ copied GitHub author identity are excluded.
 
 ## Forecast and evaluation gates
 
-The baseline uses only observations verified by the forecast cutoff. At least
-two valid events are required to calculate a cycle and likely interval. At least
-20 are required before candidate evaluation can be considered for promotion.
+The baseline uses only observations verified by the forecast cutoff. A future
+provider-issued reset timestamp anchors the current window directly. Without
+that anchor, at least two scheduled events are required to calculate a cadence
+and likely interval. Out-of-cycle events re-anchor the active window but do not
+enter recurring-cadence intervals. At least 20 confirmed events are required
+before candidate evaluation can be considered for promotion.
 Historical forecasts keep their original probabilities and version IDs.
 Completed 24-hour windows are scored with a Brier score; precision, recall,
 false alarms, misses, timing error, calibration, and sample count are displayed

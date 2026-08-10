@@ -109,7 +109,7 @@ test("older observer state migrates without losing safe reset samples", () => {
     pendingCandidate: null,
     publishedKeys: ["old"],
   });
-  assert.equal(migrated.schemaVersion, 3);
+  assert.equal(migrated.schemaVersion, 4);
   assert.equal(migrated.recentSamples.length, 1);
   assert.equal(migrated.lastSample?.usedPercent, 42);
   assert.deepEqual(migrated.publishedKeys, ["old"]);
@@ -167,4 +167,46 @@ test("observer does not classify a partial quota adjustment as a full reset", ()
     "UTC",
   );
   assert.equal(adjusted.candidate, null);
+});
+
+test("observer does not classify a window-duration migration as a full reset", () => {
+  const first = advanceLocalObserver(
+    emptyLocalObserverState(),
+    sample({ usedPercent: 10, windowDurationMinutes: 10080 }),
+    "UTC",
+  ).state;
+  const migrated = advanceLocalObserver(first, sample({
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    usedPercent: 0,
+    resetsAtUtc: "2026-08-09T10:05:00.000Z",
+    windowDurationMinutes: 11520,
+  }), "UTC");
+  assert.equal(migrated.candidate, null);
+});
+
+test("observer retains bounded credit evidence and out-of-cycle timing", () => {
+  const beforeCredits = {
+    sampledAtUtc: "2026-08-08T20:27:39.534Z",
+    availableCount: 1,
+    credits: [],
+  };
+  let state = recordLocalTelemetry(emptyLocalObserverState(), [], beforeCredits);
+  state = advanceLocalObserver(state, sample({
+    sampledAtUtc: "2026-08-08T20:27:39.534Z",
+    usedPercent: 10,
+    resetsAtUtc: "2026-08-15T09:19:41.000Z",
+  }), "UTC").state;
+  const afterCredits = {
+    sampledAtUtc: "2026-08-08T20:32:48.433Z",
+    availableCount: 0,
+    credits: [],
+  };
+  const result = advanceLocalObserver(state, sample({
+    sampledAtUtc: "2026-08-08T20:32:48.433Z",
+    usedPercent: 0,
+    resetsAtUtc: "2026-08-15T20:29:18.000Z",
+  }), "UTC", afterCredits);
+  assert.equal(result.candidate?.resetTiming, "out-of-cycle");
+  assert.equal(result.candidate?.previousResetCredits?.availableCount, 1);
+  assert.equal(result.candidate?.currentResetCredits?.availableCount, 0);
 });
