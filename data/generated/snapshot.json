@@ -1,14 +1,14 @@
 {
-  "generatedAtUtc": "2026-08-10T09:20:32.649Z",
+  "generatedAtUtc": "2026-08-10T13:43:24.565Z",
   "sourceMode": "live-official-status-and-verified-github-issues",
   "officialStatusHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-10T09:20:33.552Z",
+    "checkedAtUtc": "2026-08-10T13:43:25.578Z",
     "message": "Collected 2 Codex-relevant official incident record(s)."
   },
   "observationSourceHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-10T09:20:32.649Z",
+    "checkedAtUtc": "2026-08-10T13:43:24.565Z",
     "message": "Verified observations and approved public sources were collected from GitHub Issues.",
     "rejectedRecordCount": 0,
     "duplicateCount": 0
@@ -20,7 +20,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-24T07:55:28.000Z",
-      "retrievalTimeUtc": "2026-08-10T09:20:33.552Z",
+      "retrievalTimeUtc": "2026-08-10T13:43:25.578Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KY9HYHCMK8AND23B4X17XQEK",
       "title": "Elevated Errors in Codex Review",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We are investigating the issue for the listed services.",
@@ -42,7 +42,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-20T00:34:34.000Z",
-      "retrievalTimeUtc": "2026-08-10T09:20:33.552Z",
+      "retrievalTimeUtc": "2026-08-10T13:43:25.578Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXYF4BTCV9DTZ5NDSFN716FH",
       "title": "Elevated errors for GitHub-dependent ChatGPT and Codex workflows",
       "excerpt": "All impacted services have now fully recovered. We are monitoring the recovery. Users may experience failures or delays in ChatGPT and Codex workflows that depend on GitHub. This mostly should impact Codex web and code review for PRs on Git",
@@ -59,11 +59,31 @@
       "contentHash": "aeb5df87770a87093026e823806f046d5e4be0a7f258437fd03794d63a8cfdc1"
     }
   ],
-  "approvedPublicSources": [],
+  "approvedPublicSources": [
+    {
+      "id": "github-source-3",
+      "sourceAdapterId": "github-approved-source-v1",
+      "sourceKind": "approved_public_post",
+      "provenance": "administrator_approved",
+      "publicationTimeUtc": "2026-08-08T20:29:22.056Z",
+      "retrievalTimeUtc": "2026-08-10T13:43:24.565Z",
+      "canonicalUrl": "https://x.com/thsottiaux/status/2086188036493344823",
+      "title": "Paid-user Codex and ChatGPT Work usage-limit reset announcement",
+      "excerpt": "Announced a completed usage-limit reset for all paid ChatGPT Work and Codex users.",
+      "metadata": {
+        "sourceIssueNumber": 3,
+        "sourceIssueUrl": "https://github.com/KyleStay/codex-reset-monitor/issues/3"
+      },
+      "normalizedFeatures": {
+        "approved": true
+      },
+      "contentHash": "2daa1cd3742b2017d6f91fb3193ab7738a20d4160d2b59faa935f142e9175d53"
+    }
+  ],
   "verifiedObservationCount": 2,
   "forecast": {
-    "id": "fc_20260810092032",
-    "forecastAtUtc": "2026-08-10T09:20:32.649Z",
+    "id": "fc_20260810134324",
+    "forecastAtUtc": "2026-08-10T13:43:24.565Z",
     "probabilities": {
       "1": 0.01,
       "3": 0.01,
@@ -75,17 +95,17 @@
     "likelyEndUtc": "2026-08-16T00:41:18.000Z",
     "confidenceGrade": "D",
     "featureSnapshot": {
-      "cutoffUtc": "2026-08-10T09:20:32.649Z",
+      "cutoffUtc": "2026-08-10T13:43:24.565Z",
       "confirmedEventCount": 2,
       "scheduledEventCount": 0,
       "outOfCycleEventCount": 1,
       "lastResetTiming": "out-of-cycle",
       "scheduledResetAtUtc": "2026-08-15T20:29:18.000Z",
-      "hoursSinceLastConfirmedReset": 36.79561555555556,
+      "hoursSinceLastConfirmedReset": 41.176703333333336,
       "medianCycleHours": 167.94,
       "cycleDispersionHours": 8.4,
       "activeIncident": false,
-      "incidentRecencyHours": 409.4179580555556,
+      "incidentRecencyHours": 413.7990458333333,
       "approvedPostCount24h": 0,
       "weightedReportVolume6h": 0,
       "sourceTrustMean": 0.6,
@@ -95,7 +115,7 @@
       {
         "label": "Official next-reset anchor",
         "direction": "lowers",
-        "detail": "The current quota window reports 131 hours until its next reset."
+        "detail": "The current quota window reports 127 hours until its next reset."
       },
       {
         "label": "Out-of-cycle reset isolated",

@@ -20,7 +20,18 @@
       "rule": "Use for discovery and corroboration only; never promote a community claim to a confirmed observation."
     }
   ],
-  "socialWatchlist": [],
+  "socialWatchlist": [
+    {
+      "host": "x.com",
+      "handle": "thsottiaux",
+      "displayName": "Tibo",
+      "canonicalUrl": "https://x.com/thsottiaux",
+      "scope": "Public Codex and ChatGPT Work usage-limit reset, promotion, and mechanism announcements",
+      "trust": "attributed-operator-announcement",
+      "collectionMethod": "manual-source-native-browser-review",
+      "rule": "Use only public canonical profile or status URLs with source-native timestamps. Treat posts as attributed public signals and correlate them with independently observed reset bounds and contradictions. A post cannot by itself create a confirmed observation, causal fact, or model promotion."
+    }
+  ],
   "unknownSourcePolicy": "manual-review",
-  "notes": "Do not guess account identities. Add social accounts only after a maintainer confirms the exact canonical account and collection method."
+  "notes": "Do not guess account identities. The maintainer confirmed @thsottiaux and manual source-native browser review on 2026-08-10. Any other social account or collection method still requires explicit maintainer confirmation."
 }

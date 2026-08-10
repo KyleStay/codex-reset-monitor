@@ -1,6 +1,6 @@
 # Codex Reset Monitor: product and architecture
 
-Last verified: 2026-08-08
+Last verified: 2026-08-10
 
 ## Current direction
 
@@ -24,7 +24,10 @@ historical inferences, official incidents, and public context distinct.
   with a new content hash and append-only audit entry.
 - **Incident:** an official OpenAI Status record. It is context, not a reset.
 - **Public signal:** minimal metadata from an issue carrying
-  `approved-public-source`.
+  `approved-public-source`. Configured social accounts are manually reviewed
+  at public source-native URLs. Their posts remain attributed and are
+  correlated with independent reset bounds, provider anchors, scope, and
+  contradictions rather than treated as confirmed events.
 - **Inferred historical reset:** a source-backed research record with explicit
   evidence grade, date precision, contradictions, cause confidence, and
   detection signals. It never enters confirmed training labels.
@@ -113,6 +116,13 @@ Prompts, responses, code, credentials,
 cookies, auth tokens, private links, screenshots, logs,
 conversation/thread/session history, account identifiers, device locale, and
 copied GitHub author identity are excluded.
+
+The social watchlist is an explicit allowlist, not an identity heuristic. Each
+entry fixes the canonical account URL, scoped subject matter, trust class,
+manual source-native collection method, and rule preventing a post from
+creating a confirmed observation, confirmed cause, or model promotion by
+itself. A newly discovered post affects only feature snapshots created after
+its retrieval and approval; historical forecasts remain unchanged.
 
 ## Forecast and evaluation gates
 

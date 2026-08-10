@@ -46,7 +46,13 @@ For a valid reset observation:
 
 For a compliant public source, verify the canonical public HTTPS URL,
 publication time, neutral title, and minimal excerpt; then replace
-`pending-review` with `approved-public-source`.
+`pending-review` with `approved-public-source`. A social source must also match
+an exact account and manual collection method in `data/source-policy.json`.
+Review only its public source-native profile or permanent status URL; never use
+search snippets or automated timeline scraping as evidence. Record the post as
+an attributed signal and compare its UTC time with independent reset bounds,
+provider anchors, claimed scope, and nonrecipient reports before assigning any
+cause. Approval does not turn a post into a confirmed observation.
 
 ## Local reset observer
 

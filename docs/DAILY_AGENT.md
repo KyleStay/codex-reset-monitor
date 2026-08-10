@@ -21,8 +21,9 @@ probability calculation, scoring, and generated forecast history.
 4. Never fabricate an observation, publication time, excerpt, model result, or
    source. Never treat a service incident or public claim as a confirmed
    personal reset.
-5. Do not guess an account identity, including any account referred to only as
-   "Tibo". Do not use prohibited, brittle, authenticated, or evasive scraping.
+5. Do not guess an account identity. Only exact canonical accounts and manual
+   collection methods listed in `data/source-policy.json` may be reviewed. Do
+   not use prohibited, brittle, authenticated, automated, or evasive scraping.
 6. Do not weaken verification, privacy, provenance, backtesting, or model
    promotion gates. Model changes require reproducible evaluation and the
    declared promotion criteria; an agent's judgment alone is insufficient.
@@ -57,6 +58,18 @@ Read `docs/HISTORICAL_RESEARCH.md` before researching.
   announcements. Store only the canonical URL, publication time, neutral title,
   minimal excerpt or summary, retrieval time, relevant metadata, normalized
   features, and content hash.
+- Review configured social-watchlist accounts manually through their public,
+  source-native profile and permanent status URLs. Do not use search snippets,
+  inferred identities, private views, or scraped timelines as evidence.
+- Treat a watchlist post as an attributed public signal even when it uses
+  first-person operator language. Correlate its source-native UTC timestamp
+  with independently observed reset bounds, new provider reset anchors, scope,
+  and nonrecipient contradictions. It cannot by itself create a confirmed
+  observation, prove account-by-account delivery, assign a confirmed cause, or
+  promote a model.
+- Preserve point-in-time integrity: a post discovered after a forecast cutoff
+  may inform later forecasts and research, but must never be inserted into an
+  earlier forecast's feature snapshot.
 - For a newly found official-domain record, create a structured public-source
   issue and apply `public-source` plus `approved-public-source`. The issue body
   must use the exact headings `Canonical URL`, `Publication time`, `Title`,

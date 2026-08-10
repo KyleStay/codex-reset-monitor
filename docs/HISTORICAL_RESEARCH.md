@@ -38,6 +38,11 @@ backfill:
    independently established by an approved official source.
    Do not evade access controls, automate prohibited scraping, or infer the
    identity of an unnamed account.
+   A canonical social account explicitly confirmed in `data/source-policy.json`
+   may be reviewed manually through public source-native status URLs. Its posts
+   remain attributed public signals: correlate their UTC timestamps with reset
+   observation bounds, provider anchors, scope, and contradictions, but do not
+   convert them into confirmed observations or automatic causal truth.
 3. Work backwards through uncovered date ranges. Prefer precise source-native
    timestamps and permanent URLs to search snippets.
 4. Cluster records only when their timing, reported behavior, plan/surface

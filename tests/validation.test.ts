@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import researchHistory from "../data/research-history.json";
+import sourcePolicy from "../data/source-policy.json";
 import { validateHistoricalResearch } from "../lib/research";
 import { observationDedupeKey, validateObservation } from "../lib/validation";
 
@@ -81,4 +82,16 @@ test("historical research remains explicitly inferred and source-backed", () => 
       ]),
     /requires a UTC eventTimeUtc/,
   );
+});
+
+test("configured social sources are canonical and manual-review only", () => {
+  assert.ok(sourcePolicy.socialWatchlist.length > 0);
+  for (const source of sourcePolicy.socialWatchlist) {
+    const url = new URL(source.canonicalUrl);
+    assert.equal(url.protocol, "https:");
+    assert.equal(url.hostname, source.host);
+    assert.equal(url.pathname, `/${source.handle}`);
+    assert.equal(source.collectionMethod, "manual-source-native-browser-review");
+    assert.match(source.rule, /cannot by itself create a confirmed observation/i);
+  }
 });

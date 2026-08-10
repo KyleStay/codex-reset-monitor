@@ -18,7 +18,10 @@ no seeded or fabricated observations.
   day with provenance, publication/retrieval times, canonical URL, minimal
   excerpt, normalized features, and content hash.
 - **Public posts:** administrator-approved issue records carrying
-  `approved-public-source`. No social account is guessed or scraped.
+  `approved-public-source`. Configured social-watchlist accounts are reviewed
+  manually through public source-native status URLs; no identity is guessed and
+  no social timeline is scraped. Posts remain attributed signals until their
+  timing and scope are correlated with independent evidence.
 - **Historical research:** a validated ledger of inferred public reset events,
   possible causes, contradictions, and future detection signals. It remains
   separate from verified observations and cannot silently become training data.

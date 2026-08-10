@@ -58,32 +58,40 @@
     "datePrecision": "day",
     "classification": "inferred_reset",
     "verificationState": "inferred",
-    "scope": "unknown",
-    "title": "Broad usage reset reported around the eight-million-user milestone",
-    "summary": "Two independent public Codex issues described an unbanked usage reset around July 14. One report called it a global reset associated with the eight-million-user milestone; another observed weekly usage returning to full while banked reset credits did not change. No canonical OpenAI announcement or staff confirmation was located, so the event and promotional attribution remain lower-confidence inferred history.",
-    "evidenceGrade": "C",
+    "scope": "all_accounts",
+    "title": "All-user usage reset announced at the eight-million-user milestone",
+    "summary": "The maintainer-confirmed @thsottiaux account announced that usage limits were being reset for all Codex and ChatGPT Work users after reaching eight million active users. An independent report observed weekly usage returning to full while banked reset credits remained unchanged, while a Business report said the reset was not delivered. The action and stated motivation are directly attributed, but universal account-level completion remains unsupported.",
+    "evidenceGrade": "B",
     "cause": {
-      "assessment": "Possible milestone promotion",
-      "confidence": "hypothesis",
-      "rationale": "One independent report associated the reset with an eight-million-user milestone, but no approved official source was located to confirm either the motivation or universal scope."
+      "assessment": "Eight-million-active-user milestone promotion",
+      "confidence": "attributed",
+      "rationale": "The canonical maintainer-confirmed staff social post explicitly states the milestone motivation and intended all-user scope; public reports independently support a completed reset but contradict universal delivery."
     },
     "detectionSignals": [
+      "A canonical staff social announcement supplies a source-native UTC statement time and intended scope.",
       "Independent accounts report weekly usage returning to full on the same date.",
       "The active usage window restarts while banked reset-credit balances remain unchanged.",
-      "A permanent official announcement or staff statement would raise confidence in the milestone attribution."
+      "Nonrecipient reports test whether broad announcement wording matched account-level delivery."
     ],
     "contradictions": [
-      "The reports disagree implicitly about whether the reset was universal because at least one account reported missing it.",
+      "A Business account reported that the announced all-user reset was not delivered and its quota remained exhausted.",
       "The distinction between a hard reset and a banked reset reward was not consistently communicated.",
-      "No source-native official announcement was located in the configured sources."
+      "The attributed announcement establishes intended scope, not simultaneous or universal completion."
     ],
     "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2077114635308986427",
+        "publicationTimeUtc": "2026-07-14T19:34:54.638Z",
+        "title": "All-user reset announced at the eight-million-user milestone",
+        "provenance": "public_report",
+        "role": "primary"
+      },
       {
         "canonicalUrl": "https://github.com/openai/codex/issues/33344",
         "publicationTimeUtc": "2026-07-15T13:57:52Z",
         "title": "Account reported missing the July 14 global usage reset",
         "provenance": "public_report",
-        "role": "primary"
+        "role": "corroborating"
       },
       {
         "canonicalUrl": "https://github.com/openai/codex/issues/33513",
@@ -94,7 +102,7 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
-    "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
   },
   {
     "id": "research-reset-2026-07-09",
@@ -140,6 +148,50 @@
     "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
   },
   {
+    "id": "research-reset-2026-06-28",
+    "eventDate": "2026-06-28",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "all_accounts",
+    "title": "Hard reset announced during a fast-depletion investigation",
+    "summary": "The maintainer-confirmed @thsottiaux account stated that everyone's Codex usage had been hard-reset during an ongoing investigation and explicitly distinguished the active-window reset from banked resets retained for later redemption. This is strong evidence that an operator action was initiated, but it does not establish universal account-level delivery or one exclusive incident cause.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "Operator hard reset during an ongoing fast-depletion investigation",
+      "confidence": "attributed",
+      "rationale": "The canonical staff social post directly announces the hard reset and its investigative context while declining to identify a resolved central cause."
+    },
+    "detectionSignals": [
+      "A source-native operator announcement distinguishes a completed hard reset from banked reset credits.",
+      "Active usage returns to full while the banked-reset balance remains independently available.",
+      "An official rate-limit incident overlaps the announcement without proving the reset's exclusive cause."
+    ],
+    "contradictions": [
+      "The post uses universal wording but provides no account-by-account delivery record.",
+      "The investigation was ongoing, so the source does not support one confirmed root cause.",
+      "A later report described missing banked credits, which is a separate ledger path from the announced hard reset."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2071381664853319742",
+        "publicationTimeUtc": "2026-06-28T23:54:07.968Z",
+        "title": "All-user hard reset announced during investigation",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/30726",
+        "publicationTimeUtc": "2026-06-30T14:38:57Z",
+        "title": "Account distinguishes working hard resets from missing banked reset credits",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-10T13:43:24Z",
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
+  },
+  {
     "id": "research-reset-2026-06-17",
     "eventDate": "2026-06-17",
     "datePrecision": "day",
@@ -147,12 +199,12 @@
     "verificationState": "inferred",
     "scope": "unknown",
     "title": "Public reset reported during the early banked-reset rollout",
-    "summary": "Two independent public Codex issues described a promotional reset around June 17. One reported that the public reset applied immediately instead of being banked; the other expected both a full usage reset and a banked credit. The reports establish a likely reset action but leave plan eligibility, delivery mode, and promotional wording uncertain.",
-    "evidenceGrade": "C",
+    "summary": "The maintainer-confirmed @thsottiaux account announced that a fix was complete and limits across all plans would be reset within 24 hours. Two independent Codex issues then described the action, while disagreeing over immediate hard-reset delivery versus a banked credit. The intended action and scope are directly attributed; exact completion and credit delivery remain uncertain.",
+    "evidenceGrade": "B",
     "cause": {
       "assessment": "Promotional reset during banked-credit rollout",
       "confidence": "attributed",
-      "rationale": "Both reports described the action as a publicly announced promotion, but no configured canonical official announcement was located for the exact event."
+      "rationale": "The canonical staff social post establishes the intended all-plan action, while two independent reports support later delivery but preserve hard-reset versus banked-credit ambiguity."
     },
     "detectionSignals": [
       "Weekly usage returns to full near a public promotion.",
@@ -165,11 +217,18 @@
     ],
     "sources": [
       {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2066956441173323943",
+        "publicationTimeUtc": "2026-06-16T18:49:52.426Z",
+        "title": "All-plan reset promised within 24 hours after a fix",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
         "canonicalUrl": "https://github.com/openai/codex/issues/28811",
         "publicationTimeUtc": "2026-06-17T23:20:05Z",
         "title": "Public reset appeared immediately applied instead of banked",
         "provenance": "public_report",
-        "role": "primary"
+        "role": "corroborating"
       },
       {
         "canonicalUrl": "https://github.com/openai/codex/issues/28837",
@@ -180,7 +239,7 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
-    "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
   },
   {
     "id": "research-mechanism-2026-06-12",
@@ -190,7 +249,7 @@
     "verificationState": "inferred",
     "scope": "selected_plans",
     "title": "Banked usage-limit reset credits began rolling out",
-    "summary": "A permanent OpenAI Community archive preserved an announcement that eligible Go, Plus, Pro, and Business users would receive one reset credit and could save future reset rewards. Subsequent merged openai/codex pull requests exposed reset-credit balances and redemption in app-server and TUI usage surfaces. This is a mechanism change, not a reset observation.",
+    "summary": "A permanent OpenAI Community archive preserved the initial eligible-plan reset-credit grant, while a canonical maintainer-confirmed staff social post stated that future resets would let users choose when the reset applied. Subsequent merged openai/codex pull requests exposed reset-credit balances and redemption in app-server and TUI usage surfaces. This is a mechanism change, not a reset observation.",
     "evidenceGrade": "A",
     "cause": {
       "assessment": "Product rollout of redeemable reset credits",
@@ -215,6 +274,13 @@
         "role": "primary"
       },
       {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2065468501750649006",
+        "publicationTimeUtc": "2026-06-12T16:17:20.023Z",
+        "title": "User-timed application of future resets announced",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
         "canonicalUrl": "https://github.com/openai/codex/pull/28143",
         "publicationTimeUtc": "2026-06-14T00:45:47Z",
         "title": "Expose rate-limit reset credits and redemption in app-server",
@@ -230,7 +296,7 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
-    "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
   },
   {
     "id": "research-reset-2026-06-04",
@@ -258,6 +324,13 @@
     ],
     "sources": [
       {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2062329981548802523",
+        "publicationTimeUtc": "2026-06-04T00:25:58.496Z",
+        "title": "All-paid-plan reset announced after three reliability incidents",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
         "canonicalUrl": "https://community.openai.com/t/1382610/1",
         "publicationTimeUtc": "2026-06-04T02:58:07.610Z",
         "title": "Public report of usage returning to full",
@@ -280,7 +353,7 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
-    "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
   },
   {
     "id": "research-reset-2026-05-23",
@@ -290,12 +363,12 @@
     "verificationState": "inferred",
     "scope": "all_accounts",
     "title": "All-account reset reported after a cache-efficiency regression",
-    "summary": "OpenAI Status documented an increase in users hitting Codex rate limits. A permanent OpenAI Community archive then preserved a staff announcement that an optimization had reduced cache hit rates during long-session compaction, the change had been rolled back, and limits had been reset for all accounts. Because the staff statement is preserved through a configured archive rather than a canonical announcement endpoint, the causal assessment is attributed rather than promoted to confirmed.",
+    "summary": "OpenAI Status documented an increase in users hitting Codex rate limits. A canonical maintainer-confirmed staff social post then stated that a long-session compaction optimization had reduced cache-hit rates, the change was rolled back, and limits had been reset for all accounts. The operator statement and official incident strongly support the narrow attribution, while account-level delivery remains unverified.",
     "evidenceGrade": "B",
     "cause": {
       "assessment": "Compensation after a cache-hit regression",
       "confidence": "attributed",
-      "rationale": "The archived staff statement explicitly tied the reset to a rolled-back optimization, while official Status independently confirms the rate-limit incident."
+      "rationale": "The canonical staff social post explicitly tied the reset to a rolled-back optimization, while official Status independently confirms the rate-limit incident."
     },
     "detectionSignals": [
       "Official Status reports an unusual rise in users reaching Codex limits.",
@@ -303,7 +376,7 @@
       "Usage returns to full after rollback and a staff reset statement."
     ],
     "contradictions": [
-      "The causal statement is preserved in a configured community archive, not a canonical OpenAI announcement URL.",
+      "The broad all-account wording does not prove simultaneous or universal delivery.",
       "The exact account-by-account completion time was not published."
     ],
     "sources": [
@@ -315,6 +388,13 @@
         "role": "primary"
       },
       {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2058280452851638313",
+        "publicationTimeUtc": "2026-05-23T20:14:35.618Z",
+        "title": "Rollback and all-account reset announcement",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
         "canonicalUrl": "https://community.openai.com/t/1381065/5",
         "publicationTimeUtc": "2026-05-23T20:18:54.261Z",
         "title": "Permanent archive of the all-account reset and rollback statement",
@@ -323,7 +403,7 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
-    "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
   },
   {
     "id": "research-reset-2026-05-16",
@@ -338,7 +418,7 @@
     "cause": {
       "assessment": "Mitigation after GPT-5.5 usage issues",
       "confidence": "attributed",
-      "rationale": "The archived statement linked the planned reset to fixes, while independent reports observed the later action; no canonical announcement established exact completion or scope."
+      "rationale": "The canonical staff social post linked the planned reset to completed fixes, while independent reports observed the later action; the post promised future delivery and therefore does not establish exact completion or scope."
     },
     "detectionSignals": [
       "A staff statement promises a reset after a service fix.",
@@ -351,11 +431,18 @@
     ],
     "sources": [
       {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2055446089957036402",
+        "publicationTimeUtc": "2026-05-16T00:31:50.844Z",
+        "title": "Post-fix usage reset promised for later that day",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
         "canonicalUrl": "https://community.openai.com/t/1381065/1",
         "publicationTimeUtc": "2026-05-16T10:25:49.819Z",
         "title": "Permanent archive of the promised post-fix reset",
         "provenance": "public_report",
-        "role": "primary"
+        "role": "corroborating"
       },
       {
         "canonicalUrl": "https://community.openai.com/t/1381065/2",
@@ -380,7 +467,7 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
-    "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
   },
   {
     "id": "research-reset-2026-05-05",
@@ -434,12 +521,12 @@
     "verificationState": "inferred",
     "scope": "paid_plans",
     "title": "All paid-plan limits reset as a promotion",
-    "summary": "A permanent OpenAI Community archive preserved a statement that Codex rate limits had been reset for all paid plans to celebrate a product milestone and support more GPT-5.5 use. A public Codex issue observed the early weekly reset, and an OpenAI repository contributor confirmed that the intended behavior was to restore usage to full and restart the window. The reset remains inferred rather than a confirmed project observation.",
+    "summary": "A canonical maintainer-confirmed staff social post stated that Codex limits had been reset for all paid plans to celebrate a good week and allow more GPT-5.5 use. A public Codex issue observed the early weekly reset, and an OpenAI repository contributor confirmed that the intended behavior was to restore usage to full and restart the window. The reset remains inferred rather than a confirmed project observation.",
     "evidenceGrade": "A",
     "cause": {
       "assessment": "Promotional paid-plan reset",
       "confidence": "attributed",
-      "rationale": "The promotional motivation and paid-plan scope are preserved in a configured community archive, while repository staff independently confirmed the reset mechanism and observed event."
+      "rationale": "The canonical staff social post states the promotional motivation and paid-plan scope, while repository staff independently confirmed the reset mechanism and observed event."
     },
     "detectionSignals": [
       "Paid-plan usage returns to full before the previously displayed reset time.",
@@ -448,15 +535,22 @@
     ],
     "contradictions": [
       "Some later public reports suggested that not every quota type or account reflected the action immediately.",
-      "The announcement is preserved through a configured community archive rather than a canonical OpenAI announcement endpoint."
+      "The announcement establishes intended paid-plan scope, not simultaneous account-level delivery."
     ],
     "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2048997818673537399",
+        "publicationTimeUtc": "2026-04-28T05:28:43.167Z",
+        "title": "All-paid-plan promotional reset announcement",
+        "provenance": "public_report",
+        "role": "primary"
+      },
       {
         "canonicalUrl": "https://community.openai.com/t/codex-rate-limits-reset-for-all-paid-plans-april-28-2026/1379921",
         "publicationTimeUtc": "2026-04-28T06:17:29.048Z",
         "title": "Permanent archive of the all-paid-plans reset announcement",
         "provenance": "public_report",
-        "role": "primary"
+        "role": "corroborating"
       },
       {
         "canonicalUrl": "https://github.com/openai/codex/issues/19987",
@@ -474,7 +568,95 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-28T17:00:00Z",
-    "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
+  },
+  {
+    "id": "research-reset-2026-04-07",
+    "eventDate": "2026-04-07",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "unknown",
+    "title": "Promotional reset announced at three million weekly users",
+    "summary": "The maintainer-confirmed @thsottiaux account announced that Codex had reached three million weekly users and that rate limits were being reset in celebration. A later Business report linked the exact post and said its account did not receive the action. The promotion and operator intent are directly attributed, while plan scope and successful delivery remain uncertain.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "Three-million-weekly-user milestone promotion",
+      "confidence": "attributed",
+      "rationale": "The canonical staff social post explicitly states the milestone motivation, but the claimed eligible population and account-level completion are not independently established."
+    },
+    "detectionSignals": [
+      "A canonical milestone announcement states that rate limits are being reset.",
+      "Independent accounts report whether active usage and reset timestamps actually restart.",
+      "Plan-specific nonrecipient reports test the announcement's unstated scope."
+    ],
+    "contradictions": [
+      "A Business account reported no visible reset after the announcement.",
+      "The post does not publish a precise completion time or explicit eligible-plan list.",
+      "Announcement timing is not proof of simultaneous account-level delivery."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2041655710346572085",
+        "publicationTimeUtc": "2026-04-07T23:13:48.132Z",
+        "title": "Milestone promotional reset announcement",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/17157",
+        "publicationTimeUtc": "2026-04-08T20:47:02Z",
+        "title": "Business account reports nonreceipt after the announcement",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-10T13:43:24Z",
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
+  },
+  {
+    "id": "research-reset-2026-03-11",
+    "eventDate": "2026-03-11",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "unknown",
+    "title": "Reset action announced after Codex service stabilization",
+    "summary": "The maintainer-confirmed @thsottiaux account stated that Codex was stable again, that the reset action had been triggered, and that users should see it shortly. A Business report later linked the exact post and said the reset did not arrive. This supports an operator-initiated mitigation but preserves delivery and plan-scope uncertainty.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "Mitigation after service instability",
+      "confidence": "attributed",
+      "rationale": "The canonical staff social post directly links stabilization and the reset action, but does not identify a permanent incident URL, exact affected population, or account-level completion."
+    },
+    "detectionSignals": [
+      "A source-native statement reports service stability and an initiated reset action.",
+      "Usage restoration and new reset anchors appear shortly after the announcement.",
+      "Nonrecipient reports identify plan or rollout gaps."
+    ],
+    "contradictions": [
+      "A Business account reported that the announced reset was not delivered.",
+      "The phrase that users should see it shortly leaves completion time imprecise.",
+      "The source does not identify one official Status incident or universal eligible scope."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2031605592352313567",
+        "publicationTimeUtc": "2026-03-11T05:38:13.280Z",
+        "title": "Reset action announced after service stabilization",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/14329",
+        "publicationTimeUtc": "2026-03-11T10:00:05Z",
+        "title": "Business account reports nonreceipt after the announcement",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-10T13:43:24Z",
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
   },
   {
     "id": "research-reset-2026-03-07",
@@ -920,12 +1102,12 @@
     "verificationState": "inferred",
     "scope": "unknown",
     "title": "Rate limits reportedly reset after a Codex outage",
-    "summary": "OpenAI Status documented a Codex outage on November 5. A permanent OpenAI Community post archived a staff statement that the outage was resolved and rate limits had been reset. The official incident and archived statement align, but the reset statement is not available at a configured canonical announcement endpoint.",
+    "summary": "OpenAI Status documented a Codex outage on November 5. A canonical maintainer-confirmed staff social post stated that the outage was resolved and rate limits had been reset. The official incident and operator statement align, while account-by-account delivery and exact breadth remain unknown.",
     "evidenceGrade": "B",
     "cause": {
       "assessment": "Compensation after the November 5 Codex outage",
       "confidence": "attributed",
-      "rationale": "Official Status establishes the outage, and the permanent community archive preserves the staff reset statement."
+      "rationale": "Official Status establishes the outage, and the canonical staff social post directly joins service recovery with the reset action."
     },
     "detectionSignals": [
       "Official Status transitions a Codex outage to recovered.",
@@ -933,8 +1115,8 @@
       "A staff statement announces a rate-limit reset."
     ],
     "contradictions": [
-      "The archived social timestamp does not expose an unambiguous source-native UTC reset time.",
-      "The staff statement is preserved through a configured archive rather than a canonical announcement endpoint."
+      "The statement does not provide an account-by-account completion record.",
+      "The intended plan scope is not explicit in the post."
     ],
     "sources": [
       {
@@ -945,6 +1127,13 @@
         "role": "primary"
       },
       {
+        "canonicalUrl": "https://x.com/thsottiaux/status/1986166501435711936",
+        "publicationTimeUtc": "2025-11-05T20:19:29.788Z",
+        "title": "Outage resolution and rate-limit reset announcement",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
         "canonicalUrl": "https://community.openai.com/t/1364782/38",
         "publicationTimeUtc": "2025-11-05T21:15:01.939Z",
         "title": "Permanent archive of the outage-resolution and reset statement",
@@ -953,7 +1142,7 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
-    "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
+    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
   },
   {
     "id": "research-reset-2025-11-02",
