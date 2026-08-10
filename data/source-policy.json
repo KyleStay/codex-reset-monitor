@@ -18,6 +18,24 @@
       "scope": "public Codex discussions",
       "trust": "low",
       "rule": "Use for discovery and corroboration only; never promote a community claim to a confirmed observation."
+    },
+    {
+      "host": "willcodexquotareset.com",
+      "scope": "Discovery of candidate @thsottiaux canonical X status URLs through the public /api/forecast response",
+      "trust": "discovery-only",
+      "rule": "Use only to discover candidate canonical X URLs, text, reply context, and timestamps. Never treat this independent tracker as source proof or direct forecast input. Confirm the canonical post through X-owned oEmbed when available, derive exact UTC from the status ID when needed, and preserve any mismatch or omission."
+    },
+    {
+      "host": "publish.twitter.com",
+      "scope": "X-owned oEmbed validation for already-known canonical @thsottiaux status URLs",
+      "trust": "source-native-validation",
+      "rule": "Use oEmbed to confirm the canonical URL, author, public text, and date after discovery. It does not discover a timeline, prove account-by-account reset delivery, or replace independent reset observation."
+    },
+    {
+      "host": "public.api.bsky.app",
+      "scope": "Public AT Protocol reads for the unofficial @thsottiaux-mirr.selfhosted.social mirror (DID did:plc:rcaom2u2hfsm3aqab5dfvhxs) and @thsottiaux-bot.eurosky.social fallback (DID did:plc:rcelwndiefenpjvnm6uood4t)",
+      "trust": "low-discovery-only",
+      "rule": "Use only these exact handles and DIDs for redundant discovery, preferring the more current selfhosted.social mirror. Either bot may lag, omit replies or parent context, split threads, or stop updating. Require a canonical X status URL and X-owned validation before using mirrored text as an attributed signal."
     }
   ],
   "socialWatchlist": [
@@ -33,5 +51,5 @@
     }
   ],
   "unknownSourcePolicy": "manual-review",
-  "notes": "Do not guess account identities. The maintainer confirmed @thsottiaux and manual source-native browser review on 2026-08-10. Any other social account or collection method still requires explicit maintainer confirmation."
+  "notes": "Do not guess account identities. The maintainer confirmed @thsottiaux and manual source-native browser review on 2026-08-10, and approved willcodexquotareset.com as a provisional discovery source on 2026-08-10. The configured X oEmbed validator and exact Bluesky bots are discovery/validation fallbacks only. Any other social account or collection method still requires explicit maintainer confirmation."
 }

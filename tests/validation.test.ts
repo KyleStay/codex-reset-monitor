@@ -95,3 +95,17 @@ test("configured social sources are canonical and manual-review only", () => {
     assert.match(source.rule, /cannot by itself create a confirmed observation/i);
   }
 });
+
+test("configured social discovery fallbacks cannot become evidence by themselves", () => {
+  const requiredFallbacks = new Map([
+    ["willcodexquotareset.com", /never treat .* as source proof/i],
+    ["publish.twitter.com", /does not .* replace independent reset observation/i],
+    ["public.api.bsky.app", /require a canonical X status URL/i],
+  ]);
+
+  for (const [host, guardrail] of requiredFallbacks) {
+    const source = sourcePolicy.researchSources.find((candidate) => candidate.host === host);
+    assert.ok(source, `missing configured discovery fallback ${host}`);
+    assert.match(source.rule, guardrail);
+  }
+});

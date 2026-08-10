@@ -43,6 +43,12 @@ backfill:
    remain attributed public signals: correlate their UTC timestamps with reset
    observation bounds, provider anchors, scope, and contradictions, but do not
    convert them into confirmed observations or automatic causal truth.
+   Configured mirrors and independent trackers are discovery aids only. Use
+   them to locate a canonical X status ID, then validate the author, URL, text,
+   and date through X-owned oEmbed when available. A mirror timestamp may be
+   checked against the timestamp deterministically encoded in the X status ID.
+   Preserve gaps, edits, missing replies, split threads, and disagreements;
+   never cite a mirror alone as staff corroboration.
 3. Work backwards through uncovered date ranges. Prefer precise source-native
    timestamps and permanent URLs to search snippets.
 4. Cluster records only when their timing, reported behavior, plan/surface

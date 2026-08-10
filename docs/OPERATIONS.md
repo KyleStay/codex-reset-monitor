@@ -49,10 +49,15 @@ publication time, neutral title, and minimal excerpt; then replace
 `pending-review` with `approved-public-source`. A social source must also match
 an exact account and manual collection method in `data/source-policy.json`.
 Review only its public source-native profile or permanent status URL; never use
-search snippets or automated timeline scraping as evidence. Record the post as
-an attributed signal and compare its UTC time with independent reset bounds,
-provider anchors, claimed scope, and nonrecipient reports before assigning any
-cause. Approval does not turn a post into a confirmed observation.
+search snippets or automated timeline scraping as evidence. Configured public
+trackers and the exact Bluesky bots may be used only to discover a canonical X
+status URL. Validate that URL, author, text, and date with X-owned oEmbed when
+available, check exact UTC against the status ID, and retain the discovery
+source and retrieval time. A mirror omission or mismatch is a contradiction,
+not permission to fill a gap. Record the post as an attributed signal and
+compare its UTC time with independent reset bounds, provider anchors, claimed
+scope, and nonrecipient reports before assigning any cause. Approval does not
+turn a post into a confirmed observation.
 
 ## Local reset observer
 

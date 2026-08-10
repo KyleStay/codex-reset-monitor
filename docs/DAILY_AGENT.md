@@ -61,6 +61,15 @@ Read `docs/HISTORICAL_RESEARCH.md` before researching.
 - Review configured social-watchlist accounts manually through their public,
   source-native profile and permanent status URLs. Do not use search snippets,
   inferred identities, private views, or scraped timelines as evidence.
+- When X does not expose the public timeline, use only the configured discovery
+  fallbacks in `data/source-policy.json`. The provisional
+  `willcodexquotareset.com/api/forecast` response and exact Bluesky bots may
+  locate candidate canonical URLs, but neither is evidence by itself. Validate
+  a discovered status through X-owned oEmbed when available, confirm the exact
+  configured author and canonical URL, derive exact UTC from the X status ID
+  only when necessary, record retrieval time and any mismatch, and keep stale
+  or missing mirror coverage explicit. Do not crawl, evade access controls, or
+  turn a mirror's classifier or forecast into this project's input.
 - Treat a watchlist post as an attributed public signal even when it uses
   first-person operator language. Correlate its source-native UTC timestamp
   with independently observed reset bounds, new provider reset anchors, scope,
