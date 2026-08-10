@@ -1,14 +1,14 @@
 {
-  "generatedAtUtc": "2026-08-10T02:09:01.229Z",
+  "generatedAtUtc": "2026-08-10T09:20:32.649Z",
   "sourceMode": "live-official-status-and-verified-github-issues",
   "officialStatusHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-10T02:09:02.184Z",
-    "message": "Collected 3 Codex-relevant official incident record(s)."
+    "checkedAtUtc": "2026-08-10T09:20:33.552Z",
+    "message": "Collected 2 Codex-relevant official incident record(s)."
   },
   "observationSourceHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-10T02:09:01.229Z",
+    "checkedAtUtc": "2026-08-10T09:20:32.649Z",
     "message": "Verified observations and approved public sources were collected from GitHub Issues.",
     "rejectedRecordCount": 0,
     "duplicateCount": 0
@@ -20,7 +20,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-24T07:55:28.000Z",
-      "retrievalTimeUtc": "2026-08-10T02:09:02.184Z",
+      "retrievalTimeUtc": "2026-08-10T09:20:33.552Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KY9HYHCMK8AND23B4X17XQEK",
       "title": "Elevated Errors in Codex Review",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We are investigating the issue for the listed services.",
@@ -42,7 +42,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-20T00:34:34.000Z",
-      "retrievalTimeUtc": "2026-08-10T02:09:02.184Z",
+      "retrievalTimeUtc": "2026-08-10T09:20:33.552Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KXYF4BTCV9DTZ5NDSFN716FH",
       "title": "Elevated errors for GitHub-dependent ChatGPT and Codex workflows",
       "excerpt": "All impacted services have now fully recovered. We are monitoring the recovery. Users may experience failures or delays in ChatGPT and Codex workflows that depend on GitHub. This mostly should impact Codex web and code review for PRs on Git",
@@ -57,35 +57,13 @@
         "impact": "minor"
       },
       "contentHash": "aeb5df87770a87093026e823806f046d5e4be0a7f258437fd03794d63a8cfdc1"
-    },
-    {
-      "id": "src_a304d75d499326df",
-      "sourceAdapterId": "openai-status-v1",
-      "sourceKind": "official_status",
-      "provenance": "official",
-      "publicationTimeUtc": "2026-07-18T08:05:37.000Z",
-      "retrievalTimeUtc": "2026-08-10T02:09:02.184Z",
-      "canonicalUrl": "https://status.openai.com/incidents/01KXT44TAQQ2R0AZDDVSJGAC4H",
-      "title": "Some users are unable to access Codex",
-      "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We have identified an issue causing some users to receive access-denied errors when using the Codex desktop app and CLI.",
-      "metadata": {
-        "externalId": "01KXT44TAQQ2R0AZDDVSJGAC4H",
-        "status": "resolved",
-        "impact": "minor"
-      },
-      "normalizedFeatures": {
-        "codexRelevant": true,
-        "active": false,
-        "impact": "minor"
-      },
-      "contentHash": "cb15b7846d3f0a6e41a6ed2b792c573278a68bead86a3ad879ef06e539cffac1"
     }
   ],
   "approvedPublicSources": [],
   "verifiedObservationCount": 2,
   "forecast": {
-    "id": "fc_20260810020901",
-    "forecastAtUtc": "2026-08-10T02:09:01.229Z",
+    "id": "fc_20260810092032",
+    "forecastAtUtc": "2026-08-10T09:20:32.649Z",
     "probabilities": {
       "1": 0.01,
       "3": 0.01,
@@ -97,17 +75,17 @@
     "likelyEndUtc": "2026-08-16T00:41:18.000Z",
     "confidenceGrade": "D",
     "featureSnapshot": {
-      "cutoffUtc": "2026-08-10T02:09:01.229Z",
+      "cutoffUtc": "2026-08-10T09:20:32.649Z",
       "confirmedEventCount": 2,
       "scheduledEventCount": 0,
       "outOfCycleEventCount": 1,
       "lastResetTiming": "out-of-cycle",
       "scheduledResetAtUtc": "2026-08-15T20:29:18.000Z",
-      "hoursSinceLastConfirmedReset": 29.603554444444445,
+      "hoursSinceLastConfirmedReset": 36.79561555555556,
       "medianCycleHours": 167.94,
       "cycleDispersionHours": 8.4,
       "activeIncident": false,
-      "incidentRecencyHours": 402.22589694444446,
+      "incidentRecencyHours": 409.4179580555556,
       "approvedPostCount24h": 0,
       "weightedReportVolume6h": 0,
       "sourceTrustMean": 0.6,
@@ -117,7 +95,7 @@
       {
         "label": "Official next-reset anchor",
         "direction": "lowers",
-        "detail": "The current quota window reports 138 hours until its next reset."
+        "detail": "The current quota window reports 131 hours until its next reset."
       },
       {
         "label": "Out-of-cycle reset isolated",
