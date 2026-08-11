@@ -76,6 +76,14 @@ const observationBody = `### Limit reached time
 
 2026-07-27T12:00:00Z
 
+### Previous reset time
+
+2026-07-29T12:00:00Z
+
+### Current reset time
+
+2026-08-03T12:00:00Z
+
 ### Time zone
 
 UTC
@@ -130,6 +138,8 @@ test("GitHub issue form parsing retains only validated observation fields", asyn
   }], "2026-07-28T04:17:00Z");
   assert.equal(normalized.codexSurface, "cli");
   assert.equal(normalized.observationKind, "access-restored");
+  assert.equal(normalized.previousResetsAtUtc, "2026-07-29T12:00:00.000Z");
+  assert.equal(normalized.currentResetsAtUtc, "2026-08-03T12:00:00.000Z");
   assert.equal(normalized.verifiedAtUtc, "2026-07-27T13:00:00.000Z");
   assert.equal(normalized.trustWeight, 0.54);
   assert.equal(normalized.auditHistory[0].action, "verified");

@@ -105,6 +105,148 @@
     "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
   },
   {
+    "id": "research-reset-2026-07-11",
+    "eventDate": "2026-07-11",
+    "eventTimeUtc": "2026-07-11T06:11:59Z",
+    "datePrecision": "exact",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "all_accounts",
+    "title": "One account's weekly window restarted inside a 30-minute all-user rollout",
+    "summary": "A canonically validated @thsottiaux post announced another reset for all ChatGPT Work and Codex users within 30 minutes. A later source-native public comment preserved one account's server reset timestamp, which implies a seven-day-window restart 17 minutes 34 seconds after the announcement. This is a precise inferred transition for one account, not a confirmed project observation or proof of universal delivery.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "GPT-5.6 Sol launch-period operator reset",
+      "confidence": "attributed",
+      "rationale": "The canonical operator post supplies the intended action and scope; the public server anchor supplies one-account delivery timing, while the broader launch context remains attribution rather than confirmed account-level cause."
+    },
+    "detectionSignals": [
+      "A canonical operator post supplies a short prospective rollout window.",
+      "A server-provided seven-day reset anchor advances within that window.",
+      "Plan and account-level nonreceipt reports test the universal wording."
+    ],
+    "contradictions": [
+      "The exact transition comes from one public account and cannot establish rollout breadth.",
+      "The record does not expose reset-credit transactions or prove every announced account received the action.",
+      "This inferred event is not a repository verified-observation label."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2075820987833274448",
+        "publicationTimeUtc": "2026-07-11T05:54:25.045Z",
+        "title": "All-user reset announced within 30 minutes",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/9508#issuecomment-4952895210",
+        "publicationTimeUtc": "2026-07-12T21:46:38Z",
+        "title": "One account preserves the resulting server reset-window anchor",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-11T09:27:59Z",
+    "lastReviewedAtUtc": "2026-08-11T09:27:59Z"
+  },
+  {
+    "id": "research-reset-2026-07-10-second",
+    "eventDate": "2026-07-10",
+    "eventTimeUtc": "2026-07-10T17:26:43Z",
+    "datePrecision": "exact",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "all_accounts",
+    "title": "Second launch-day weekly window restart observed on one account",
+    "summary": "A canonical operator post promised two ChatGPT Work and Codex resets over 24 hours for the GPT-5.6 Sol launch. A later public server timeline preserves a second seven-day-window restart at 17:26:43 UTC, and a canonical completion post 33 minutes later said one reset was complete while another remained planned. This is inferred one-account delivery, not a confirmed label or universal-delivery proof.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "GPT-5.6 Sol launch promotion",
+      "confidence": "attributed",
+      "rationale": "The operator explicitly linked the promised resets to the launch, while the server anchor and later completion wording support one-account delivery without proving universal breadth."
+    },
+    "detectionSignals": [
+      "A launch announcement specifies multiple resets within a bounded period.",
+      "The server-provided seven-day reset anchor advances for a second time.",
+      "A later canonical post distinguishes one completed action from a remaining promise."
+    ],
+    "contradictions": [
+      "The precise anchor represents one public account only.",
+      "The completion post followed the inferred transition and cannot be used prospectively at the earlier cutoff.",
+      "Universal scope and simultaneous completion remain unsupported."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2075452680760443190",
+        "publicationTimeUtc": "2026-07-10T05:30:53.796Z",
+        "title": "Two launch-day resets promised within 24 hours",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/9508#issuecomment-4952895210",
+        "publicationTimeUtc": "2026-07-12T21:46:38Z",
+        "title": "One account preserves a second launch-day server reset anchor",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2075641131002700120",
+        "publicationTimeUtc": "2026-07-10T17:59:43.835Z",
+        "title": "One reset announced complete and another still planned",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-11T09:27:59Z",
+    "lastReviewedAtUtc": "2026-08-11T09:27:59Z"
+  },
+  {
+    "id": "research-reset-2026-07-10-first",
+    "eventDate": "2026-07-10",
+    "eventTimeUtc": "2026-07-10T11:45:52Z",
+    "datePrecision": "exact",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "all_accounts",
+    "title": "First launch-day weekly window restart observed on one account",
+    "summary": "A canonical @thsottiaux post promised two ChatGPT Work and Codex resets over 24 hours for the GPT-5.6 Sol launch. A source-native public server timeline later preserved one account's first new seven-day reset anchor, implying an active-window restart 6 hours 15 minutes after the promise. The exact account-level transition is inferred historical evidence, not a project confirmed observation.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "GPT-5.6 Sol launch promotion",
+      "confidence": "attributed",
+      "rationale": "The operator explicitly linked the promised actions to the launch; the independent server anchor supports delivery to one account but not universal scope."
+    },
+    "detectionSignals": [
+      "A launch announcement promises multiple resets within a bounded period.",
+      "The account's seven-day reset anchor advances before the public completion post.",
+      "A second anchor is expected if both promised actions reach the account."
+    ],
+    "contradictions": [
+      "The precise transition is preserved for one public account only.",
+      "No project verified observation covers this historical event.",
+      "The post's all-user wording does not prove simultaneous or universal delivery."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2075452680760443190",
+        "publicationTimeUtc": "2026-07-10T05:30:53.796Z",
+        "title": "Two launch-day resets promised within 24 hours",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/9508#issuecomment-4952895210",
+        "publicationTimeUtc": "2026-07-12T21:46:38Z",
+        "title": "One account preserves the first launch-day server reset anchor",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-11T09:27:59Z",
+    "lastReviewedAtUtc": "2026-08-11T09:27:59Z"
+  },
+  {
     "id": "research-reset-2026-07-09",
     "eventDate": "2026-07-09",
     "datePrecision": "day",
@@ -137,6 +279,13 @@
         "role": "primary"
       },
       {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2075330198887940337",
+        "publicationTimeUtc": "2026-07-09T21:24:11.842Z",
+        "title": "Paid-plan reset announced as propagating within one hour",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
         "canonicalUrl": "https://community.openai.com/t/1364615/10",
         "publicationTimeUtc": "2026-07-10T22:29:48.530Z",
         "title": "OpenAI Support identifies a partial rollout issue",
@@ -145,7 +294,7 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
-    "lastReviewedAtUtc": "2026-07-29T14:55:18Z"
+    "lastReviewedAtUtc": "2026-08-11T09:27:59Z"
   },
   {
     "id": "research-reset-2026-06-28",
@@ -231,6 +380,13 @@
         "role": "corroborating"
       },
       {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2067399435009622521",
+        "publicationTimeUtc": "2026-06-18T00:10:10.387Z",
+        "title": "Full hard reset and separate banked reset announced complete",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
         "canonicalUrl": "https://github.com/openai/codex/issues/28837",
         "publicationTimeUtc": "2026-06-18T02:56:10Z",
         "title": "Expected banked credit was not visible after the public reset",
@@ -239,7 +395,7 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
-    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
+    "lastReviewedAtUtc": "2026-08-11T09:27:59Z"
   },
   {
     "id": "research-mechanism-2026-06-12",
@@ -296,7 +452,7 @@
       }
     ],
     "firstRecordedAtUtc": "2026-07-29T14:55:18Z",
-    "lastReviewedAtUtc": "2026-08-10T13:43:24Z"
+    "lastReviewedAtUtc": "2026-08-11T09:27:59Z"
   },
   {
     "id": "research-reset-2026-06-04",

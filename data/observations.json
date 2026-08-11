@@ -62,5 +62,43 @@
         "sourceIssueUpdatedAtUtc": "2026-08-08T20:32:52.000Z"
       }
     ]
+  },
+  {
+    "id": "github-issue-4",
+    "observationKind": "access-restored",
+    "limitReachedAtUtc": "2026-08-10T20:48:27.788Z",
+    "observedResetAtUtc": "2026-08-11T00:02:38.929Z",
+    "previousResetsAtUtc": "2026-08-15T20:29:18.000Z",
+    "currentResetsAtUtc": "2026-08-18T00:02:38.000Z",
+    "statedTimeZone": "UTC",
+    "codexSurface": "other",
+    "planTier": "individual-paid",
+    "relatedIncidentIds": [],
+    "relatedSourceIds": [],
+    "submitterNotes": "Automatically observed through the read-only Codex rate-limit API. No prompts, responses, account identifiers, screenshots, session files, or logs were accessed.",
+    "detectionMethod": "local-observer",
+    "confidence": 1,
+    "verificationState": "confirmed",
+    "trustWeight": 0.6,
+    "createdAtUtc": "2026-08-11T00:02:41.000Z",
+    "verifiedAtUtc": "2026-08-11T00:02:43.000Z",
+    "sourceUrl": "https://github.com/KyleStay/codex-reset-monitor/issues/4",
+    "sourceIssueNumber": 4,
+    "sourceIssueUpdatedAtUtc": "2026-08-11T09:23:34.000Z",
+    "sourceContentHash": "97734040b6ac655c9e479a1ecad2af16df1e3c562475ea522766cb7ab27b8e6b",
+    "auditHistory": [
+      {
+        "recordedAtUtc": "2026-08-11T09:22:39.807Z",
+        "action": "verified",
+        "sourceContentHash": "a6980b7cbccc37772bc55120cd5e4db4a358722f98477554ea1df2dc9b048a43",
+        "sourceIssueUpdatedAtUtc": "2026-08-11T00:02:41.000Z"
+      },
+      {
+        "recordedAtUtc": "2026-08-11T09:24:01.443Z",
+        "action": "corrected",
+        "sourceContentHash": "97734040b6ac655c9e479a1ecad2af16df1e3c562475ea522766cb7ab27b8e6b",
+        "sourceIssueUpdatedAtUtc": "2026-08-11T09:23:34.000Z"
+      }
+    ]
   }
 ]

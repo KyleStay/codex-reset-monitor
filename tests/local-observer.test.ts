@@ -45,6 +45,9 @@ test("local observer emits a minimized candidate on exhausted-to-available trans
   assert.equal(recovered.candidate?.observedResetAtUtc, "2026-08-01T10:05:00.000Z");
   assert.equal(recovered.candidate?.observationKind, "access-restored");
   assert.equal(recovered.candidate?.detectionMethod, "local-observer");
+  assert.equal(recovered.candidate?.previousResetsAtUtc, "2026-08-01T11:00:00.000Z");
+  assert.equal(recovered.candidate?.currentResetsAtUtc, "2026-08-08T10:05:00.000Z");
+  assert.equal(recovered.candidate?.resetTiming, "scheduled");
   assert.match(recovered.candidate?.submitterNotes ?? "", /No prompts, responses, account identifiers/);
   assert.equal(recovered.state.openExhaustion, null);
 });
