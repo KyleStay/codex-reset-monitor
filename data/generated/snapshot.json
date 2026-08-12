@@ -1,26 +1,48 @@
 {
-  "generatedAtUtc": "2026-08-11T09:24:01.443Z",
+  "generatedAtUtc": "2026-08-12T09:20:51.319Z",
   "sourceMode": "live-official-status-and-verified-github-issues",
   "officialStatusHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-11T09:24:02.639Z",
+    "checkedAtUtc": "2026-08-12T09:20:52.421Z",
     "message": "Collected 2 Codex-relevant official incident record(s)."
   },
   "observationSourceHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-11T09:24:01.443Z",
+    "checkedAtUtc": "2026-08-12T09:20:51.319Z",
     "message": "Verified observations and approved public sources were collected from GitHub Issues.",
     "rejectedRecordCount": 0,
     "duplicateCount": 0
   },
   "officialIncidents": [
     {
+      "id": "src_6f9bb739ba620ad9",
+      "sourceAdapterId": "openai-status-v1",
+      "sourceKind": "official_status",
+      "provenance": "official",
+      "publicationTimeUtc": "2026-08-11T21:35:23.000Z",
+      "retrievalTimeUtc": "2026-08-12T09:20:52.421Z",
+      "canonicalUrl": "https://status.openai.com/incidents/01KZSC0T66YTVM57N5T79SV8ZV",
+      "title": "Increase in errors on API, Codex and Work Mode",
+      "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We have identified that users are experiencing elevated errors for the impacted services. We are working on implementing a mitig",
+      "metadata": {
+        "externalId": "01KZSC0T66YTVM57N5T79SV8ZV",
+        "status": "resolved",
+        "impact": "none"
+      },
+      "normalizedFeatures": {
+        "codexRelevant": true,
+        "active": false,
+        "impact": "none"
+      },
+      "contentHash": "860c7fee52aa7911d67d7c15fef9f8e3636dbaabf97fc3a344b40b8041ffe9fb"
+    },
+    {
       "id": "src_236013eebe7307e9",
       "sourceAdapterId": "openai-status-v1",
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-07-24T07:55:28.000Z",
-      "retrievalTimeUtc": "2026-08-11T09:24:02.639Z",
+      "retrievalTimeUtc": "2026-08-12T09:20:52.421Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KY9HYHCMK8AND23B4X17XQEK",
       "title": "Elevated Errors in Codex Review",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We are investigating the issue for the listed services.",
@@ -35,28 +57,6 @@
         "impact": "minor"
       },
       "contentHash": "410dcdaa7f3a1c1e0bf59dab32f6c306a59b8542fc69f8277b3a722fda08fc54"
-    },
-    {
-      "id": "src_d36e9e895ce89ee6",
-      "sourceAdapterId": "openai-status-v1",
-      "sourceKind": "official_status",
-      "provenance": "official",
-      "publicationTimeUtc": "2026-07-20T00:34:34.000Z",
-      "retrievalTimeUtc": "2026-08-11T09:24:02.639Z",
-      "canonicalUrl": "https://status.openai.com/incidents/01KXYF4BTCV9DTZ5NDSFN716FH",
-      "title": "Elevated errors for GitHub-dependent ChatGPT and Codex workflows",
-      "excerpt": "All impacted services have now fully recovered. We are monitoring the recovery. Users may experience failures or delays in ChatGPT and Codex workflows that depend on GitHub. This mostly should impact Codex web and code review for PRs on Git",
-      "metadata": {
-        "externalId": "01KXYF4BTCV9DTZ5NDSFN716FH",
-        "status": "resolved",
-        "impact": "minor"
-      },
-      "normalizedFeatures": {
-        "codexRelevant": true,
-        "active": false,
-        "impact": "minor"
-      },
-      "contentHash": "aeb5df87770a87093026e823806f046d5e4be0a7f258437fd03794d63a8cfdc1"
     }
   ],
   "approvedPublicSources": [
@@ -66,7 +66,7 @@
       "sourceKind": "approved_public_post",
       "provenance": "administrator_approved",
       "publicationTimeUtc": "2026-08-08T20:29:22.056Z",
-      "retrievalTimeUtc": "2026-08-11T09:24:01.443Z",
+      "retrievalTimeUtc": "2026-08-12T09:20:51.319Z",
       "canonicalUrl": "https://x.com/thsottiaux/status/2086188036493344823",
       "title": "Paid-user Codex and ChatGPT Work usage-limit reset announcement",
       "excerpt": "Announced a completed usage-limit reset for all paid ChatGPT Work and Codex users.",
@@ -82,8 +82,8 @@
   ],
   "verifiedObservationCount": 3,
   "forecast": {
-    "id": "fc_20260811092401",
-    "forecastAtUtc": "2026-08-11T09:24:01.443Z",
+    "id": "fc_20260812092051",
+    "forecastAtUtc": "2026-08-12T09:20:51.319Z",
     "probabilities": {
       "1": 0.01,
       "3": 0.01,
@@ -95,17 +95,17 @@
     "likelyEndUtc": "2026-08-18T04:14:38.000Z",
     "confidenceGrade": "D",
     "featureSnapshot": {
-      "cutoffUtc": "2026-08-11T09:24:01.443Z",
+      "cutoffUtc": "2026-08-12T09:20:51.319Z",
       "confirmedEventCount": 3,
       "scheduledEventCount": 0,
       "outOfCycleEventCount": 2,
       "lastResetTiming": "out-of-cycle",
       "scheduledResetAtUtc": "2026-08-18T00:02:38.000Z",
-      "hoursSinceLastConfirmedReset": 9.356253888888888,
+      "hoursSinceLastConfirmedReset": 33.303441666666664,
       "medianCycleHours": 168,
       "cycleDispersionHours": 8.4,
       "activeIncident": false,
-      "incidentRecencyHours": 433.4759563888889,
+      "incidentRecencyHours": 11.757866388888889,
       "approvedPostCount24h": 0,
       "weightedReportVolume6h": 0,
       "sourceTrustMean": 0.6,
@@ -115,7 +115,7 @@
       {
         "label": "Official next-reset anchor",
         "direction": "lowers",
-        "detail": "The current quota window reports 159 hours until its next reset."
+        "detail": "The current quota window reports 135 hours until its next reset."
       },
       {
         "label": "Out-of-cycle reset isolated",
@@ -129,7 +129,7 @@
       }
     ],
     "modelVersion": "provider-anchor-baseline-0.3.0",
-    "datasetVersion": "events-3-cutoff-2026-08-11-239f16b2",
+    "datasetVersion": "events-3-cutoff-2026-08-12-239f16b2",
     "dataSufficiencyLabel": "Experimental—limited history"
   },
   "performance": {
