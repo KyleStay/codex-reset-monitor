@@ -6,33 +6,40 @@
     "classification": "inferred_reset",
     "verificationState": "inferred",
     "scope": "paid_plans",
-    "title": "Independent paid-plan reports show August 1 window restarts",
-    "summary": "Independent Plus and Pro reports described weekly usage returning to zero used on August 1, including two reports that place the transition around 03:00-03:36 UTC and show a newly anchored seven-day reset timestamp. A third Pro report also began the day at a full allowance. The evidence supports a day-precision inferred reset affecting some paid accounts, but it does not establish a universal action, a banked-credit redemption, or any operator-supplied cause.",
-    "evidenceGrade": "C",
+    "title": "Attributed August 1 announcement corroborates paid-plan window restarts",
+    "summary": "A canonically validated @thsottiaux post announced that Codex and ChatGPT Work usage limits had been reset in a weekend promotional context. Independent Plus and Pro reports described weekly usage returning to zero used around 03:00-03:36 UTC with newly anchored seven-day windows. This strengthens the day-precision inferred reset for some paid accounts, but does not prove universal delivery or a banked-credit redemption.",
+    "evidenceGrade": "B",
     "cause": {
-      "assessment": "Unknown; a broad reset, banked-credit action, or account-side window replacement remain possible",
-      "confidence": "unknown",
-      "rationale": "The independent telemetry reports establish allowance restoration and new window anchors, but no configured official or repository-staff source identified the trigger or affected population."
+      "assessment": "Weekend promotional reset following a week of efficiency work",
+      "confidence": "attributed",
+      "rationale": "The canonical operator post explicitly presents the reset as a weekend celebration; independent reports support some account-level delivery, but the statement does not prove an exclusive cause or universal receipt."
     },
     "detectionSignals": [
+      "A canonical operator announcement supplies an exact source publication time and stated action.",
       "Independent paid accounts move from nonzero weekly usage to zero used within the same UTC hour.",
       "The backend-provided reset timestamp advances to a newly anchored seven-day window.",
-      "Banked reset-credit balances and explicit consume calls are checked separately from the active usage window.",
-      "An official or staff statement with an effective timestamp would distinguish a broad operator reset from account-specific credit actions."
+      "Banked reset-credit balances and explicit consume calls are checked separately from the active usage window."
     ],
     "contradictions": [
       "One report found no local reset-credit consume call, but client-visible telemetry cannot identify the server-side actor or transaction type.",
       "Other August 1 reports described disappearing credits, rapid post-reset usage, or additional window replacements rather than a single uniform outcome.",
-      "No configured official announcement, Help record, Status incident, or repository-staff statement confirmed the scope or cause.",
-      "The reports do not establish that every eligible paid account received the same reset."
+      "The attributed announcement establishes an intended action, not simultaneous or universal completion.",
+      "The post was discovered by this project on August 15 and cannot enter earlier forecast snapshots."
     ],
     "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2083395449814229287",
+        "publicationTimeUtc": "2026-08-01T03:32:37.508Z",
+        "title": "Codex and ChatGPT Work usage reset announced for the weekend",
+        "provenance": "public_report",
+        "role": "primary"
+      },
       {
         "canonicalUrl": "https://github.com/openai/codex/issues/36436",
         "publicationTimeUtc": "2026-08-01T05:32:16Z",
         "title": "Pro account records a newly anchored weekly window around 03:36 UTC",
         "provenance": "public_report",
-        "role": "primary"
+        "role": "corroborating"
       },
       {
         "canonicalUrl": "https://github.com/openai/codex/issues/36481",
@@ -50,7 +57,103 @@
       }
     ],
     "firstRecordedAtUtc": "2026-08-02T09:18:45Z",
-    "lastReviewedAtUtc": "2026-08-02T09:18:45Z"
+    "lastReviewedAtUtc": "2026-08-15T09:28:39Z"
+  },
+  {
+    "id": "research-reset-2026-07-29",
+    "eventDate": "2026-07-29",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "all_accounts",
+    "title": "All-user Codex and ChatGPT Work reset announced on July 29",
+    "summary": "A canonically validated @thsottiaux post announced that usage limits had been reset for all ChatGPT Work and Codex users alongside a GPT-5.6 Sol usage update. The attributed completed-action wording supports a day-precision inferred reset, while public nonrecipient and display reports leave delivery breadth and account-level timing unresolved.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "Unknown; the reset accompanied a GPT-5.6 Sol usage update",
+      "confidence": "unknown",
+      "rationale": "The validated initial post links the reset and a usage update in time but does not establish that the update caused the reset. Mirror-preserved follow-up parts remain discovery context without separately validated canonical IDs."
+    },
+    "detectionSignals": [
+      "A canonical operator announcement supplies an exact source publication time and stated all-user action.",
+      "Independent accounts should show a bounded usage restoration or stable new window anchor near the announcement.",
+      "Nonrecipient and display-only reports test whether stated broad scope matched enforcement."
+    ],
+    "contradictions": [
+      "A Plus account reported that the reportedly distributed July 29 reset was not delivered.",
+      "Another account reported a reset date change while its usage meter remained fully used.",
+      "No bounded independent recipient transition establishes the rollout time or breadth.",
+      "The post was discovered by this project on August 15 and cannot enter earlier forecast snapshots."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2082317452755751098",
+        "publicationTimeUtc": "2026-07-29T04:09:02.981Z",
+        "title": "All-user Codex and ChatGPT Work reset announced with a Sol usage update",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/36170",
+        "publicationTimeUtc": "2026-07-30T14:33:54Z",
+        "title": "Plus account reports nonreceipt of the July 29 reset",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/35952",
+        "publicationTimeUtc": "2026-07-29T13:21:41Z",
+        "title": "Reset date changed while the meter remained fully used",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-15T09:28:39Z",
+    "lastReviewedAtUtc": "2026-08-15T09:28:39Z"
+  },
+  {
+    "id": "research-reset-2026-07-28",
+    "eventDate": "2026-07-28",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "paid_plans",
+    "title": "Paid-user Codex and ChatGPT Work reset announced on July 28",
+    "summary": "A canonically validated @thsottiaux post announced that usage limits had been reset for all paid Codex and ChatGPT Work users. The attributed completed-action wording supports a day-precision inferred reset, but no bounded independent transition establishes account-level timing, simultaneous delivery, or universal paid-plan receipt.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "Unknown",
+      "confidence": "unknown",
+      "rationale": "The canonical post states the completed action and intended scope but gives no supported trigger or causal explanation."
+    },
+    "detectionSignals": [
+      "A canonical operator announcement supplies an exact source publication time and stated paid-user scope.",
+      "Independent paid accounts should show bounded allowance restoration with a new stable window anchor.",
+      "Nonrecipient reports are required to test whether the broad announcement matched account-level delivery."
+    ],
+    "contradictions": [
+      "A later public issue referred to a July 28 global reset but did not supply an independent account-level observation.",
+      "No bounded recipient transition or delivery denominator establishes timing or breadth.",
+      "The post was discovered by this project on August 15 and cannot enter earlier forecast snapshots."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2081940052154933696",
+        "publicationTimeUtc": "2026-07-28T03:09:23.666Z",
+        "title": "Paid-user Codex and ChatGPT Work reset completion announcement",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/36426",
+        "publicationTimeUtc": "2026-08-01T03:53:12Z",
+        "title": "Public issue refers to the reported July 28 broad reset",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-08-15T09:28:39Z",
+    "lastReviewedAtUtc": "2026-08-15T09:28:39Z"
   },
   {
     "id": "research-reset-2026-07-14",

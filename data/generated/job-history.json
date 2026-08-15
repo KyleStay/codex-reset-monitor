@@ -1,5 +1,29 @@
 [
   {
+    "id": "refresh-2026-08-15T09:33:02.532Z",
+    "startedAtUtc": "2026-08-15T09:33:02.532Z",
+    "completedAtUtc": "2026-08-15T09:33:04.014Z",
+    "status": "succeeded",
+    "officialIncidentCount": 2,
+    "verifiedObservationCount": 4,
+    "approvedPublicSourceCount": 1,
+    "rejectedRecordCount": 0,
+    "duplicateCount": 0,
+    "datasetVersion": "events-4-cutoff-2026-08-15-bf546d8e"
+  },
+  {
+    "id": "refresh-2026-08-15T09:20:34.688Z",
+    "startedAtUtc": "2026-08-15T09:20:34.688Z",
+    "completedAtUtc": "2026-08-15T09:20:36.359Z",
+    "status": "succeeded",
+    "officialIncidentCount": 2,
+    "verifiedObservationCount": 4,
+    "approvedPublicSourceCount": 1,
+    "rejectedRecordCount": 0,
+    "duplicateCount": 0,
+    "datasetVersion": "events-4-cutoff-2026-08-15-bf546d8e"
+  },
+  {
     "id": "refresh-2026-08-14T09:19:30.800Z",
     "startedAtUtc": "2026-08-14T09:19:30.800Z",
     "completedAtUtc": "2026-08-14T09:19:32.058Z",

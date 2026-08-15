@@ -72,6 +72,20 @@ test("local observer ignores sub-minute reset timestamp jitter", () => {
   assert.equal(jittered.candidate, null);
 });
 
+test("local observer ignores a sliding reset timestamp without a usage transition", () => {
+  const first = advanceLocalObserver(
+    emptyLocalObserverState(),
+    sample({ usedPercent: 0, resetsAtUtc: "2026-08-08T10:00:00.000Z" }),
+    "UTC",
+  ).state;
+  const sliding = advanceLocalObserver(
+    first,
+    sample({ sampledAtUtc: "2026-08-01T10:05:00.000Z", usedPercent: 0, resetsAtUtc: "2026-08-08T10:05:00.000Z" }),
+    "UTC",
+  );
+  assert.equal(sliding.candidate, null);
+});
+
 test("local observer emits a full meter reset when usage reaches near zero and reset time advances", () => {
   const first = advanceLocalObserver(
     emptyLocalObserverState(),

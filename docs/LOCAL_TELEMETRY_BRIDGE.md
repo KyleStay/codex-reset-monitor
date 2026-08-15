@@ -54,6 +54,10 @@ A local event is confirmed only when either:
 The detected time is a sample bound, not an invented exact server timestamp.
 Other suspicious changes can inform later analysis but cannot self-verify or be
 published as confirmed.
+In particular, some unused or rolling windows can report a `resetsAt` value that
+advances with the sample time. An advancing timestamp alone is schedule/display
+behavior, not a completed reset; the second rule still requires the bounded
+usage drop and stable window duration.
 
 Available reset credits are queued capacity issued by OpenAI. They are surfaced
 separately and never treated as evidence that a full reset already completed.

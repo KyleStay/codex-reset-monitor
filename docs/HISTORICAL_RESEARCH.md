@@ -60,6 +60,8 @@ backfill:
    usage returning to 100%, a changed reset timestamp, window restart,
    coordinated report volume, official incident transitions, staff statements,
    or approved announcement activity.
+   A reset timestamp that merely slides forward between reads, without a
+   bounded usage or enforcement transition, is not reset evidence.
 7. State the cause as unknown unless a source actually supports it. Keep
    outage compensation, promotions, metering corrections, plan migrations,
    product launches, and unrelated incidents distinct.
