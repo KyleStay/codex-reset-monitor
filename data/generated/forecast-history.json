@@ -1,5 +1,26 @@
 [
   {
+    "id": "events-4-cutoff-2026-08-19-bf546d8e",
+    "at": "2026-08-19T09:23:50.790Z",
+    "probabilities": {
+      "1": 0.06525318072486976,
+      "3": 0.08121085018513505,
+      "6": 0.11173796946813948,
+      "12": 0.20206696103008284,
+      "24": 0.49222134940879747
+    },
+    "p6": 0.11173796946813948,
+    "likelyStartUtc": "2026-08-20T03:11:15.000Z",
+    "likelyEndUtc": "2026-08-20T11:35:15.000Z",
+    "interval": "Aug 20, 3:11 AM–Aug 20, 11:35 AM UTC",
+    "outcome": "Awaiting 24-hour outcome",
+    "outcomes": null,
+    "brier": null,
+    "timingErrorMinutes": null,
+    "modelVersion": "provider-anchor-baseline-0.3.0",
+    "datasetVersion": "events-4-cutoff-2026-08-19-bf546d8e"
+  },
+  {
     "id": "events-4-cutoff-2026-08-18-bf546d8e",
     "at": "2026-08-18T09:18:53.562Z",
     "probabilities": {
@@ -13,9 +34,15 @@
     "likelyStartUtc": "2026-08-20T03:11:15.000Z",
     "likelyEndUtc": "2026-08-20T11:35:15.000Z",
     "interval": "Aug 20, 3:11 AM–Aug 20, 11:35 AM UTC",
-    "outcome": "Awaiting 24-hour outcome",
-    "outcomes": null,
-    "brier": null,
+    "outcome": "No verified reset within 24h",
+    "outcomes": {
+      "1": false,
+      "3": false,
+      "6": false,
+      "12": false,
+      "24": false
+    },
+    "brier": 0.0008,
     "timingErrorMinutes": null,
     "modelVersion": "provider-anchor-baseline-0.3.0",
     "datasetVersion": "events-4-cutoff-2026-08-18-bf546d8e"
@@ -34,9 +61,15 @@
     "likelyStartUtc": "2026-08-20T03:11:15.000Z",
     "likelyEndUtc": "2026-08-20T11:35:15.000Z",
     "interval": "Aug 20, 3:11 AM–Aug 20, 11:35 AM UTC",
-    "outcome": "Awaiting 24-hour outcome",
-    "outcomes": null,
-    "brier": null,
+    "outcome": "No verified reset within 24h",
+    "outcomes": {
+      "1": false,
+      "3": false,
+      "6": false,
+      "12": false,
+      "24": false
+    },
+    "brier": 0.0001,
     "timingErrorMinutes": null,
     "modelVersion": "provider-anchor-baseline-0.3.0",
     "datasetVersion": "events-4-cutoff-2026-08-17-bf546d8e"
