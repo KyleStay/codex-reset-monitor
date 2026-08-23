@@ -1,7 +1,7 @@
 [
   {
-    "id": "events-5-cutoff-2026-08-21-4333ea99",
-    "at": "2026-08-21T09:23:48.383Z",
+    "id": "events-5-cutoff-2026-08-23-4333ea99",
+    "at": "2026-08-23T09:19:58.153Z",
     "probabilities": {
       "1": 0.01,
       "3": 0.01,
@@ -16,6 +16,33 @@
     "outcome": "Awaiting 24-hour outcome",
     "outcomes": null,
     "brier": null,
+    "timingErrorMinutes": null,
+    "modelVersion": "provider-anchor-baseline-0.3.0",
+    "datasetVersion": "events-5-cutoff-2026-08-23-4333ea99"
+  },
+  {
+    "id": "events-5-cutoff-2026-08-21-4333ea99",
+    "at": "2026-08-21T09:23:48.383Z",
+    "probabilities": {
+      "1": 0.01,
+      "3": 0.01,
+      "6": 0.01,
+      "12": 0.01,
+      "24": 0.01
+    },
+    "p6": 0.01,
+    "likelyStartUtc": "2026-08-27T08:19:14.000Z",
+    "likelyEndUtc": "2026-08-27T11:19:14.000Z",
+    "interval": "Aug 27, 8:19 AM–Aug 27, 11:19 AM UTC",
+    "outcome": "No verified reset within 24h",
+    "outcomes": {
+      "1": false,
+      "3": false,
+      "6": false,
+      "12": false,
+      "24": false
+    },
+    "brier": 0.0001,
     "timingErrorMinutes": null,
     "modelVersion": "provider-anchor-baseline-0.3.0",
     "datasetVersion": "events-5-cutoff-2026-08-21-4333ea99"
@@ -34,9 +61,15 @@
     "likelyStartUtc": "2026-08-27T08:19:14.000Z",
     "likelyEndUtc": "2026-08-27T11:19:14.000Z",
     "interval": "Aug 27, 8:19 AM–Aug 27, 11:19 AM UTC",
-    "outcome": "Awaiting 24-hour outcome",
-    "outcomes": null,
-    "brier": null,
+    "outcome": "No verified reset within 24h",
+    "outcomes": {
+      "1": false,
+      "3": false,
+      "6": false,
+      "12": false,
+      "24": false
+    },
+    "brier": 0.0001,
     "timingErrorMinutes": null,
     "modelVersion": "provider-anchor-baseline-0.3.0",
     "datasetVersion": "events-5-cutoff-2026-08-20-4333ea99"
