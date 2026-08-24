@@ -17,6 +17,8 @@ test("static export contains critical public and administrator journeys", async 
   assert.match(home, /Official status/);
   assert.match(home, /OpenAI Support/);
   assert.match(home, /Forecast history/);
+  assert.match(home, /https:\/\/kylestay\.github\.io\/codex-reset-monitor\/og\.png/);
+  assert.doesNotMatch(home, /http:\/\/localhost:3000/);
   assert.doesNotMatch(home, /Seeded demonstration data/i);
   const submit = await readFile(new URL("../out/submit/index.html", import.meta.url), "utf8");
   assert.match(submit, /No prompts or responses/);

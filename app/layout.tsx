@@ -3,9 +3,10 @@ import "./globals.css";
 import { SiteHeader } from "./components/SiteHeader";
 import { SiteFooter } from "./components/SiteFooter";
 
-const origin = process.env.APP_ORIGIN || "http://localhost:3000";
+const origin = process.env.APP_ORIGIN || "https://kylestay.github.io";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const socialImage = `${origin.replace(/\/$/, "")}${basePath}/og.png`;
+const publicBasePath = basePath || "/codex-reset-monitor";
+const socialImage = `${origin.replace(/\/$/, "")}${publicBasePath}/og.png`;
 const favicon = `${basePath}/favicon.svg`;
 
 export const metadata: Metadata = {
