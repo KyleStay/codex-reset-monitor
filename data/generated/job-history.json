@@ -1,5 +1,17 @@
 [
   {
+    "id": "refresh-2026-08-26T09:23:35.622Z",
+    "startedAtUtc": "2026-08-26T09:23:35.622Z",
+    "completedAtUtc": "2026-08-26T09:23:37.326Z",
+    "status": "succeeded",
+    "officialIncidentCount": 2,
+    "verifiedObservationCount": 7,
+    "approvedPublicSourceCount": 1,
+    "rejectedRecordCount": 0,
+    "duplicateCount": 0,
+    "datasetVersion": "events-7-cutoff-2026-08-26-74ea586e"
+  },
+  {
     "id": "refresh-2026-08-25T09:27:34.997Z",
     "startedAtUtc": "2026-08-25T09:27:34.997Z",
     "completedAtUtc": "2026-08-25T09:27:36.697Z",
