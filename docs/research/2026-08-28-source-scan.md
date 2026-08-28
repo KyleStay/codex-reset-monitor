@@ -50,6 +50,21 @@ redemption, a confirmed cause, or a project observation label. Pending issue
 discovery cutoff and remains forecast-ineligible unless a maintainer approves
 it.
 
+Two additional canonical records remain weaker context. Tibo reply
+[`2092993835953787255`](https://x.com/thsottiaux/status/2092993835953787255),
+ID-derived `2026-08-27T15:13:11.093Z`, says "I always deliver" in response to
+a request to state resets clearly. X and oEmbed confirmed the author, text,
+URL, and date. It is attributed intent or delivery commentary, not independent
+completion proof; pending issue
+[#35](https://github.com/KyleStay/codex-reset-monitor/issues/35) keeps it out of
+the forecast. An unconfigured user's post
+[`2093026573720977508`](https://x.com/BeingImmu/status/2093026573720977508),
+ID-derived `2026-08-27T17:23:16.385Z`, reports a before-and-after reset feeling
+without provider data. X oEmbed confirmed the public author, text, URL, and
+date. Pending issue
+[#34](https://github.com/KyleStay/codex-reset-monitor/issues/34) preserves it
+as an unbounded public report. Its linked image was not retained.
+
 The independent local observer recorded verified issue
 [#32](https://github.com/KyleStay/codex-reset-monitor/issues/32). Samples bound
 one individual-paid meter transition from `2026-08-27T16:15:29.844Z` to
@@ -71,8 +86,8 @@ the usual cross-account display and enforcement reports.
 The observer status at `2026-08-28T09:19:16.095Z` showed eight published
 resets, `16%` used, the September 3 provider anchor, one available unredeemed
 full-reset credit, and no pending publication. Project issues contain eight
-verified observations, one approved public source, and twenty-four pending
-public sources after filing issue #33.
+verified observations, one approved public source, and twenty-six pending
+public sources after filing issues #33 through #35.
 
 The strongest separation remains:
 
@@ -95,7 +110,7 @@ The incident also lacks any compensation or usage-limit statement.
 
 ## Recent repository-native signals
 
-The focused pass reviewed **n=9** public `openai/codex` records spanning August
+The focused pass reviewed **n=11** public `openai/codex` records spanning August
 26 through August 28: [#40862](https://github.com/openai/codex/issues/40862),
 [#40880](https://github.com/openai/codex/issues/40880),
 [#40905](https://github.com/openai/codex/issues/40905),
@@ -103,7 +118,9 @@ The focused pass reviewed **n=9** public `openai/codex` records spanning August
 [#41102](https://github.com/openai/codex/issues/41102),
 [#41134](https://github.com/openai/codex/issues/41134),
 [#41154](https://github.com/openai/codex/issues/41154),
-[#41160](https://github.com/openai/codex/issues/41160), and
+[#41160](https://github.com/openai/codex/issues/41160),
+[#41220](https://github.com/openai/codex/issues/41220),
+[#41224](https://github.com/openai/codex/issues/41224), and
 [#41277](https://github.com/openai/codex/issues/41277). No OpenAI member or
 owner comment confirmed a new reset mechanism, provider anchor, credit
 transaction, quota size, or cause.
@@ -116,8 +133,10 @@ which weakens stale-time claims. #41102 reports an authentication or entitlement
 loop after a displayed reset and plan upgrade. #41134 alleges paid credits were
 used after included usage was exhausted. #41154 reports a full-looking Spark
 meter with continued enforcement. #41277 treats Luna Reserve as a fallback
-after Sol exhaustion. The remaining records request changes to the five-hour
-window. They do not establish delivery, cause, or a shared meter transition.
+after Sol exhaustion. #41220 collects anomalous-depletion reports without a
+staff diagnosis, and #41224 requests a capped Luna continuity mode. The
+remaining records request changes to the five-hour window. They do not
+establish delivery, cause, or a shared meter transition.
 
 ## Point-in-time-safe pattern audit
 
@@ -130,13 +149,13 @@ forecast feature snapshot.
 | --- | --- | --- |
 | Provider-owned bounded transition | `n=8` verified observations, August 8-27; sanitized observer meter/access transitions and provider anchors; current cutoff. | The eighth event independently resolves yesterday's watch window for one account. Six of eight events are out of cycle, so recurring timing is not established. **Grade A, strengthened.** |
 | Explicit future reset promises and hints | `n=11` canonical promise or future-action records, June 16-August 27; canonical X, oEmbed, discovery cutoffs, and later observer bounds; current cutoff. | The newest hint led the observer upper bound by `9h55m20.813s`. The observed successful lead-time range remains about 17 minutes 34 seconds to 51 hours 28 minutes. June 29 remains unresolved and July 9 missed its stated hour. **Grade C directional, strengthened.** |
-| Completed versus future wording | `n=25` attributed wording records, June 4-August 27; X originals/replies, credits, inferred records, and verified observations; current cutoff. | The new original changes yesterday's hint into attributed completed-action language and follows the local bound by 8 minutes 13 seconds. It still cannot prove universal receipt. **Grade A attribution, C delivery prediction, strengthened.** |
-| Original posts versus replies | `n=4` current canonical records, August 26-27; two originals and two replies, canonical X, oEmbed, feed, and mirrors; current cutoff. | The hint and completion are originals. Replies supplied Luna reserve and one-user recovery context. The profile Replies view remained incomplete. **Grade A attribution, C timing, D completeness, strengthened.** |
+| Completed versus future wording | `n=26` attributed wording records, June 4-August 27; X originals/replies, credits, inferred records, and verified observations; current cutoff. | The new original changes yesterday's hint into attributed completed-action language and follows the local bound by 8 minutes 13 seconds. The "I always deliver" reply reinforces intent but adds no delivery proof. **Grade A attribution, C delivery prediction, strengthened.** |
+| Original posts versus replies | `n=5` current canonical records, August 26-27; two originals and three replies, canonical X, oEmbed, feed, and mirrors; current cutoff. | The hint and completion are originals. Replies supplied Luna reserve, one-user recovery, and intent context. The profile Replies view remained incomplete. **Grade A attribution, C timing, D completeness, strengthened.** |
 | Banked credit versus hard reset | `n=1` local banked credit tracked across three later hard resets, August 22-28; observer credit snapshots, current Help, attributed mechanisms, and public reports; current cutoff. | The credit stayed available through the August 24, 25, and 27 transitions. One public report claims a redemption but lacks provider anchors. **Grade A local distinction, D breadth, strengthened.** |
 | Incident chronology and reset linkage | `n=17` incident/reset contexts, June 3-August 27; official Status phases, observer events, attributed posts, and public reports; current cutoff. | The new incident began about 93 minutes after the reset bound and contains no compensation statement. **Grade A chronology, D reset linkage, strengthened as a negative control.** |
-| Recent depletion and mechanism candidates | `n=9` focused GitHub records, August 26-28; issue bodies/comments and no staff confirmation; current cutoff. | Fast depletion, credit use, Luna Reserve, Spark display/enforcement, authentication, UTC display, and long-task interruption reports remain heterogeneous. #40862's correction weakens one apparent failure. **Grade B candidate mechanisms, D prevalence/cause, strengthened with a refutation.** |
-| Public clustering and contradictions | `n=11` current records, August 27-28; one completed X post, one Status incident, and nine focused GitHub records; current cutoff. | Records cluster around the action and renewed five-hour enforcement, but reset receipt, consumption, display, and enforcement still diverge. No recipient denominator exists. **Grade B divergence, D prevalence, strengthened.** |
-| Discovery and mirror freshness | `n=1` newly validated relevant post; feed fetched `2026-08-28T09:19:16.312Z`, two exact-DID reads, and current cutoff. | Both mirrors carried the original with measured lag of about 2 minutes 26 seconds and 12 minutes 11 seconds. Their reply completeness remains unreliable. **Grade B measured freshness, D completeness, strengthened for this original only.** |
+| Recent depletion and mechanism candidates | `n=11` focused GitHub records, August 26-28; issue bodies/comments and no staff confirmation; current cutoff. | Fast depletion, credit use, Luna Reserve, Spark display/enforcement, authentication, UTC display, and long-task interruption reports remain heterogeneous. #40862's correction weakens one apparent failure. **Grade B candidate mechanisms, D prevalence/cause, strengthened with a refutation.** |
+| Public clustering and contradictions | `n=14` current records, August 27-28; one completed X post, one unbounded X user report, one Status incident, and eleven focused GitHub records; current cutoff. | Records cluster around the action and renewed five-hour enforcement, but reset receipt, consumption, display, and enforcement still diverge. No recipient denominator exists. **Grade B divergence, D prevalence, strengthened.** |
+| Discovery and mirror freshness | `n=2` newly validated relevant Tibo records; feed fetched `2026-08-28T09:19:16.312Z`, two exact-DID reads, and current cutoff. | Both mirrors carried the original with measured lag of about 2 minutes 26 seconds and 12 minutes 11 seconds. The preferred mirror carried the reply; the fallback omitted it. **Grade B measured freshness, D completeness, strengthened.** |
 | Reset gaps, cooldown, UTC time, and weekday | `n=8` observations, August 8-27, yielding seven gaps: `11h09m42.937s`, `51h29m50.496s`, `55h20m37.071s`, `170h25m58.932s`, `86h58m44.404s`, `37h26m14.123s`, and `50h12m38.541s`; observer transitions and anchors; current cutoff. | The heterogeneous sample remains too small for cadence, cooldown, weekday, or UTC-hour inference. **Grade D, unchanged.** |
 | August 31 migration context | `n=2` official records, current Help and dated changelog, public before the cutoff; current cutoff. | Both identify Terra and Luna replacements. Neither describes a reset or quota-window change. **Grade A product context, D reset-cause linkage, unchanged.** |
 
@@ -160,6 +179,8 @@ Since the prior scan:
 - verified issue #32 added the eighth account-level reset;
 - canonical post `2093014447833116908` supplied attributed completed-action
   language and was filed as pending issue #33;
+- two weaker canonical records were filed as pending issues #34 and #35, one
+  attributed intent reply and one unbounded report from an unconfigured user;
 - the August 27 hint resolved after a `9h55m20.813s` lead to the observer upper
   bound;
 - the banked credit stayed available through a third later hard reset;
