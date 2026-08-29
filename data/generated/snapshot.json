@@ -1,14 +1,14 @@
 {
-  "generatedAtUtc": "2026-08-28T09:22:43.687Z",
+  "generatedAtUtc": "2026-08-29T09:22:21.081Z",
   "sourceMode": "live-official-status-and-verified-github-issues",
   "officialStatusHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-28T09:22:45.811Z",
+    "checkedAtUtc": "2026-08-29T09:22:23.198Z",
     "message": "Collected 2 Codex-relevant official incident record(s)."
   },
   "observationSourceHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-08-28T09:22:43.687Z",
+    "checkedAtUtc": "2026-08-29T09:22:21.081Z",
     "message": "Verified observations and approved public sources were collected from GitHub Issues.",
     "rejectedRecordCount": 0,
     "duplicateCount": 0
@@ -20,7 +20,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-08-20T16:58:53.000Z",
-      "retrievalTimeUtc": "2026-08-28T09:22:45.811Z",
+      "retrievalTimeUtc": "2026-08-29T09:22:23.198Z",
       "canonicalUrl": "https://status.openai.com/incidents/01M0G1RZER839AZXWMYKSZF3GR",
       "title": "Elevated Codex API authentication errors",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. Some users may encounter errors when using Codex with API authentication. We are working on implementing a mitigation.",
@@ -42,7 +42,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-08-11T21:35:23.000Z",
-      "retrievalTimeUtc": "2026-08-28T09:22:45.811Z",
+      "retrievalTimeUtc": "2026-08-29T09:22:23.198Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KZSC0T66YTVM57N5T79SV8ZV",
       "title": "Increase in errors on API, Codex and Work Mode",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We have identified that users are experiencing elevated errors for the impacted services. We are working on implementing a mitig",
@@ -66,7 +66,7 @@
       "sourceKind": "approved_public_post",
       "provenance": "administrator_approved",
       "publicationTimeUtc": "2026-08-08T20:29:22.056Z",
-      "retrievalTimeUtc": "2026-08-28T09:22:43.687Z",
+      "retrievalTimeUtc": "2026-08-29T09:22:21.081Z",
       "canonicalUrl": "https://x.com/thsottiaux/status/2086188036493344823",
       "title": "Paid-user Codex and ChatGPT Work usage-limit reset announcement",
       "excerpt": "Announced a completed usage-limit reset for all paid ChatGPT Work and Codex users.",
@@ -82,8 +82,8 @@
   ],
   "verifiedObservationCount": 8,
   "forecast": {
-    "id": "fc_20260828092243",
-    "forecastAtUtc": "2026-08-28T09:22:43.687Z",
+    "id": "fc_20260829092221",
+    "forecastAtUtc": "2026-08-29T09:22:21.081Z",
     "probabilities": {
       "1": 0.01,
       "3": 0.01,
@@ -95,17 +95,17 @@
     "likelyEndUtc": "2026-09-03T17:56:50.000Z",
     "confidenceGrade": "D",
     "featureSnapshot": {
-      "cutoffUtc": "2026-08-28T09:22:43.687Z",
+      "cutoffUtc": "2026-08-29T09:22:21.081Z",
       "confirmedEventCount": 8,
       "scheduledEventCount": 1,
       "outOfCycleEventCount": 6,
       "lastResetTiming": "out-of-cycle",
       "scheduledResetAtUtc": "2026-09-03T16:26:50.000Z",
-      "hoursSinceLastConfirmedReset": 16.931024166666667,
+      "hoursSinceLastConfirmedReset": 40.92474472222222,
       "medianCycleHours": 170.43,
       "cycleDispersionHours": 2,
       "activeIncident": false,
-      "incidentRecencyHours": 184.39741305555555,
+      "incidentRecencyHours": 208.39113361111112,
       "approvedPostCount24h": 0,
       "weightedReportVolume6h": 0,
       "sourceTrustMean": 0.6,
@@ -115,7 +115,7 @@
       {
         "label": "Official next-reset anchor",
         "direction": "lowers",
-        "detail": "The current quota window reports 151 hours until its next reset."
+        "detail": "The current quota window reports 127 hours until its next reset."
       },
       {
         "label": "Out-of-cycle reset isolated",
@@ -129,13 +129,13 @@
       }
     ],
     "modelVersion": "provider-anchor-baseline-0.3.0",
-    "datasetVersion": "events-8-cutoff-2026-08-28-c55f0ba2",
+    "datasetVersion": "events-8-cutoff-2026-08-29-c55f0ba2",
     "dataSufficiencyLabel": "Experimental—limited history"
   },
   "performance": {
-    "sampleCount": 23,
-    "brier": 0.09042608695652174,
-    "baselineBrier": 0.09042608695652174,
+    "sampleCount": 24,
+    "brier": 0.10299583333333333,
+    "baselineBrier": 0.10299583333333333,
     "precision6h": null,
     "recall6h": 0,
     "falseAlarmRate": null,
@@ -144,9 +144,9 @@
     "calibration": [
       {
         "bucket": "0–20%",
-        "predicted": 0.015984586439302326,
-        "observed": 0.058823529411764705,
-        "n": 17
+        "predicted": 0.015652109414896642,
+        "observed": 0.05555555555555555,
+        "n": 18
       },
       {
         "bucket": "21–40%",
