@@ -82,7 +82,11 @@ Read `docs/HISTORICAL_RESEARCH.md` before researching.
 - For a newly found official-domain record, create a structured public-source
   issue and apply `public-source` plus `approved-public-source`. The issue body
   must use the exact headings `Canonical URL`, `Publication time`, `Title`,
-  `Minimal excerpt`, and `Source confirmation` used by the Issue Form.
+  `Minimal excerpt`, `Signal classification`, and `Source confirmation` used by
+  the Issue Form. Only `completed_hard_reset` and `promised_future_reset`
+  records may enter the approved-reset-signal feature. Mechanism, credit,
+  incident, and nonqualifying records remain visible evidence but do not count
+  as reset signals.
 - For any other potentially useful public record, create or leave it as
   `public-source` plus `pending-review`. It must not affect the forecast until a
   maintainer approves it.

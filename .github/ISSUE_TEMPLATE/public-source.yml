@@ -40,6 +40,22 @@ body:
       description: Optional short excerpt or summary, maximum 240 characters.
     validations:
       required: false
+  - type: dropdown
+    id: signal_classification
+    attributes:
+      label: Signal classification
+      description: Classify the record before it can affect forecast features.
+      options:
+        - completed_hard_reset
+        - promised_future_reset
+        - banked_reset_grant
+        - banked_reset_redemption
+        - usage_limit_change
+        - mechanism_change
+        - incident_statement
+        - nonqualifying_commentary
+    validations:
+      required: true
   - type: checkboxes
     id: compliance
     attributes:

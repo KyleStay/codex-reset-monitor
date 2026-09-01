@@ -1,11 +1,32 @@
 [
   {
+    "id": "github-source-42",
+    "sourceAdapterId": "github-approved-source-v1",
+    "sourceKind": "approved_public_post",
+    "provenance": "administrator_approved",
+    "publicationTimeUtc": "2026-08-31T20:44:58.219Z",
+    "retrievalTimeUtc": "2026-09-01T09:39:16.823Z",
+    "canonicalUrl": "https://help.openai.com/en/articles/20001507-paid-weekly-work-and-codex-rate-limit-resets",
+    "title": "Paid weekly Work and Codex rate limit resets",
+    "excerpt": "Official Help documents eligible Plus and Pro users can purchase an immediate weekly reset distinct from banked resets and usage credits.",
+    "metadata": {
+      "sourceIssueNumber": 42,
+      "sourceIssueUrl": "https://github.com/KyleStay/codex-reset-monitor/issues/42"
+    },
+    "normalizedFeatures": {
+      "approved": true,
+      "signalClassification": "mechanism_change",
+      "resetSignal": false
+    },
+    "contentHash": "be883d8a3e9cd3f9d978441c0622071fd25e72860365472236b92f6bee3f1f3f"
+  },
+  {
     "id": "github-source-3",
     "sourceAdapterId": "github-approved-source-v1",
     "sourceKind": "approved_public_post",
     "provenance": "administrator_approved",
     "publicationTimeUtc": "2026-08-08T20:29:22.056Z",
-    "retrievalTimeUtc": "2026-08-31T09:20:17.741Z",
+    "retrievalTimeUtc": "2026-09-01T09:39:16.823Z",
     "canonicalUrl": "https://x.com/thsottiaux/status/2086188036493344823",
     "title": "Paid-user Codex and ChatGPT Work usage-limit reset announcement",
     "excerpt": "Announced a completed usage-limit reset for all paid ChatGPT Work and Codex users.",
@@ -14,7 +35,9 @@
       "sourceIssueUrl": "https://github.com/KyleStay/codex-reset-monitor/issues/3"
     },
     "normalizedFeatures": {
-      "approved": true
+      "approved": true,
+      "signalClassification": "completed_hard_reset",
+      "resetSignal": true
     },
     "contentHash": "2daa1cd3742b2017d6f91fb3193ab7738a20d4160d2b59faa935f142e9175d53"
   }

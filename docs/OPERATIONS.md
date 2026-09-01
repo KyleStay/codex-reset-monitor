@@ -45,8 +45,11 @@ For a valid reset observation:
 6. Ask the agent to refresh immediately, or wait for its next daily run.
 
 For a compliant public source, verify the canonical public HTTPS URL,
-publication time, neutral title, and minimal excerpt; then replace
-`pending-review` with `approved-public-source`. A social source must also match
+publication time, neutral title, minimal excerpt, and signal classification;
+then replace `pending-review` with `approved-public-source`. Only completed hard
+reset and promised future reset classifications count toward the forecast's
+approved-reset-signal feature. Mechanism, credit, incident, and nonqualifying
+records remain public evidence without affecting that feature. A social source must also match
 an exact account and manual collection method in `data/source-policy.json`.
 Review only its public source-native profile or permanent status URL; never use
 search snippets or automated timeline scraping as evidence. Configured public

@@ -145,6 +145,23 @@ export async function normalizeApprovedSource(
   const url = new URL(canonicalUrl);
   if (url.protocol !== "https:") throw new Error("Approved source URL must use HTTPS");
   if (Number.isNaN(Date.parse(publicationTime))) throw new Error("Publication time must be an ISO 8601 timestamp");
+  const signalClassification = field(fields, "Signal classification") ?? "legacy_reset_signal";
+  const validClassifications = new Set([
+    "completed_hard_reset",
+    "promised_future_reset",
+    "banked_reset_grant",
+    "banked_reset_redemption",
+    "usage_limit_change",
+    "mechanism_change",
+    "incident_statement",
+    "nonqualifying_commentary",
+    "legacy_reset_signal",
+  ]);
+  if (!validClassifications.has(signalClassification)) {
+    throw new Error("Approved source has an invalid signal classification");
+  }
+  const resetSignal = ["completed_hard_reset", "promised_future_reset", "legacy_reset_signal"]
+    .includes(signalClassification);
   const excerpt = field(fields, "Minimal excerpt")?.replace(/\s+/g, " ").slice(0, 240) ?? null;
   const contentHash = await stableDigest(JSON.stringify({
     url: url.toString(),
@@ -163,7 +180,7 @@ export async function normalizeApprovedSource(
     title: title.slice(0, 160),
     excerpt,
     metadata: { sourceIssueNumber: issue.number, sourceIssueUrl: issue.html_url },
-    normalizedFeatures: { approved: true },
+    normalizedFeatures: { approved: true, signalClassification, resetSignal },
     contentHash,
   };
 }

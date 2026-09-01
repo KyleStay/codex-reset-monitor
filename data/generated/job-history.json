@@ -1,5 +1,77 @@
 [
   {
+    "id": "refresh-2026-09-01T09:39:16.823Z",
+    "startedAtUtc": "2026-09-01T09:39:16.823Z",
+    "completedAtUtc": "2026-09-01T09:39:19.184Z",
+    "status": "succeeded",
+    "officialIncidentCount": 2,
+    "verifiedObservationCount": 9,
+    "approvedPublicSourceCount": 2,
+    "rejectedRecordCount": 0,
+    "duplicateCount": 0,
+    "datasetVersion": "events-9-cutoff-2026-09-01-9a445484"
+  },
+  {
+    "id": "refresh-2026-09-01T09:26:51.542Z",
+    "startedAtUtc": "2026-09-01T09:26:51.542Z",
+    "completedAtUtc": "2026-09-01T09:26:53.560Z",
+    "status": "succeeded",
+    "officialIncidentCount": 2,
+    "verifiedObservationCount": 9,
+    "approvedPublicSourceCount": 2,
+    "rejectedRecordCount": 0,
+    "duplicateCount": 0,
+    "datasetVersion": "events-9-cutoff-2026-09-01-9a445484"
+  },
+  {
+    "id": "refresh-2026-09-01T09:26:46.646Z",
+    "startedAtUtc": "2026-09-01T09:26:46.646Z",
+    "completedAtUtc": "2026-09-01T09:26:46.735Z",
+    "status": "degraded",
+    "officialIncidentCount": 2,
+    "verifiedObservationCount": 9,
+    "approvedPublicSourceCount": 2,
+    "rejectedRecordCount": 0,
+    "duplicateCount": 0,
+    "datasetVersion": "events-9-cutoff-2026-09-01-ec195e01"
+  },
+  {
+    "id": "refresh-2026-09-01T09:25:06.479Z",
+    "startedAtUtc": "2026-09-01T09:25:06.479Z",
+    "completedAtUtc": "2026-09-01T09:25:08.525Z",
+    "status": "succeeded",
+    "officialIncidentCount": 2,
+    "verifiedObservationCount": 9,
+    "approvedPublicSourceCount": 2,
+    "rejectedRecordCount": 0,
+    "duplicateCount": 0,
+    "datasetVersion": "events-9-cutoff-2026-09-01-ec195e01"
+  },
+  {
+    "id": "refresh-2026-09-01T09:24:13.557Z",
+    "startedAtUtc": "2026-09-01T09:24:13.557Z",
+    "completedAtUtc": "2026-09-01T09:24:15.618Z",
+    "status": "degraded",
+    "officialIncidentCount": 2,
+    "verifiedObservationCount": 9,
+    "approvedPublicSourceCount": 1,
+    "rejectedRecordCount": 1,
+    "duplicateCount": 0,
+    "datasetVersion": "events-9-cutoff-2026-09-01-9a445484"
+  },
+  {
+    "id": "refresh-2026-09-01T09:22:55.368Z",
+    "startedAtUtc": "2026-09-01T09:22:55.368Z",
+    "completedAtUtc": "2026-09-01T09:22:57.690Z",
+    "status": "succeeded",
+    "officialIncidentCount": 2,
+    "verifiedObservationCount": 9,
+    "approvedPublicSourceCount": 1,
+    "rejectedRecordCount": 0,
+    "duplicateCount": 0,
+    "datasetVersion": "events-9-cutoff-2026-09-01-9a445484"
+  },
+  {
     "id": "refresh-2026-08-31T09:20:17.741Z",
     "startedAtUtc": "2026-08-31T09:20:17.741Z",
     "completedAtUtc": "2026-08-31T09:20:20.004Z",

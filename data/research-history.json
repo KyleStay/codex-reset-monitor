@@ -1,5 +1,43 @@
 [
   {
+    "id": "research-mechanism-2026-08-31-paid-instant-reset",
+    "eventDate": "2026-08-31",
+    "datePrecision": "day",
+    "classification": "reset_mechanism_change",
+    "verificationState": "inferred",
+    "scope": "selected_plans",
+    "title": "OpenAI documented paid instant weekly resets for eligible personal plans",
+    "summary": "OpenAI Help documented a paid instant reset for eligible Plus and Pro personal accounts. A completed purchase immediately restores the applicable five-hour and weekly allowances, then starts a new weekly period with the account's next Work or Codex request. The purchase cannot be banked and is distinct from usage credits, promotional banked resets, and automatic global resets.",
+    "evidenceGrade": "A",
+    "cause": {
+      "assessment": "Product rollout of paid instant weekly reset purchases",
+      "confidence": "confirmed",
+      "rationale": "The official OpenAI Help article directly documents the purchase flow, eligible plan classes, allowance effect, and distinction from other reset and credit mechanisms."
+    },
+    "detectionSignals": [
+      "A checkout completion precedes an immediate restoration of the applicable five-hour and weekly allowances.",
+      "The next weekly reset anchor moves to seven days after the first subsequent Work or Codex request.",
+      "The banked-reset count and usage-credit balance remain separate from the purchased reset action.",
+      "A purchase receipt and explicit user action distinguish this mechanism from an automatic or operator-initiated global reset."
+    ],
+    "contradictions": [
+      "Availability varies by account, plan, and billing country, so the article does not establish population-wide access.",
+      "The article documents product behavior and does not prove that any specific account purchased or completed a reset.",
+      "The source exposes an exact update time but not a separate first-publication time; the ledger therefore uses day precision."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://help.openai.com/en/articles/20001507-paid-weekly-work-and-codex-rate-limit-resets",
+        "publicationTimeUtc": "2026-08-31T20:44:58.219Z",
+        "title": "Paid weekly Work and Codex rate limit resets",
+        "provenance": "official_support",
+        "role": "primary"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-09-01T09:23:07Z",
+    "lastReviewedAtUtc": "2026-09-01T09:23:07Z"
+  },
+  {
     "id": "research-reset-2026-08-01",
     "eventDate": "2026-08-01",
     "datePrecision": "day",

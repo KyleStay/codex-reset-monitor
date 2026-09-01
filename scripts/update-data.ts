@@ -154,7 +154,8 @@ const features: FeatureSnapshot = {
     ? Math.max(0, (now.getTime() - Date.parse(mostRecentIncident.publicationTimeUtc)) / 3_600_000)
     : null,
   approvedPostCount24h: approvedPublicSources.filter(
-    (row) => Date.parse(row.publicationTimeUtc) >= now.getTime() - 24 * 3_600_000,
+    (row) => row.normalizedFeatures.resetSignal !== false
+      && Date.parse(row.publicationTimeUtc) >= now.getTime() - 24 * 3_600_000,
   ).length,
   weightedReportVolume6h: Number(recentReports.reduce((sum, row) => sum + row.trustWeight, 0).toFixed(3)),
   sourceTrustMean: Number(trustMean.toFixed(3)),

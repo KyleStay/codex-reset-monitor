@@ -7,6 +7,7 @@ import { scoreForecast } from "../lib/scoring";
 import { validateObservation } from "../lib/validation";
 import {
   collectGitHubIssueData,
+  normalizeApprovedSource,
   normalizeVerifiedObservation,
   parseIssueFormBody,
 } from "../lib/sources/github-issues";
@@ -271,4 +272,35 @@ Minimal public metadata`;
   assert.equal(result.duplicateCount, 1);
   assert.equal(result.publicSources.length, 1);
   assert.equal(result.publicSources[0].provenance, "administrator_approved");
+});
+
+test("approved mechanism records stay out of reset-signal features", async () => {
+  const source = await normalizeApprovedSource({
+    number: 51,
+    html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/51",
+    body: `### Canonical URL
+
+https://help.openai.com/en/articles/20001507-paid-weekly-work-and-codex-rate-limit-resets
+
+### Publication time
+
+2026-08-31T20:44:58.219Z
+
+### Title
+
+Paid weekly Work and Codex rate limit resets
+
+### Minimal excerpt
+
+Official mechanism documentation.
+
+### Signal classification
+
+mechanism_change`,
+    created_at: "2026-09-01T09:00:00Z",
+    updated_at: "2026-09-01T09:01:00Z",
+  }, "2026-09-01T09:02:00Z");
+
+  assert.equal(source.normalizedFeatures.signalClassification, "mechanism_change");
+  assert.equal(source.normalizedFeatures.resetSignal, false);
 });
