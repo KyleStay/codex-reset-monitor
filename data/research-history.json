@@ -1,5 +1,52 @@
 [
   {
+    "id": "research-reset-2026-08-31",
+    "eventDate": "2026-08-31",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "selected_plans",
+    "title": "One Pro 5X report corroborates an attributed August 31 reset action",
+    "summary": "A canonically validated @thsottiaux post said usage had been reset for paid ChatGPT Work and Codex subscriptions. One Pro 5X account later reported its weekly allowance returning to full on August 31 without manual redemption and its next reset moving to September 7. This supports a day-precision inferred reset for at least some paid accounts, not universal or simultaneous delivery.",
+    "evidenceGrade": "C",
+    "cause": {
+      "assessment": "25 million active-user milestone celebration",
+      "confidence": "attributed",
+      "rationale": "The canonical operator statement attributes the action to the milestone. The account report supports receipt but does not independently establish motive, exclusivity, or provider-wide scope."
+    },
+    "detectionSignals": [
+      "A canonical operator completion statement supplies the stated action, scope, and publication time.",
+      "An independent paid account reports weekly usage returning to full without manual redemption.",
+      "The reported weekly reset date advances to a new seven-day anchor.",
+      "Before-and-after banked-reset counts distinguish an automatic hard reset from credit redemption when available."
+    ],
+    "contradictions": [
+      "The project observer changed from 23% to 11% used while its provider anchor advanced, which failed the near-zero full-reset gate for that account.",
+      "The corroborating report covers one Pro 5X account and supplies only local-day precision, so delivery time, lag, other plans, and nonrecipients remain unresolved.",
+      "The public report does not include a before-and-after banked-reset count, so it cannot independently rule out every credit-ledger explanation.",
+      "The corroborating report was discovered by this project on September 2 and cannot enter or rewrite earlier forecast snapshots.",
+      "The canonical operator statement establishes an attributed action, not universal account-by-account completion."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2094252447271366730",
+        "publicationTimeUtc": "2026-08-31T02:34:27.415Z",
+        "title": "Tibo attributes a paid-user reset to 25 million active users",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/openai/codex/issues/42224",
+        "publicationTimeUtc": "2026-09-02T06:51:36Z",
+        "title": "Pro 5X account reports automatic weekly resets on August 30 and 31",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-09-02T09:33:30Z",
+    "lastReviewedAtUtc": "2026-09-02T09:33:30Z"
+  },
+  {
     "id": "research-mechanism-2026-08-31-paid-instant-reset",
     "eventDate": "2026-08-31",
     "datePrecision": "day",
