@@ -1,11 +1,32 @@
 [
   {
+    "id": "github-source-47",
+    "sourceAdapterId": "github-approved-source-v1",
+    "sourceKind": "approved_public_post",
+    "provenance": "administrator_approved",
+    "publicationTimeUtc": "2026-09-04T23:59:50.236Z",
+    "retrievalTimeUtc": "2026-09-05T09:33:35.117Z",
+    "canonicalUrl": "https://help.openai.com/en/articles/20001498-how-banked-codex-resets-work",
+    "title": "OpenAI documents September 3 and 4 banked-reset promotion",
+    "excerpt": "Official Help says eligible existing Plus, Pro, and Business users receive a banked reset on September 3 and September 4, with new-account cutoffs and delivery that may take several hours.",
+    "metadata": {
+      "sourceIssueNumber": 47,
+      "sourceIssueUrl": "https://github.com/KyleStay/codex-reset-monitor/issues/47"
+    },
+    "normalizedFeatures": {
+      "approved": true,
+      "signalClassification": "banked_reset_grant",
+      "resetSignal": false
+    },
+    "contentHash": "922805c0746e637a7734cbee8f496c9394f2f00791accd8e77f4467781efa3da"
+  },
+  {
     "id": "github-source-42",
     "sourceAdapterId": "github-approved-source-v1",
     "sourceKind": "approved_public_post",
     "provenance": "administrator_approved",
     "publicationTimeUtc": "2026-08-31T20:44:58.219Z",
-    "retrievalTimeUtc": "2026-09-03T09:20:08.381Z",
+    "retrievalTimeUtc": "2026-09-05T09:33:35.117Z",
     "canonicalUrl": "https://help.openai.com/en/articles/20001507-paid-weekly-work-and-codex-rate-limit-resets",
     "title": "Paid weekly Work and Codex rate limit resets",
     "excerpt": "Official Help documents eligible Plus and Pro users can purchase an immediate weekly reset distinct from banked resets and usage credits.",
@@ -26,7 +47,7 @@
     "sourceKind": "approved_public_post",
     "provenance": "administrator_approved",
     "publicationTimeUtc": "2026-08-08T20:29:22.056Z",
-    "retrievalTimeUtc": "2026-09-03T09:20:08.381Z",
+    "retrievalTimeUtc": "2026-09-05T09:33:35.117Z",
     "canonicalUrl": "https://x.com/thsottiaux/status/2086188036493344823",
     "title": "Paid-user Codex and ChatGPT Work usage-limit reset announcement",
     "excerpt": "Announced a completed usage-limit reset for all paid ChatGPT Work and Codex users.",
