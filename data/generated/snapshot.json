@@ -1,14 +1,14 @@
 {
-  "generatedAtUtc": "2026-09-05T09:33:35.117Z",
+  "generatedAtUtc": "2026-09-06T09:20:06.675Z",
   "sourceMode": "live-official-status-and-verified-github-issues",
   "officialStatusHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-09-05T09:33:37.032Z",
+    "checkedAtUtc": "2026-09-06T09:20:09.048Z",
     "message": "Collected 4 Codex-relevant official incident record(s)."
   },
   "observationSourceHealth": {
     "status": "healthy",
-    "checkedAtUtc": "2026-09-05T09:33:35.117Z",
+    "checkedAtUtc": "2026-09-06T09:20:06.675Z",
     "message": "Verified observations and approved public sources were collected from GitHub Issues.",
     "rejectedRecordCount": 0,
     "duplicateCount": 0
@@ -20,7 +20,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-09-04T07:00:26.000Z",
-      "retrievalTimeUtc": "2026-09-05T09:33:37.032Z",
+      "retrievalTimeUtc": "2026-09-06T09:20:09.048Z",
       "canonicalUrl": "https://status.openai.com/incidents/01M1NKFZH5EEYEREC54HNAHY35",
       "title": "Users in APAC region may face increased error in ChatGPT, Work, image generation, file upload, Voice, and Codex Cloud",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We are investigating the issue for the listed services.",
@@ -42,7 +42,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-09-03T14:58:23.000Z",
-      "retrievalTimeUtc": "2026-09-05T09:33:37.032Z",
+      "retrievalTimeUtc": "2026-09-06T09:20:09.048Z",
       "canonicalUrl": "https://status.openai.com/incidents/01M1KWEDH417T2CF44YYHZDFCR",
       "title": "Elevated errors across ChatGPT and Codex",
       "excerpt": "The issue causing elevated errors across ChatGPT and Codex has been resolved. Some Codex remote control users may need to pair their mobile device again following this incident. We have applied the mitigation and are monitoring the recovery",
@@ -64,7 +64,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-08-20T16:58:53.000Z",
-      "retrievalTimeUtc": "2026-09-05T09:33:37.032Z",
+      "retrievalTimeUtc": "2026-09-06T09:20:09.048Z",
       "canonicalUrl": "https://status.openai.com/incidents/01M0G1RZER839AZXWMYKSZF3GR",
       "title": "Elevated Codex API authentication errors",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. Some users may encounter errors when using Codex with API authentication. We are working on implementing a mitigation.",
@@ -86,7 +86,7 @@
       "sourceKind": "official_status",
       "provenance": "official",
       "publicationTimeUtc": "2026-08-11T21:35:23.000Z",
-      "retrievalTimeUtc": "2026-09-05T09:33:37.032Z",
+      "retrievalTimeUtc": "2026-09-06T09:20:09.048Z",
       "canonicalUrl": "https://status.openai.com/incidents/01KZSC0T66YTVM57N5T79SV8ZV",
       "title": "Increase in errors on API, Codex and Work Mode",
       "excerpt": "All impacted services have now fully recovered. We have applied the mitigation and are monitoring the recovery. We have identified that users are experiencing elevated errors for the impacted services. We are working on implementing a mitig",
@@ -110,7 +110,7 @@
       "sourceKind": "approved_public_post",
       "provenance": "administrator_approved",
       "publicationTimeUtc": "2026-09-04T23:59:50.236Z",
-      "retrievalTimeUtc": "2026-09-05T09:33:35.117Z",
+      "retrievalTimeUtc": "2026-09-06T09:20:06.675Z",
       "canonicalUrl": "https://help.openai.com/en/articles/20001498-how-banked-codex-resets-work",
       "title": "OpenAI documents September 3 and 4 banked-reset promotion",
       "excerpt": "Official Help says eligible existing Plus, Pro, and Business users receive a banked reset on September 3 and September 4, with new-account cutoffs and delivery that may take several hours.",
@@ -131,7 +131,7 @@
       "sourceKind": "approved_public_post",
       "provenance": "administrator_approved",
       "publicationTimeUtc": "2026-08-31T20:44:58.219Z",
-      "retrievalTimeUtc": "2026-09-05T09:33:35.117Z",
+      "retrievalTimeUtc": "2026-09-06T09:20:06.675Z",
       "canonicalUrl": "https://help.openai.com/en/articles/20001507-paid-weekly-work-and-codex-rate-limit-resets",
       "title": "Paid weekly Work and Codex rate limit resets",
       "excerpt": "Official Help documents eligible Plus and Pro users can purchase an immediate weekly reset distinct from banked resets and usage credits.",
@@ -152,7 +152,7 @@
       "sourceKind": "approved_public_post",
       "provenance": "administrator_approved",
       "publicationTimeUtc": "2026-08-08T20:29:22.056Z",
-      "retrievalTimeUtc": "2026-09-05T09:33:35.117Z",
+      "retrievalTimeUtc": "2026-09-06T09:20:06.675Z",
       "canonicalUrl": "https://x.com/thsottiaux/status/2086188036493344823",
       "title": "Paid-user Codex and ChatGPT Work usage-limit reset announcement",
       "excerpt": "Announced a completed usage-limit reset for all paid ChatGPT Work and Codex users.",
@@ -170,30 +170,30 @@
   ],
   "verifiedObservationCount": 9,
   "forecast": {
-    "id": "fc_20260905093335",
-    "forecastAtUtc": "2026-09-05T09:33:35.117Z",
+    "id": "fc_20260906092006",
+    "forecastAtUtc": "2026-09-06T09:20:06.675Z",
     "probabilities": {
-      "1": 0.01,
-      "3": 0.01,
-      "6": 0.02198711383903139,
-      "12": 0.3045758390692322,
-      "24": 0.9278632369989
+      "1": 0.57591562612993,
+      "3": 0.7595473491410057,
+      "6": 0.8874868450887109,
+      "12": 0.9302511018520846,
+      "24": 0.9325998265108486
     },
-    "likelyStartUtc": "2026-09-05T21:27:55.000Z",
-    "likelyEndUtc": "2026-09-06T00:27:55.000Z",
+    "likelyStartUtc": null,
+    "likelyEndUtc": null,
     "confidenceGrade": "D",
     "featureSnapshot": {
-      "cutoffUtc": "2026-09-05T09:33:35.117Z",
+      "cutoffUtc": "2026-09-06T09:20:06.675Z",
       "confirmedEventCount": 9,
       "scheduledEventCount": 1,
       "outOfCycleEventCount": 7,
       "lastResetTiming": "out-of-cycle",
-      "scheduledResetAtUtc": "2026-09-05T22:57:55.000Z",
-      "hoursSinceLastConfirmedReset": 154.59431944444444,
+      "scheduledResetAtUtc": null,
+      "hoursSinceLastConfirmedReset": 178.36975222222222,
       "medianCycleHours": 170.43,
       "cycleDispersionHours": 2,
       "activeIncident": false,
-      "incidentRecencyHours": 26.5525325,
+      "incidentRecencyHours": 50.32796527777778,
       "approvedPostCount24h": 0,
       "weightedReportVolume6h": 0,
       "sourceTrustMean": 0.6,
@@ -201,23 +201,23 @@
     },
     "explanationFactors": [
       {
-        "label": "Official next-reset anchor",
+        "label": "One verified reset is not a schedule",
         "direction": "lowers",
-        "detail": "The current quota window reports 13 hours until its next reset."
+        "detail": "One confirmed event is available, but at least two are required to estimate a timing pattern. The displayed probabilities remain the broad published prior."
       },
       {
-        "label": "Out-of-cycle reset isolated",
+        "label": "Verified collection is active",
         "direction": "neutral",
-        "detail": "7 early reset event(s) re-anchored the current window but are excluded from recurring-cadence estimation."
+        "detail": "Only deterministic local transitions or maintainer-verified reports can enter the confirmed reset history."
       },
       {
-        "label": "No active official incident",
+        "label": "Official incident context",
         "direction": "neutral",
-        "detail": "No active Codex-relevant incident is represented in the current snapshot."
+        "detail": "Official OpenAI status is monitored separately from personal reset observations."
       }
     ],
-    "modelVersion": "provider-anchor-baseline-0.3.0",
-    "datasetVersion": "events-9-cutoff-2026-09-05-9a445484",
+    "modelVersion": "published-prior-0.1.0",
+    "datasetVersion": "events-9-cutoff-2026-09-06-8eb4bd44",
     "dataSufficiencyLabel": "Experimental—limited history"
   },
   "performance": {
