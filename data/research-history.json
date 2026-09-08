@@ -1,5 +1,67 @@
 [
   {
+    "id": "research-reset-2026-09-07-global",
+    "eventDate": "2026-09-07",
+    "datePrecision": "day",
+    "classification": "inferred_reset",
+    "verificationState": "inferred",
+    "scope": "paid_plans",
+    "title": "OpenAI documented a global reset for Plus, Pro, and Business",
+    "summary": "OpenAI Help says it provided a global reset to Plus, Pro, and Business users on September 7. A project-verified individual-paid account independently moved from 13% used to 0% at 2026-09-08T01:28:48.379Z with a new seven-day anchor and all three banked credits unchanged. Canonical operator posts promised the reset and later announced completion. This supports occurrence for the observed account and an official paid-plan action, not simultaneous or universal delivery.",
+    "evidenceGrade": "A",
+    "cause": {
+      "assessment": "Astra rollout and the start of the work week",
+      "confidence": "attributed",
+      "rationale": "The canonical operator promise linked the reset to continued Astra use and the coming work week. OpenAI Help documents the action but does not state a cause, and no Status incident or staff diagnosis establishes an exclusive trigger."
+    },
+    "detectionSignals": [
+      "An official Help revision states the event date, eligible plan classes, and direct global-reset mechanism.",
+      "A canonical operator promise supplies a prospective watch window before the observed account transition.",
+      "A project-verified meter transition moves from nonzero usage to zero and advances the provider reset anchor by seven days.",
+      "An unchanged banked-reset count distinguishes the observed hard reset from credit redemption.",
+      "A later canonical operator completion statement supplies attributed rollout closure."
+    ],
+    "contradictions": [
+      "One Plus user reported no reset at the stated 6pm time at 2026-09-08T02:42:50Z, before the later completion announcement, so delivery was not shown to be simultaneous.",
+      "The official Help page says eligibility and delivery may vary by plan, region, workspace, and offer, so its broad plan wording is not a recipient denominator.",
+      "The operator used PST during September daylight time; the stated clock is ambiguous and is not converted into an exact provider delivery timestamp.",
+      "The project observer covers one individual-paid account and cannot prove Business, Plus, Pro, regional, or workspace breadth.",
+      "The Help revision and operator completion statement were discovered after the observed transition and cannot rewrite earlier forecast snapshots."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://help.openai.com/en/articles/20001498-how-banked-codex-resets-work",
+        "publicationTimeUtc": "2026-09-08T04:33:27.365Z",
+        "title": "How banked Codex resets work",
+        "provenance": "official_support",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/KyleStay/codex-reset-monitor/issues/52",
+        "publicationTimeUtc": "2026-09-08T01:28:50Z",
+        "title": "Local meter reset 2026-09-08T01:28:48Z",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2097043464538264003",
+        "publicationTimeUtc": "2026-09-07T19:24:57.786Z",
+        "title": "Tibo promises a paid-subscription usage reset",
+        "provenance": "public_report",
+        "role": "corroborating"
+      },
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2097174560412246215",
+        "publicationTimeUtc": "2026-09-08T04:05:53.478Z",
+        "title": "Tibo announces a paid-user usage reset completion",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-09-08T09:31:02.032Z",
+    "lastReviewedAtUtc": "2026-09-08T09:31:02.032Z"
+  },
+  {
     "id": "research-reset-2026-08-31",
     "eventDate": "2026-08-31",
     "datePrecision": "day",
