@@ -28,12 +28,22 @@ function optionalPercent(value: unknown, field: string): number | undefined {
   return parsed;
 }
 
+function optionalCount(value: unknown, field: string): number | undefined {
+  if (value === undefined || value === null || value === "") return undefined;
+  const parsed = Number(value);
+  if (!Number.isInteger(parsed) || parsed < 0 || parsed > 100) {
+    throw new Error(`${field} must be a whole number between 0 and 100`);
+  }
+  return parsed;
+}
+
 export function validateObservation(payload: unknown): ObservationInput {
   if (!payload || typeof payload !== "object" || Array.isArray(payload)) throw new Error("A submission object is required");
   const input = payload as Record<string, unknown>;
   const allowed = new Set([
     "observationKind", "limitReachedAtUtc", "priorSampleAtUtc", "observedResetAtUtc",
     "previousUsedPercent", "currentUsedPercent", "previousResetsAtUtc", "currentResetsAtUtc",
+    "resetCreditsBefore", "resetCreditsAfter",
     "statedTimeZone", "precedingForecastId",
     "codexSurface", "planTier", "relatedIncidentIds", "relatedSourceIds", "submitterNotes",
     "detectionMethod", "confidence",
@@ -56,6 +66,8 @@ export function validateObservation(payload: unknown): ObservationInput {
   const currentUsedPercent = optionalPercent(input.currentUsedPercent, "Current used percent");
   const previousResetsAtUtc = optionalIso(input.previousResetsAtUtc, "Previous reset time");
   const currentResetsAtUtc = optionalIso(input.currentResetsAtUtc, "Current reset time");
+  const resetCreditsBefore = optionalCount(input.resetCreditsBefore, "Reset credits before");
+  const resetCreditsAfter = optionalCount(input.resetCreditsAfter, "Reset credits after");
   if (observationKind === "meter-reset") {
     if (!priorSampleAtUtc || Date.parse(observedResetAtUtc) <= Date.parse(priorSampleAtUtc)) {
       throw new Error("Meter-reset observations require an earlier prior sample time");
@@ -98,6 +110,8 @@ export function validateObservation(payload: unknown): ObservationInput {
     currentUsedPercent,
     previousResetsAtUtc,
     currentResetsAtUtc,
+    resetCreditsBefore,
+    resetCreditsAfter,
     statedTimeZone: timeZone,
     precedingForecastId: typeof input.precedingForecastId === "string" ? input.precedingForecastId.trim().slice(0, 80) : undefined,
     codexSurface: input.codexSurface as Surface,

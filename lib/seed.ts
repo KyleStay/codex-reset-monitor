@@ -55,7 +55,9 @@ export const resetHistory = chronological.map((row, index) => {
     cycle,
     note: row.detectionMethod === "local-observer"
       ? row.observationKind === "meter-reset"
-        ? "Automatically verified from a privacy-minimized local meter transition."
+        ? row.resetCreditsBefore !== undefined && row.resetCreditsAfter !== undefined && row.resetCreditsAfter < row.resetCreditsBefore
+          ? "Automatically verified banked-reset redemption from a local meter transition and reset-credit decrease."
+          : "Automatically verified from a privacy-minimized local meter transition."
         : "Automatically verified from a privacy-minimized local access-recovery transition."
       : "Administrator-verified community observation.",
     url: row.sourceUrl,

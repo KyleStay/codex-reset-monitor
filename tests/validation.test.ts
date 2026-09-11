@@ -41,6 +41,8 @@ test("validation accepts only source-backed local meter-reset transitions", () =
     currentUsedPercent: 0,
     previousResetsAtUtc: "2026-08-03T10:00:00Z",
     currentResetsAtUtc: "2026-08-08T10:05:00Z",
+    resetCreditsBefore: 3,
+    resetCreditsAfter: 2,
     statedTimeZone: "America/New_York",
     codexSurface: "other",
     planTier: "individual-paid",
@@ -52,9 +54,15 @@ test("validation accepts only source-backed local meter-reset transitions", () =
   assert.equal(result.limitReachedAtUtc, undefined);
   assert.equal(result.observationKind, "meter-reset");
   assert.equal(result.previousUsedPercent, 37);
+  assert.equal(result.resetCreditsBefore, 3);
+  assert.equal(result.resetCreditsAfter, 2);
   assert.throws(
     () => validateObservation({ ...result, currentResetsAtUtc: result.previousResetsAtUtc }),
     /advanced reset timestamp/,
+  );
+  assert.throws(
+    () => validateObservation({ ...result, resetCreditsAfter: 1.5 }),
+    /whole number/,
   );
 });
 

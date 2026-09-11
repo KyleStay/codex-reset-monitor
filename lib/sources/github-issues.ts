@@ -93,6 +93,8 @@ export async function normalizeVerifiedObservation(
     currentUsedPercent: field(fields, "Current used percent"),
     previousResetsAtUtc: field(fields, "Previous reset time"),
     currentResetsAtUtc: field(fields, "Current reset time"),
+    resetCreditsBefore: field(fields, "Reset credits before"),
+    resetCreditsAfter: field(fields, "Reset credits after"),
     statedTimeZone: field(fields, "Time zone"),
     precedingForecastId: field(fields, "Preceding forecast ID"),
     codexSurface: surface(field(fields, "Codex surface")),

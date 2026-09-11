@@ -176,6 +176,14 @@ Locally observed meter reset
 
 2026-08-08T10:05:00Z
 
+### Reset credits before
+
+3
+
+### Reset credits after
+
+2
+
 ### Time zone
 
 America/New_York
@@ -210,6 +218,8 @@ Privacy-safe local observation.`;
   assert.equal(normalized.limitReachedAtUtc, undefined);
   assert.equal(normalized.detectionMethod, "local-observer");
   assert.equal(normalized.previousUsedPercent, 37);
+  assert.equal(normalized.resetCreditsBefore, 3);
+  assert.equal(normalized.resetCreditsAfter, 2);
 });
 
 test("GitHub collection deduplicates verified reports and ingests only approved source metadata", async () => {

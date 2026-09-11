@@ -14,6 +14,8 @@ export interface ObservationInput {
   currentUsedPercent?: number;
   previousResetsAtUtc?: string;
   currentResetsAtUtc?: string;
+  resetCreditsBefore?: number;
+  resetCreditsAfter?: number;
   statedTimeZone: string;
   precedingForecastId?: string;
   codexSurface: Surface;

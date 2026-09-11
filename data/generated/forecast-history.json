@@ -1,5 +1,26 @@
 [
   {
+    "id": "events-12-cutoff-2026-09-11-4553bb75",
+    "at": "2026-09-11T09:22:45.488Z",
+    "probabilities": {
+      "1": 0.01,
+      "3": 0.01,
+      "6": 0.01,
+      "12": 0.01,
+      "24": 0.01
+    },
+    "p6": 0.01,
+    "likelyStartUtc": "2026-09-17T07:35:21.000Z",
+    "likelyEndUtc": "2026-09-17T20:07:45.000Z",
+    "interval": "Sep 17, 7:35 AM–Sep 17, 8:07 PM UTC",
+    "outcome": "Awaiting 24-hour outcome",
+    "outcomes": null,
+    "brier": null,
+    "timingErrorMinutes": null,
+    "modelVersion": "provider-anchor-baseline-0.3.0",
+    "datasetVersion": "events-12-cutoff-2026-09-11-4553bb75"
+  },
+  {
     "id": "events-11-cutoff-2026-09-10-dfe91f05",
     "at": "2026-09-10T09:33:27.956Z",
     "probabilities": {
