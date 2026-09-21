@@ -1,5 +1,26 @@
 [
   {
+    "id": "events-15-cutoff-2026-09-21-be693eb2",
+    "at": "2026-09-21T09:21:13.836Z",
+    "probabilities": {
+      "1": 0.010159648236358542,
+      "3": 0.010159648236358542,
+      "6": 0.010159648236358542,
+      "12": 0.010159648236358542,
+      "24": 0.010159648236358542
+    },
+    "p6": 0.010159648236358542,
+    "likelyStartUtc": "2026-09-26T03:41:39.000Z",
+    "likelyEndUtc": "2026-09-26T12:38:39.000Z",
+    "interval": "Sep 26, 3:41 AM–Sep 26, 12:38 PM UTC",
+    "outcome": "Awaiting 24-hour outcome",
+    "outcomes": null,
+    "brier": null,
+    "timingErrorMinutes": null,
+    "modelVersion": "provider-anchor-baseline-0.3.0",
+    "datasetVersion": "events-15-cutoff-2026-09-21-be693eb2"
+  },
+  {
     "id": "events-15-cutoff-2026-09-19-be693eb2",
     "at": "2026-09-19T09:20:44.713Z",
     "probabilities": {
@@ -13,9 +34,15 @@
     "likelyStartUtc": "2026-09-26T03:41:39.000Z",
     "likelyEndUtc": "2026-09-26T12:38:39.000Z",
     "interval": "Sep 26, 3:41 AM–Sep 26, 12:38 PM UTC",
-    "outcome": "Awaiting 24-hour outcome",
-    "outcomes": null,
-    "brier": null,
+    "outcome": "No verified reset within 24h",
+    "outcomes": {
+      "1": false,
+      "3": false,
+      "6": false,
+      "12": false,
+      "24": false
+    },
+    "brier": 0.0001,
     "timingErrorMinutes": null,
     "modelVersion": "provider-anchor-baseline-0.3.0",
     "datasetVersion": "events-15-cutoff-2026-09-19-be693eb2"
@@ -34,10 +61,16 @@
     "likelyStartUtc": "2026-09-19T01:53:44.000Z",
     "likelyEndUtc": "2026-09-19T14:26:08.000Z",
     "interval": "Sep 19, 1:53 AM–Sep 19, 2:26 PM UTC",
-    "outcome": "Awaiting 24-hour outcome",
-    "outcomes": null,
-    "brier": null,
-    "timingErrorMinutes": null,
+    "outcome": "Verified reset at Sep 19, 8:51 AM UTC",
+    "outcomes": {
+      "1": false,
+      "3": false,
+      "6": false,
+      "12": false,
+      "24": true
+    },
+    "brier": 0.0918,
+    "timingErrorMinutes": 42,
     "modelVersion": "provider-anchor-baseline-0.3.0",
     "datasetVersion": "events-14-cutoff-2026-09-18-e059a0ed"
   },
