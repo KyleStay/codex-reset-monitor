@@ -264,17 +264,25 @@ Minimal public metadata`;
       created_at: "2026-07-27T10:01:00Z",
       updated_at: "2026-07-27T10:02:00Z",
     }]));
-    if (url.includes("/events")) return new Response(JSON.stringify([{
-      event: "labeled",
-      created_at: "2026-07-27T13:00:00Z",
-      label: { name: "verified-observation" },
-    }]));
+    if (url.includes("/events")) return new Response(JSON.stringify([
+      {
+        event: "labeled",
+        created_at: "2026-07-27T13:01:00Z",
+        label: { name: "verified-observation" },
+      },
+      {
+        event: "labeled",
+        created_at: "2026-07-27T13:00:00Z",
+        label: { name: "approved-public-source" },
+      },
+    ]));
     return new Response("not found", { status: 404 });
   }) as typeof fetch;
   const result = await collectGitHubIssueData({
     repository: "KyleStay/codex-reset-monitor",
     token: "test-token",
     previousObservations: [],
+    previousPublicSources: [],
     fetcher: mockFetch,
     now: new Date("2026-07-28T04:17:00Z"),
   });
@@ -309,8 +317,230 @@ Official mechanism documentation.
 mechanism_change`,
     created_at: "2026-09-01T09:00:00Z",
     updated_at: "2026-09-01T09:01:00Z",
-  }, "2026-09-01T09:02:00Z");
+  }, [{ event: "labeled", created_at: "2026-09-01T09:01:00Z", label: { name: "approved-public-source" } }], "2026-09-01T09:02:00Z");
 
   assert.equal(source.normalizedFeatures.signalClassification, "mechanism_change");
   assert.equal(source.normalizedFeatures.resetSignal, false);
+});
+
+test("GitHub collection retains the last verified row when current normalization fails", async () => {
+  const issue = {
+    number: 42,
+    html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/42",
+    body: observationBody,
+    created_at: "2026-07-27T12:05:00Z",
+    updated_at: "2026-07-27T13:00:00Z",
+  };
+  const previous = await normalizeVerifiedObservation(issue, [{
+    event: "labeled",
+    created_at: "2026-07-27T13:00:00Z",
+    label: { name: "verified-observation" },
+  }], "2026-07-28T04:17:00Z");
+  const mockFetch = (async (input: string | URL | Request) => {
+    const url = String(input);
+    if (url.includes("labels=verified-observation")) return new Response(JSON.stringify([issue]));
+    if (url.includes("labels=approved-public-source")) return new Response("[]");
+    if (url.includes("/events")) return new Response("unavailable", { status: 404 });
+    return new Response("not found", { status: 404 });
+  }) as typeof fetch;
+
+  const result = await collectGitHubIssueData({
+    repository: "KyleStay/codex-reset-monitor",
+    token: "test-token",
+    previousObservations: [previous],
+    previousPublicSources: [],
+    fetcher: mockFetch,
+    now: new Date("2026-07-29T04:17:00Z"),
+  });
+
+  assert.deepEqual(result.observations, [previous]);
+  assert.equal(result.rejectedRecords.length, 1);
+});
+
+test("edited approved source requires a post-edit approval label and retains the approved snapshot", async () => {
+  const originalBody = `### Canonical URL
+
+https://openai.com/news/
+
+### Publication time
+
+2026-07-27T10:00:00Z
+
+### Title
+
+Official announcement
+
+### Minimal excerpt
+
+Minimal public metadata`;
+  const originalIssue = {
+    number: 50,
+    html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/50",
+    body: originalBody,
+    created_at: "2026-07-27T10:01:00Z",
+    updated_at: "2026-07-27T10:02:00Z",
+  };
+  const approvalEvent = {
+    event: "labeled",
+    created_at: "2026-07-27T10:02:00Z",
+    label: { name: "approved-public-source" },
+  };
+  const previous = await normalizeApprovedSource(
+    originalIssue,
+    [approvalEvent],
+    "2026-07-28T04:17:00Z",
+  );
+  const editedIssue = {
+    ...originalIssue,
+    body: originalBody
+      .replace("https://openai.com/news/", "https://example.test/unreviewed/")
+      .replace("Official announcement", "Unreviewed replacement"),
+    updated_at: "2026-07-27T11:00:00Z",
+  };
+  const mockFetch = (async (input: string | URL | Request) => {
+    const url = String(input);
+    if (url.includes("labels=verified-observation")) return new Response("[]");
+    if (url.includes("labels=approved-public-source")) return new Response(JSON.stringify([editedIssue]));
+    if (url.includes("/events")) return new Response(JSON.stringify([approvalEvent]));
+    return new Response("not found", { status: 404 });
+  }) as typeof fetch;
+
+  const result = await collectGitHubIssueData({
+    repository: "KyleStay/codex-reset-monitor",
+    token: "test-token",
+    previousObservations: [],
+    previousPublicSources: [previous],
+    fetcher: mockFetch,
+    now: new Date("2026-07-28T05:00:00Z"),
+  });
+
+  assert.deepEqual(result.publicSources, [previous]);
+  assert.match(result.rejectedRecords[0]?.reason ?? "", /re-approved after its latest edit/i);
+
+  const reapproved = await normalizeApprovedSource(editedIssue, [approvalEvent, {
+    ...approvalEvent,
+    created_at: "2026-07-27T11:00:00Z",
+  }], "2026-07-28T05:00:00Z", previous);
+  assert.equal(reapproved.canonicalUrl, "https://example.test/unreviewed/");
+  assert.equal(reapproved.title, "Unreviewed replacement");
+});
+
+test("approved source collection retains its snapshot when approval history cannot be fetched", async () => {
+  const issue = {
+    number: 50,
+    html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/50",
+    body: `### Canonical URL
+
+https://openai.com/news/
+
+### Publication time
+
+2026-07-27T10:00:00Z
+
+### Title
+
+Official announcement`,
+    created_at: "2026-07-27T10:01:00Z",
+    updated_at: "2026-07-27T10:02:00Z",
+  };
+  const approvalEvent = {
+    event: "labeled",
+    created_at: "2026-07-27T10:02:00Z",
+    label: { name: "approved-public-source" },
+  };
+  const previous = await normalizeApprovedSource(issue, [approvalEvent], "2026-07-28T04:17:00Z");
+  const mockFetch = (async (input: string | URL | Request) => {
+    const url = String(input);
+    if (url.includes("labels=verified-observation")) return new Response("[]");
+    if (url.includes("labels=approved-public-source")) return new Response(JSON.stringify([issue]));
+    if (url.includes("/events")) return new Response("unavailable", { status: 404 });
+    return new Response("not found", { status: 404 });
+  }) as typeof fetch;
+
+  const result = await collectGitHubIssueData({
+    repository: "KyleStay/codex-reset-monitor",
+    token: "test-token",
+    previousObservations: [],
+    previousPublicSources: [previous],
+    fetcher: mockFetch,
+    now: new Date("2026-07-28T05:00:00Z"),
+  });
+
+  assert.deepEqual(result.publicSources, [previous]);
+  assert.match(result.rejectedRecords[0]?.reason ?? "", /GitHub returned 404/);
+});
+
+test("edited verified issue requires a post-edit verification label", async () => {
+  const originalIssue = {
+    number: 42,
+    html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/42",
+    body: observationBody,
+    created_at: "2026-07-27T12:05:00Z",
+    updated_at: "2026-07-27T13:00:00Z",
+  };
+  const originalLabel = {
+    event: "labeled",
+    created_at: "2026-07-27T13:00:00Z",
+    label: { name: "verified-observation" },
+  };
+  const previous = await normalizeVerifiedObservation(originalIssue, [originalLabel], "2026-07-28T04:17:00Z");
+  const editedIssue = {
+    ...originalIssue,
+    body: observationBody.replace("Timing only\nSecond line", "Corrected timing"),
+    updated_at: "2026-07-27T14:00:00Z",
+  };
+
+  await assert.rejects(
+    normalizeVerifiedObservation(editedIssue, [originalLabel], "2026-07-28T05:00:00Z", previous),
+    /re-verified after its latest edit/i,
+  );
+  const corrected = await normalizeVerifiedObservation(editedIssue, [originalLabel, {
+    ...originalLabel,
+    created_at: "2026-07-27T14:00:00Z",
+  }], "2026-07-28T05:00:00Z", previous);
+  assert.equal(corrected.verifiedAtUtc, "2026-07-27T14:00:00.000Z");
+  assert.equal(corrected.auditHistory.at(-1)?.action, "corrected");
+
+  const unchanged = await normalizeVerifiedObservation(editedIssue, [originalLabel, {
+    ...originalLabel,
+    created_at: "2026-07-27T14:00:00Z",
+  }], "2026-07-29T05:00:00Z", corrected);
+  assert.equal(unchanged.verifiedAtUtc, "2026-07-27T14:00:00.000Z");
+  assert.deepEqual(unchanged.auditHistory, corrected.auditHistory);
+});
+
+test("first ingestion rejects a verified issue edited after its verification label", async () => {
+  await assert.rejects(
+    normalizeVerifiedObservation({
+      number: 42,
+      html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/42",
+      body: observationBody.replace("Timing only\nSecond line", "Edited after verification"),
+      created_at: "2026-07-27T12:05:00Z",
+      updated_at: "2026-07-27T14:00:00Z",
+    }, [{
+      event: "labeled",
+      created_at: "2026-07-27T13:00:00Z",
+      label: { name: "verified-observation" },
+    }], "2026-07-28T05:00:00Z"),
+    /verified after its latest edit/i,
+  );
+});
+
+
+test("reapproving a changed signal classification replaces the approved snapshot", async () => {
+  const issue = {
+    number: 52,
+    html_url: "https://github.com/KyleStay/codex-reset-monitor/issues/52",
+    body: "### Canonical URL\n\nhttps://example.test/announcement\n\n### Publication time\n\n2026-09-01T09:00:00Z\n\n### Title\n\nAnnouncement\n\n### Signal classification\n\ncompleted_hard_reset",
+    created_at: "2026-09-01T09:00:00Z",
+    updated_at: "2026-09-01T09:01:00Z",
+  };
+  const events = [{ event: "labeled", created_at: issue.updated_at, label: { name: "approved-public-source" } }];
+  const previous = await normalizeApprovedSource(issue, events, "2026-09-01T09:02:00Z");
+  const edited = { ...issue, body: issue.body.replace("completed_hard_reset", "mechanism_change"), updated_at: "2026-09-01T10:00:00Z" };
+  await assert.rejects(normalizeApprovedSource(edited, events, "2026-09-01T10:02:00Z", previous), /re-approved/);
+  const corrected = await normalizeApprovedSource(edited, [...events, { ...events[0], created_at: edited.updated_at }], "2026-09-01T10:02:00Z", previous);
+  assert.equal(corrected.normalizedFeatures.signalClassification, "mechanism_change");
+  assert.equal(corrected.normalizedFeatures.resetSignal, false);
+  assert.notEqual(corrected.contentHash, previous.contentHash);
 });

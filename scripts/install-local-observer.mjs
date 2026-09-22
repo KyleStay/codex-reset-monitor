@@ -14,6 +14,7 @@ if (uid === undefined) throw new Error("The local observer installer requires ma
 const domain = `gui/${uid}`;
 const launchAgentsDir = resolve(homedir(), "Library", "LaunchAgents");
 const logsDir = resolve(homedir(), "Library", "Logs", "Codex Reset Monitor");
+const legacyStdoutLogPath = resolve(logsDir, "local-observer.log");
 const supportDir = resolve(homedir(), "Library", "Application Support", "Codex Reset Monitor");
 const runtimeDir = resolve(supportDir, "runtime");
 const runtimeObserver = resolve(runtimeDir, "local-reset-observer.mjs");
@@ -33,6 +34,7 @@ function commandPath(name) {
 if (process.argv.includes("--uninstall")) {
   spawnSync("launchctl", ["bootout", domain, plistPath], { stdio: "ignore" });
   await unlink(plistPath).catch(() => undefined);
+  await unlink(legacyStdoutLogPath).catch(() => undefined);
   console.log(JSON.stringify({ status: "uninstalled", label, plistPath }));
   process.exit(0);
 }
@@ -65,7 +67,7 @@ const plist = `<?xml version="1.0" encoding="UTF-8"?>
   <key>RunAtLoad</key><true/>
   <key>StartInterval</key><integer>300</integer>
   <key>ProcessType</key><string>Background</string>
-  <key>StandardOutPath</key><string>${xml(resolve(logsDir, "local-observer.log"))}</string>
+  <key>StandardOutPath</key><string>${xml("/dev/null")}</string>
   <key>StandardErrorPath</key><string>${xml(resolve(logsDir, "local-observer.error.log"))}</string>
 </dict>
 </plist>
@@ -73,6 +75,7 @@ const plist = `<?xml version="1.0" encoding="UTF-8"?>
 
 await mkdir(launchAgentsDir, { recursive: true });
 await mkdir(logsDir, { recursive: true });
+await unlink(legacyStdoutLogPath).catch(() => undefined);
 await mkdir(runtimeDir, { recursive: true, mode: 0o700 });
 await chmod(observerScript, 0o755);
 execFileSync(esbuildPath, [

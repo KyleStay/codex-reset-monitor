@@ -3,19 +3,23 @@ import { HORIZONS, type FeatureSnapshot, type Forecast, type Horizon } from "./d
 const clamp = (value: number, min = 0.01, max = 0.98) => Math.min(max, Math.max(min, value));
 const sigmoid = (value: number) => 1 / (1 + Math.exp(-value));
 const featureTag = (features: FeatureSnapshot) => {
-  const value = [
+  const value = JSON.stringify([
+    features.cutoffUtc,
     features.confirmedEventCount,
     features.scheduledEventCount,
     features.outOfCycleEventCount,
     features.lastResetTiming,
     features.scheduledResetAtUtc,
+    features.hoursSinceLastConfirmedReset,
     features.medianCycleHours,
     features.cycleDispersionHours,
     features.activeIncident,
+    features.incidentRecencyHours,
     features.approvedPostCount24h,
+    features.weightedReportVolume6h,
     features.sourceTrustMean,
     features.dataQuality,
-  ].join("|");
+  ]);
   let hash = 2_166_136_261;
   for (const character of value) {
     hash ^= character.charCodeAt(0);
@@ -57,7 +61,7 @@ export function candidateProbability(hours: Horizon, features: FeatureSnapshot):
 
 export function buildForecast(features: FeatureSnapshot, now = new Date(features.cutoffUtc)): Forecast {
   const probabilities = Object.fromEntries(
-    HORIZONS.map((hours) => [hours, candidateProbability(hours, features)])
+    HORIZONS.map((hours) => [hours, baselineProbability(hours, features)])
   ) as Record<Horizon, number>;
   const hasProviderAnchor = Boolean(features.scheduledResetAtUtc && Date.parse(features.scheduledResetAtUtc) > now.getTime());
   const hasTimingHistory = hasProviderAnchor
@@ -89,7 +93,7 @@ export function buildForecast(features: FeatureSnapshot, now = new Date(features
         },
         {
           label: features.activeIncident ? "Active official incident" : "No active official incident",
-          direction: features.activeIncident ? "raises" as const : "neutral" as const,
+          direction: "neutral" as const,
           detail: features.activeIncident
             ? "An official Codex-relevant incident is active. It is context, not evidence of a personal reset."
             : "No active Codex-relevant incident is represented in the current snapshot.",

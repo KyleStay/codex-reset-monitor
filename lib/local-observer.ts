@@ -24,11 +24,9 @@ export interface SafeResetCreditSnapshot {
   sampledAtUtc: string;
   availableCount: number;
   credits: Array<{
-    resetType: string;
     status: string;
     grantedAtUtc: string | null;
     expiresAtUtc: string | null;
-    title: string | null;
   }>;
 }
 
@@ -106,6 +104,23 @@ export const emptyLocalObserverState = (): LocalObserverState => ({
   publishedKeys: [],
 });
 
+function sanitizeResetCredits(
+  snapshot: SafeResetCreditSnapshot | null | undefined,
+): SafeResetCreditSnapshot | null {
+  if (!snapshot) return null;
+  return {
+    sampledAtUtc: snapshot.sampledAtUtc,
+    availableCount: snapshot.availableCount,
+    credits: Array.isArray(snapshot.credits)
+      ? snapshot.credits.map((credit) => ({
+          status: credit.status,
+          grantedAtUtc: credit.grantedAtUtc,
+          expiresAtUtc: credit.expiresAtUtc,
+        }))
+      : [],
+  };
+}
+
 function normalizePendingCandidate(candidate: LocalObserverState["pendingCandidate"]) {
   if (!candidate) return null;
   const classification = classifyResetTiming(candidate);
@@ -113,8 +128,8 @@ function normalizePendingCandidate(candidate: LocalObserverState["pendingCandida
     ...candidate,
     resetTiming: candidate.resetTiming ?? classification.timing,
     scheduledLeadMinutes: candidate.scheduledLeadMinutes ?? classification.scheduledLeadMinutes,
-    previousResetCredits: candidate.previousResetCredits ?? null,
-    currentResetCredits: candidate.currentResetCredits ?? null,
+    previousResetCredits: sanitizeResetCredits(candidate.previousResetCredits),
+    currentResetCredits: sanitizeResetCredits(candidate.currentResetCredits),
   };
 }
 
@@ -141,7 +156,9 @@ export function normalizeLocalObserverState(value: unknown): LocalObserverState 
     lastSample: parsed.lastSample ?? null,
     recentSamples: Array.isArray(parsed.recentSamples) ? parsed.recentSamples : [],
     latestRateLimitBuckets: Array.isArray(parsed.latestRateLimitBuckets) ? parsed.latestRateLimitBuckets : [],
-    latestResetCredits: parsed.schemaVersion === 3 || parsed.schemaVersion === 4 ? parsed.latestResetCredits ?? null : null,
+    latestResetCredits: parsed.schemaVersion === 3 || parsed.schemaVersion === 4
+      ? sanitizeResetCredits(parsed.latestResetCredits)
+      : null,
     detectedResets: Array.isArray(parsed.detectedResets)
       ? parsed.detectedResets.map((entry) => {
           const classification = classifyResetTiming(entry);
@@ -149,8 +166,8 @@ export function normalizeLocalObserverState(value: unknown): LocalObserverState 
             ...entry,
             resetTiming: entry.resetTiming ?? classification.timing,
             scheduledLeadMinutes: entry.scheduledLeadMinutes ?? classification.scheduledLeadMinutes,
-            previousResetCredits: entry.previousResetCredits ?? null,
-            currentResetCredits: entry.currentResetCredits ?? null,
+            previousResetCredits: sanitizeResetCredits(entry.previousResetCredits),
+            currentResetCredits: sanitizeResetCredits(entry.currentResetCredits),
           };
         })
       : [],
@@ -190,6 +207,16 @@ export function advanceLocalObserver(
   if (state.openExhaustion) {
     const exhausted = state.openExhaustion;
     state.openExhaustion = null;
+    const resetCreditConsumed = current.latestResetCredits !== null
+      && currentResetCredits !== null
+      && currentResetCredits.availableCount < current.latestResetCredits.availableCount;
+    if (resetCreditConsumed) return { state, candidate: null };
+    const resetAnchorMateriallyUnchanged = exhausted.resetsAtUtc !== null
+      && sample.resetsAtUtc !== null
+      && Math.abs(Date.parse(sample.resetsAtUtc) - Date.parse(exhausted.resetsAtUtc)) < 60_000;
+    if (sample.usedPercent > 5 && resetAnchorMateriallyUnchanged) {
+      return { state, candidate: null };
+    }
     const classification = classifyResetTiming({
       observedResetAtUtc: sample.sampledAtUtc,
       previousResetsAtUtc: exhausted.resetsAtUtc ?? undefined,
@@ -213,7 +240,7 @@ export function advanceLocalObserver(
       resetTiming: classification.timing,
       scheduledLeadMinutes: classification.scheduledLeadMinutes,
       previousResetCredits: current.latestResetCredits,
-      currentResetCredits,
+      currentResetCredits: sanitizeResetCredits(currentResetCredits),
       previousResetsAtUtc: exhausted.resetsAtUtc ?? undefined,
       currentResetsAtUtc: sample.resetsAtUtc ?? undefined,
     };
@@ -256,7 +283,7 @@ export function advanceLocalObserver(
       resetTiming: classification.timing,
       scheduledLeadMinutes: classification.scheduledLeadMinutes,
       previousResetCredits: current.latestResetCredits,
-      currentResetCredits,
+      currentResetCredits: sanitizeResetCredits(currentResetCredits),
     };
     return { state, candidate };
   }
@@ -271,7 +298,7 @@ export function recordLocalTelemetry(
   return {
     ...current,
     latestRateLimitBuckets: rateLimitBuckets,
-    latestResetCredits: resetCredits,
+    latestResetCredits: sanitizeResetCredits(resetCredits),
   };
 }
 
@@ -292,8 +319,8 @@ export function rememberLocalCandidate(
     currentResetsAtUtc: candidate.currentResetsAtUtc,
     resetTiming: candidate.resetTiming,
     scheduledLeadMinutes: candidate.scheduledLeadMinutes,
-    previousResetCredits: candidate.previousResetCredits,
-    currentResetCredits: candidate.currentResetCredits,
+    previousResetCredits: sanitizeResetCredits(candidate.previousResetCredits),
+    currentResetCredits: sanitizeResetCredits(candidate.currentResetCredits),
   };
   return {
     ...current,

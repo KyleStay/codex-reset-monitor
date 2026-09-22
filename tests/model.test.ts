@@ -40,6 +40,36 @@ test("an active incident modestly raises candidate probability", () => {
   assert.ok(baselineProbability(24, features) > baselineProbability(1, features));
 });
 
+test("published forecast stays on the baseline until the candidate model is promoted", () => {
+  const contextual = {
+    ...features,
+    activeIncident: true,
+    approvedPostCount24h: 3,
+    weightedReportVolume6h: 2,
+  };
+  const calmForecast = buildForecast(features);
+  const contextualForecast = buildForecast(contextual);
+
+  for (const horizon of [1, 3, 6, 12, 24] as const) {
+    assert.equal(calmForecast.probabilities[horizon], baselineProbability(horizon, features));
+    assert.equal(contextualForecast.probabilities[horizon], baselineProbability(horizon, contextual));
+    assert.equal(contextualForecast.probabilities[horizon], calmForecast.probabilities[horizon]);
+  }
+  assert.match(contextualForecast.modelVersion, /baseline/);
+});
+
+test("dataset version changes when any previously omitted feature changes", () => {
+  const original = buildForecast(features).datasetVersion;
+  const variants: FeatureSnapshot[] = [
+    { ...features, cutoffUtc: "2026-07-28T14:01:00.000Z" },
+    { ...features, hoursSinceLastConfirmedReset: 20 },
+    { ...features, incidentRecencyHours: 101 },
+    { ...features, weightedReportVolume6h: 1 },
+  ];
+
+  for (const variant of variants) assert.notEqual(buildForecast(variant).datasetVersion, original);
+});
+
 test("zero observations use the published prior and do not invent a likely interval", () => {
   const forecast = buildForecast({
     ...features,

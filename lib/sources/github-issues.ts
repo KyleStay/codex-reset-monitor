@@ -105,12 +105,21 @@ export async function normalizeVerifiedObservation(
     detectionMethod: detectionMethod(field(fields, "Detection method")),
     confidence: confidence(field(fields, "Confidence")),
   });
-  const verifiedAtUtc = events
+  const verificationTimes = events
     .filter((event) => event.event === "labeled" && event.label?.name === VERIFIED_OBSERVATION_LABEL)
     .map((event) => new Date(event.created_at).toISOString())
-    .sort()[0] ?? new Date(issue.updated_at).toISOString();
+    .sort();
   const sourceContentHash = await stableDigest(issue.body ?? "");
-  const action = previous && previous.sourceContentHash !== sourceContentHash ? "corrected" : "verified";
+  const contentChanged = previous?.sourceContentHash !== sourceContentHash;
+  const action = previous && contentChanged ? "corrected" : "verified";
+  const verifiedAtUtc = previous && !contentChanged
+    ? previous.verifiedAtUtc
+    : verificationTimes.find((time) => Date.parse(time) >= Date.parse(issue.updated_at));
+  if (!verifiedAtUtc) {
+    throw new Error(previous
+      ? "Edited verified observation must be re-verified after its latest edit"
+      : "Verified observation must be verified after its latest edit");
+  }
   const auditHistory = previous?.auditHistory ? [...previous.auditHistory] : [];
   if (!previous || action === "corrected") {
     auditHistory.push({
@@ -137,7 +146,9 @@ export async function normalizeVerifiedObservation(
 
 export async function normalizeApprovedSource(
   issue: GitHubIssue,
+  events: GitHubIssueEvent[],
   retrievedAtUtc: string,
+  previous?: SourceRecord,
 ): Promise<SourceRecord> {
   const fields = parseIssueFormBody(issue.body ?? "");
   const canonicalUrl = field(fields, "Canonical URL");
@@ -170,8 +181,9 @@ export async function normalizeApprovedSource(
     title,
     publicationTime: new Date(publicationTime).toISOString(),
     excerpt,
+    signalClassification,
   }));
-  return {
+  const normalized: SourceRecord = {
     id: `github-source-${issue.number}`,
     sourceAdapterId: "github-approved-source-v1",
     sourceKind: "approved_public_post",
@@ -185,6 +197,14 @@ export async function normalizeApprovedSource(
     normalizedFeatures: { approved: true, signalClassification, resetSignal },
     contentHash,
   };
+  if (previous?.contentHash === contentHash) return previous;
+  const approvedAtUtc = events
+    .filter((event) => event.event === "labeled" && event.label?.name === APPROVED_SOURCE_LABEL)
+    .map((event) => new Date(event.created_at).toISOString())
+    .sort()
+    .find((time) => Date.parse(time) >= Date.parse(issue.updated_at));
+  if (!approvedAtUtc) throw new Error("Edited approved source must be re-approved after its latest edit");
+  return normalized;
 }
 
 async function requestJson<T>(url: string, token: string, fetcher: typeof fetch): Promise<T> {
@@ -228,17 +248,20 @@ export async function collectGitHubIssueData({
   repository,
   token,
   previousObservations,
+  previousPublicSources,
   fetcher = fetch,
   now = new Date(),
 }: {
   repository: string;
   token: string;
   previousObservations: StoredObservation[];
+  previousPublicSources: SourceRecord[];
   fetcher?: typeof fetch;
   now?: Date;
 }): Promise<GitHubCollection> {
   const retrievedAtUtc = now.toISOString();
   const previous = new Map(previousObservations.map((row) => [row.id, row]));
+  const previousSources = new Map(previousPublicSources.map((row) => [row.id, row]));
   const rejectedRecords: GitHubCollection["rejectedRecords"] = [];
   const verifiedIssues = await issuesForLabel(repository, VERIFIED_OBSERVATION_LABEL, token, fetcher);
   const normalized: StoredObservation[] = [];
@@ -260,6 +283,8 @@ export async function collectGitHubIssueData({
         sourceUrl: issue.html_url,
         reason: error instanceof Error ? error.message : "Invalid verified observation",
       });
+      const prior = previous.get(`github-issue-${issue.number}`);
+      if (prior) normalized.push(prior);
     }
   }
   const byDedupeKey = new Map<string, StoredObservation>();
@@ -279,12 +304,24 @@ export async function collectGitHubIssueData({
   const publicSources: SourceRecord[] = [];
   for (const issue of sourceIssues) {
     try {
-      publicSources.push(await normalizeApprovedSource(issue, retrievedAtUtc));
+      const events = await requestJson<GitHubIssueEvent[]>(
+        `https://api.github.com/repos/${repository}/issues/${issue.number}/events?per_page=100`,
+        token,
+        fetcher,
+      );
+      publicSources.push(await normalizeApprovedSource(
+        issue,
+        events,
+        retrievedAtUtc,
+        previousSources.get(`github-source-${issue.number}`),
+      ));
     } catch (error) {
       rejectedRecords.push({
         sourceUrl: issue.html_url,
         reason: error instanceof Error ? error.message : "Invalid approved source",
       });
+      const prior = previousSources.get(`github-source-${issue.number}`);
+      if (prior) publicSources.push(prior);
     }
   }
   return {
