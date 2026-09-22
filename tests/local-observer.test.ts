@@ -241,7 +241,7 @@ test("observer retains bounded credit evidence and out-of-cycle timing", () => {
   }), "UTC").state;
   const afterCredits = {
     sampledAtUtc: "2026-08-08T20:32:48.433Z",
-    availableCount: 0,
+    availableCount: 1,
     credits: [],
   };
   const result = advanceLocalObserver(state, sample({
@@ -251,7 +251,7 @@ test("observer retains bounded credit evidence and out-of-cycle timing", () => {
   }), "UTC", afterCredits);
   assert.equal(result.candidate?.resetTiming, "out-of-cycle");
   assert.equal(result.candidate?.previousResetCredits?.availableCount, 1);
-  assert.equal(result.candidate?.currentResetCredits?.availableCount, 0);
+  assert.equal(result.candidate?.currentResetCredits?.availableCount, 1);
 });
 
 test("observer does not publish a reset-credit recovery as a full reset", () => {
@@ -372,4 +372,29 @@ test("observer retains positive recovery evidence at low usage or with an advanc
   }), "UTC");
   assert.equal(nearZero.candidate?.observationKind, "access-restored");
   assert.equal(advancedAnchor.candidate?.observationKind, "access-restored");
+});
+
+test("observer suppresses credit redemption before exhaustion", () => {
+  const beforeCredits = {
+    sampledAtUtc: "2026-08-01T10:00:00.000Z",
+    availableCount: 1,
+    credits: [],
+  };
+  const state = advanceLocalObserver(
+    recordLocalTelemetry(emptyLocalObserverState(), [], beforeCredits),
+    sample({ usedPercent: 90, resetsAtUtc: "2026-08-03T10:00:00.000Z" }),
+    "UTC",
+  ).state;
+  const result = advanceLocalObserver(state, sample({
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    usedPercent: 0,
+    resetsAtUtc: "2026-08-08T10:05:00.000Z",
+  }), "UTC", {
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    availableCount: 0,
+    credits: [],
+  });
+  assert.equal(result.candidate, null);
+  assert.equal(result.state.openExhaustion, null);
+  assert.equal(result.state.lastSample?.usedPercent, 0);
 });

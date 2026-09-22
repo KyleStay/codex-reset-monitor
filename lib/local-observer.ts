@@ -204,13 +204,17 @@ export function advanceLocalObserver(
     return { state, candidate: null };
   }
 
+  const resetCreditConsumed = current.latestResetCredits !== null
+    && currentResetCredits !== null
+    && currentResetCredits.availableCount < current.latestResetCredits.availableCount;
+  if (resetCreditConsumed) {
+    state.openExhaustion = null;
+    return { state, candidate: null };
+  }
+
   if (state.openExhaustion) {
     const exhausted = state.openExhaustion;
     state.openExhaustion = null;
-    const resetCreditConsumed = current.latestResetCredits !== null
-      && currentResetCredits !== null
-      && currentResetCredits.availableCount < current.latestResetCredits.availableCount;
-    if (resetCreditConsumed) return { state, candidate: null };
     const resetAnchorMateriallyUnchanged = exhausted.resetsAtUtc !== null
       && sample.resetsAtUtc !== null
       && Math.abs(Date.parse(sample.resetsAtUtc) - Date.parse(exhausted.resetsAtUtc)) < 60_000;
