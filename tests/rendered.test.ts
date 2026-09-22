@@ -23,4 +23,9 @@ test("static export contains critical public and administrator journeys", async 
   const submit = await readFile(new URL("../out/submit/index.html", import.meta.url), "utf8");
   assert.match(submit, /No prompts or responses/);
   assert.match(submit, /Continue on GitHub/);
+  const performance = await readFile(new URL("../out/performance/index.html", import.meta.url), "utf8");
+  assert.match(performance, /<caption>Calibration values<\/caption>/);
+  assert.match(performance, /<th[^>]*>Predicted<\/th>/);
+  assert.match(performance, /<th[^>]*>Observed<\/th>/);
+  assert.match(performance, /<th[^>]*>Sample size<\/th>/);
 });

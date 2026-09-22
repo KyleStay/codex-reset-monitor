@@ -130,7 +130,9 @@ export async function stableDigest(value: string): Promise<string> {
   return Array.from(new Uint8Array(hash)).map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-export async function observationDedupeKey(input: ObservationInput): Promise<string> {
+export async function observationDedupeKey(
+  input: Pick<ObservationInput, "codexSurface" | "observedResetAtUtc" | "statedTimeZone">,
+): Promise<string> {
   const roundedReset = Math.floor(Date.parse(input.observedResetAtUtc) / 900_000);
   return stableDigest([input.codexSurface, roundedReset, input.statedTimeZone].join("|"));
 }

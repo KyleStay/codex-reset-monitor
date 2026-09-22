@@ -29,19 +29,27 @@ async function rateLimit(request: Request, env: Env) {
   const keyMaterial = env.RATE_LIMIT_HMAC_KEY;
   if (!keyMaterial) return { allowed: false, reason: "Submission service is not configured" };
   const address = request.headers.get("cf-connecting-ip") ?? "local";
-  const day = new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const nowUtc = now.toISOString();
+  const day = nowUtc.slice(0, 10);
   const digest = await stableDigest(`${keyMaterial}|${day}|${address}`);
-  const window = new Date();
+  const window = new Date(now);
   window.setUTCMinutes(0, 0, 0);
   const windowStart = window.toISOString();
   const expires = new Date(window.getTime() + 2 * 3_600_000).toISOString();
-  const existing = await env.DB.prepare("SELECT request_count FROM rate_limit_buckets WHERE key_digest = ? AND window_start_utc = ?").bind(digest, windowStart).first<{ request_count: number }>();
-  if ((existing?.request_count ?? 0) >= 5) return { allowed: false, reason: "Too many submissions. Try again after the hour changes." };
   await env.DB.prepare(`
+    DELETE FROM rate_limit_buckets
+    WHERE expires_at_utc <= ?
+  `).bind(nowUtc).run();
+  const result = await env.DB.prepare(`
     INSERT INTO rate_limit_buckets (key_digest, window_start_utc, request_count, expires_at_utc)
     VALUES (?, ?, 1, ?)
     ON CONFLICT(key_digest, window_start_utc) DO UPDATE SET request_count = request_count + 1
+    WHERE request_count < 5
   `).bind(digest, windowStart, expires).run();
+  if (result.meta.changes === 0) {
+    return { allowed: false, reason: "Too many submissions. Try again after the hour changes." };
+  }
   return { allowed: true };
 }
 
@@ -87,20 +95,77 @@ async function submitObservation(request: Request, env: Env) {
 async function administerObservation(request: Request, env: Env, id: string) {
   if (!env.ADMIN_KEY) return json({ error: "Administration is not configured" }, 503, allowedOrigin(request, env));
   if (!(await equalSecret(request.headers.get("x-admin-key") ?? "", env.ADMIN_KEY))) return json({ error: "Not authorized" }, 401, allowedOrigin(request, env));
-  const payload = await request.json() as { verificationState?: string; reason?: string; observedResetAtUtc?: string };
+  let payload: { verificationState?: string; reason?: string; observedResetAtUtc?: string };
+  try {
+    const parsed = await request.json();
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) throw new Error("Invalid JSON object");
+    payload = parsed as typeof payload;
+  } catch {
+    return json({ error: "A valid JSON object is required" }, 400, allowedOrigin(request, env));
+  }
   const allowedStates = new Set(["confirmed", "inferred", "rejected", "corrected"]);
   if (!payload.verificationState || !allowedStates.has(payload.verificationState)) return json({ error: "Invalid verification state" }, 400, allowedOrigin(request, env));
-  if (!payload.reason?.trim() || payload.reason.trim().length > 300) return json({ error: "A concise reason is required" }, 400, allowedOrigin(request, env));
+  if (typeof payload.reason !== "string" || !payload.reason.trim() || payload.reason.trim().length > 300) return json({ error: "A concise reason is required" }, 400, allowedOrigin(request, env));
   const before = await env.DB.prepare("SELECT * FROM reset_observations WHERE id = ?").bind(id).first<Record<string, unknown>>();
   if (!before) return json({ error: "Observation not found" }, 404, allowedOrigin(request, env));
   const now = new Date().toISOString();
-  const nextReset = payload.observedResetAtUtc ? new Date(payload.observedResetAtUtc).toISOString() : String(before.observed_reset_at_utc);
-  const after = { ...before, observed_reset_at_utc: nextReset, verification_state: payload.verificationState, corrected_at_utc: now };
-  await env.DB.batch([
-    env.DB.prepare("UPDATE reset_observations SET observed_reset_at_utc = ?, verification_state = ?, corrected_at_utc = ? WHERE id = ?").bind(nextReset, payload.verificationState, now, id),
-    env.DB.prepare("INSERT INTO observation_audit (id, observation_id, action, actor_class, reason, before_json, after_json, created_at_utc) VALUES (?, ?, ?, 'administrator', ?, ?, ?, ?)")
-      .bind(`aud_${crypto.randomUUID()}`, id, payload.verificationState, payload.reason.trim(), JSON.stringify(before), JSON.stringify(after), now),
-  ]);
+  if (payload.observedResetAtUtc !== undefined && (
+    typeof payload.observedResetAtUtc !== "string"
+    || !payload.observedResetAtUtc
+    || Number.isNaN(Date.parse(payload.observedResetAtUtc))
+  )) {
+    return json({ error: "Observed reset time must be a valid date and time" }, 400, allowedOrigin(request, env));
+  }
+  let nextReset = String(before.observed_reset_at_utc);
+  let nextDedupeKey = String(before.dedupe_key);
+  if (payload.observedResetAtUtc) {
+    try {
+      const validated = validateObservation({
+        observationKind: before.observation_kind,
+        limitReachedAtUtc: before.limit_reached_at_utc,
+        priorSampleAtUtc: before.prior_sample_at_utc,
+        observedResetAtUtc: payload.observedResetAtUtc,
+        previousUsedPercent: before.previous_used_percent,
+        currentUsedPercent: before.current_used_percent,
+        previousResetsAtUtc: before.previous_resets_at_utc,
+        currentResetsAtUtc: before.current_resets_at_utc,
+        statedTimeZone: before.stated_time_zone,
+        precedingForecastId: before.preceding_forecast_id,
+        codexSurface: before.codex_surface,
+        planTier: before.plan_tier,
+        relatedIncidentIds: JSON.parse(String(before.incident_ids_json ?? "[]")),
+        relatedSourceIds: JSON.parse(String(before.source_ids_json ?? "[]")),
+        submitterNotes: before.submitter_notes,
+        detectionMethod: before.detection_method,
+        confidence: before.confidence,
+      });
+      nextReset = validated.observedResetAtUtc;
+      nextDedupeKey = await observationDedupeKey(validated);
+    } catch (error) {
+      return json({ error: error instanceof Error ? error.message : "Invalid correction" }, 400, allowedOrigin(request, env));
+    }
+  }
+  const after = {
+    ...before,
+    observed_reset_at_utc: nextReset,
+    verification_state: payload.verificationState,
+    dedupe_key: nextDedupeKey,
+    corrected_at_utc: now,
+  };
+  try {
+    await env.DB.batch([
+      env.DB.prepare("UPDATE reset_observations SET observed_reset_at_utc = ?, verification_state = ?, dedupe_key = ?, corrected_at_utc = ? WHERE id = ?")
+        .bind(nextReset, payload.verificationState, nextDedupeKey, now, id),
+      env.DB.prepare("INSERT INTO observation_audit (id, observation_id, action, actor_class, reason, before_json, after_json, created_at_utc) VALUES (?, ?, ?, 'administrator', ?, ?, ?, ?)")
+        .bind(`aud_${crypto.randomUUID()}`, id, payload.verificationState, payload.reason.trim(), JSON.stringify(before), JSON.stringify(after), now),
+    ]);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+    if (/unique|dedupe/i.test(message)) {
+      return json({ error: "A matching observation already exists" }, 409, allowedOrigin(request, env));
+    }
+    throw error;
+  }
   return json({ id, verificationState: payload.verificationState, auditCreated: true }, 200, allowedOrigin(request, env));
 }
 
@@ -113,7 +178,13 @@ const api = {
     if (url.pathname === "/health" && request.method === "GET") return json({ status: "ok", writesConfigured: Boolean(env.RATE_LIMIT_HMAC_KEY), adminConfigured: Boolean(env.ADMIN_KEY) }, 200, allowedOrigin(request, env));
     if (url.pathname === "/observations" && request.method === "POST") return submitObservation(request, env);
     const adminMatch = url.pathname.match(/^\/admin\/observations\/([^/]+)$/);
-    if (adminMatch && request.method === "PATCH") return administerObservation(request, env, decodeURIComponent(adminMatch[1]));
+    if (adminMatch && request.method === "PATCH") {
+      try {
+        return administerObservation(request, env, decodeURIComponent(adminMatch[1]));
+      } catch {
+        return json({ error: "Invalid observation ID" }, 400, allowedOrigin(request, env));
+      }
+    }
     return json({ error: "Not found" }, 404, allowedOrigin(request, env));
   },
 };

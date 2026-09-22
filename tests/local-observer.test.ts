@@ -132,6 +132,34 @@ test("older observer state migrates without losing safe reset samples", () => {
   assert.deepEqual(migrated.publishedKeys, ["old"]);
 });
 
+test("observer state migration strips non-allowlisted reset-credit fields", () => {
+  const migrated = normalizeLocalObserverState({
+    ...emptyLocalObserverState(),
+    latestResetCredits: {
+      sampledAtUtc: "2026-08-01T10:00:00.000Z",
+      availableCount: 1,
+      credits: [{
+        resetType: "codexRateLimits",
+        status: "available",
+        grantedAtUtc: "2026-08-01T09:00:00.000Z",
+        expiresAtUtc: "2026-08-08T09:00:00.000Z",
+        title: "Account-specific free text",
+      }],
+    },
+  });
+
+  assert.deepEqual(migrated.latestResetCredits, {
+    sampledAtUtc: "2026-08-01T10:00:00.000Z",
+    availableCount: 1,
+    credits: [{
+      status: "available",
+      grantedAtUtc: "2026-08-01T09:00:00.000Z",
+      expiresAtUtc: "2026-08-08T09:00:00.000Z",
+    }],
+  });
+  assert.doesNotMatch(JSON.stringify(migrated), /resetType|Account-specific free text/);
+});
+
 test("observer retains privacy-safe telemetry and a deduplicated reset ledger", () => {
   const initial = recordLocalTelemetry(emptyLocalObserverState(), [{
     limitId: "codex",
@@ -147,11 +175,9 @@ test("observer retains privacy-safe telemetry and a deduplicated reset ledger", 
     sampledAtUtc: "2026-08-01T10:00:00.000Z",
     availableCount: 2,
     credits: [{
-      resetType: "codexRateLimits",
       status: "available",
       grantedAtUtc: "2026-08-01T09:00:00.000Z",
       expiresAtUtc: "2026-08-08T09:00:00.000Z",
-      title: "Rate-limit reset",
     }],
   });
   assert.equal(initial.latestRateLimitBuckets[0].limitId, "codex");
@@ -215,7 +241,7 @@ test("observer retains bounded credit evidence and out-of-cycle timing", () => {
   }), "UTC").state;
   const afterCredits = {
     sampledAtUtc: "2026-08-08T20:32:48.433Z",
-    availableCount: 0,
+    availableCount: 1,
     credits: [],
   };
   const result = advanceLocalObserver(state, sample({
@@ -225,5 +251,150 @@ test("observer retains bounded credit evidence and out-of-cycle timing", () => {
   }), "UTC", afterCredits);
   assert.equal(result.candidate?.resetTiming, "out-of-cycle");
   assert.equal(result.candidate?.previousResetCredits?.availableCount, 1);
-  assert.equal(result.candidate?.currentResetCredits?.availableCount, 0);
+  assert.equal(result.candidate?.currentResetCredits?.availableCount, 1);
+});
+
+test("observer does not publish a reset-credit recovery as a full reset", () => {
+  const beforeCredits = {
+    sampledAtUtc: "2026-08-01T10:00:00.000Z",
+    availableCount: 1,
+    credits: [],
+  };
+  let state = recordLocalTelemetry(emptyLocalObserverState(), [], beforeCredits);
+  state = advanceLocalObserver(state, sample({
+    usedPercent: 100,
+    exhausted: true,
+    resetsAtUtc: "2026-08-08T10:00:00.000Z",
+  }), "UTC").state;
+  const recoveredByCredit = advanceLocalObserver(state, sample({
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    usedPercent: 72,
+    exhausted: false,
+    resetsAtUtc: "2026-08-08T10:00:00.000Z",
+  }), "UTC", {
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    availableCount: 0,
+    credits: [],
+  });
+
+  assert.equal(recoveredByCredit.candidate, null);
+  assert.equal(recoveredByCredit.state.openExhaustion, null);
+});
+
+test("observer suppresses reset-credit recovery when the reset anchor advances", () => {
+  const beforeCredits = {
+    sampledAtUtc: "2026-08-01T10:00:00.000Z",
+    availableCount: 1,
+    credits: [],
+  };
+  let state = recordLocalTelemetry(emptyLocalObserverState(), [], beforeCredits);
+  state = advanceLocalObserver(state, sample({
+    usedPercent: 100,
+    exhausted: true,
+    resetsAtUtc: "2026-08-08T10:00:00.000Z",
+  }), "UTC").state;
+
+  const recoveredByCredit = advanceLocalObserver(state, sample({
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    usedPercent: 72,
+    exhausted: false,
+    resetsAtUtc: "2026-08-15T10:00:00.000Z",
+  }), "UTC", {
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    availableCount: 0,
+    credits: [],
+  });
+
+  assert.equal(recoveredByCredit.candidate, null);
+  assert.equal(recoveredByCredit.state.openExhaustion, null);
+});
+
+test("observer suppresses reset-credit recovery when the reset anchor disappears", () => {
+  const beforeCredits = {
+    sampledAtUtc: "2026-08-01T10:00:00.000Z",
+    availableCount: 1,
+    credits: [],
+  };
+  let state = recordLocalTelemetry(emptyLocalObserverState(), [], beforeCredits);
+  state = advanceLocalObserver(state, sample({
+    usedPercent: 100,
+    exhausted: true,
+    resetsAtUtc: "2026-08-08T10:00:00.000Z",
+  }), "UTC").state;
+
+  const recoveredByCredit = advanceLocalObserver(state, sample({
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    usedPercent: 72,
+    exhausted: false,
+    resetsAtUtc: null,
+  }), "UTC", {
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    availableCount: 0,
+    credits: [],
+  });
+
+  assert.equal(recoveredByCredit.candidate, null);
+  assert.equal(recoveredByCredit.state.openExhaustion, null);
+});
+
+test("observer suppresses high-usage recovery with an unchanged anchor without credit metadata", () => {
+  const exhausted = advanceLocalObserver(emptyLocalObserverState(), sample({
+    usedPercent: 100,
+    exhausted: true,
+    resetsAtUtc: "2026-08-08T10:00:00.000Z",
+  }), "UTC").state;
+  const recovered = advanceLocalObserver(exhausted, sample({
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    usedPercent: 72,
+    exhausted: false,
+    resetsAtUtc: "2026-08-08T10:00:30.000Z",
+  }), "UTC");
+  assert.equal(recovered.candidate, null);
+});
+
+test("observer retains positive recovery evidence at low usage or with an advanced anchor", () => {
+  const exhausted = advanceLocalObserver(emptyLocalObserverState(), sample({
+    usedPercent: 100,
+    exhausted: true,
+    resetsAtUtc: "2026-08-08T10:00:00.000Z",
+  }), "UTC").state;
+  const nearZero = advanceLocalObserver(exhausted, sample({
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    usedPercent: 2,
+    exhausted: false,
+    resetsAtUtc: "2026-08-08T10:00:30.000Z",
+  }), "UTC");
+  const advancedAnchor = advanceLocalObserver(exhausted, sample({
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    usedPercent: 72,
+    exhausted: false,
+    resetsAtUtc: "2026-08-15T10:00:00.000Z",
+  }), "UTC");
+  assert.equal(nearZero.candidate?.observationKind, "access-restored");
+  assert.equal(advancedAnchor.candidate?.observationKind, "access-restored");
+});
+
+test("observer suppresses credit redemption before exhaustion", () => {
+  const beforeCredits = {
+    sampledAtUtc: "2026-08-01T10:00:00.000Z",
+    availableCount: 1,
+    credits: [],
+  };
+  const state = advanceLocalObserver(
+    recordLocalTelemetry(emptyLocalObserverState(), [], beforeCredits),
+    sample({ usedPercent: 90, resetsAtUtc: "2026-08-03T10:00:00.000Z" }),
+    "UTC",
+  ).state;
+  const result = advanceLocalObserver(state, sample({
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    usedPercent: 0,
+    resetsAtUtc: "2026-08-08T10:05:00.000Z",
+  }), "UTC", {
+    sampledAtUtc: "2026-08-01T10:05:00.000Z",
+    availableCount: 0,
+    credits: [],
+  });
+  assert.equal(result.candidate, null);
+  assert.equal(result.state.openExhaustion, null);
+  assert.equal(result.state.lastSample?.usedPercent, 0);
 });

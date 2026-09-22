@@ -49,11 +49,9 @@ interface AppServerRateLimitsResponse {
   rateLimitResetCredits?: {
     availableCount?: number;
     credits?: Array<{
-      resetType?: string | null;
       status?: string | null;
       grantedAt?: number | null;
       expiresAt?: number | null;
-      title?: string | null;
     }> | null;
   } | null;
 }
@@ -156,11 +154,9 @@ function parseResetCredits(result: AppServerRateLimitsResponse, sampledAtUtc: st
     sampledAtUtc,
     availableCount: Math.floor(Number(snapshot.availableCount)),
     credits: (snapshot.credits ?? []).map((credit) => ({
-      resetType: safeLabel(credit.resetType) ?? "unknown",
       status: safeLabel(credit.status) ?? "unknown",
       grantedAtUtc: safeUnixTimestamp(credit.grantedAt),
       expiresAtUtc: safeUnixTimestamp(credit.expiresAt),
-      title: safeLabel(credit.title),
     })),
   };
 }

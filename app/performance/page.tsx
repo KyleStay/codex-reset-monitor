@@ -39,17 +39,27 @@ export default function PerformancePage() {
             <p className="section-intro">Bars compare mean predicted probability with the observed frequency in each bucket. Small samples can make these values swing sharply.</p>
             <div className="legend"><span><i /> Predicted</span><span><i className="actual" /> Observed</span></div>
           </div>
-          <div className="chart" role="img" aria-label={performance.calibration.length ? "Calibration chart comparing predicted and observed reset frequency" : "Calibration unavailable because no real forecasts have been scored"}>
-            {performance.calibration.map((row) => (
-              <div className="chart-group" key={row.bucket}>
-                <div className="bars">
-                  <span className="bar" style={{ height: `${row.predicted * 100}%` }} title={`Predicted ${pct(row.predicted)}`} />
-                  <span className="bar actual" style={{ height: `${row.observed * 100}%` }} title={`Observed ${pct(row.observed)}`} />
+          <div>
+            <div className="chart" role="img" aria-label={performance.calibration.length ? "Calibration chart comparing predicted and observed reset frequency" : "Calibration unavailable because no real forecasts have been scored"}>
+              {performance.calibration.map((row) => (
+                <div className="chart-group" key={row.bucket}>
+                  <div className="bars">
+                    <span className="bar" style={{ height: `${row.predicted * 100}%` }} title={`Predicted ${pct(row.predicted)}`} />
+                    <span className="bar actual" style={{ height: `${row.observed * 100}%` }} title={`Observed ${pct(row.observed)}`} />
+                  </div>
+                  <span>{row.bucket}<br />n={row.n}</span>
                 </div>
-                <span>{row.bucket}<br />n={row.n}</span>
-              </div>
-            ))}
-            {!performance.calibration.length && <p className="muted">Calibration will appear after real forecasts are scored.</p>}
+              ))}
+              {!performance.calibration.length && <p className="muted">Calibration will appear after real forecasts are scored.</p>}
+            </div>
+            <table className="visually-hidden">
+              <caption>Calibration values</caption>
+              <thead><tr><th>Probability bucket</th><th>Predicted</th><th>Observed</th><th>Sample size</th></tr></thead>
+              <tbody>
+                {performance.calibration.map((row) => <tr key={row.bucket}><td>{row.bucket}</td><td>{pct(row.predicted)}</td><td>{pct(row.observed)}</td><td>{row.n}</td></tr>)}
+                {!performance.calibration.length && <tr><td colSpan={4}>No scored calibration buckets.</td></tr>}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>

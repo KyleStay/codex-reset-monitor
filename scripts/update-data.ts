@@ -1,5 +1,6 @@
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { writeFile, mkdir } from "node:fs/promises";
 import { buildForecast } from "../lib/forecast";
+import { readJsonFile } from "../lib/json-file";
 import { scoreForecast } from "../lib/scoring";
 import { classifyResetTiming, latestProviderAnchor } from "../lib/reset-schedule";
 import { collectGitHubIssueData } from "../lib/sources/github-issues";
@@ -23,22 +24,14 @@ const JOB_HISTORY_URL = new URL("job-history.json", GENERATED_DIR);
 const now = new Date();
 const nowUtc = now.toISOString();
 
-async function readJson<T>(url: URL, fallback: T): Promise<T> {
-  try {
-    return JSON.parse(await readFile(url, "utf8")) as T;
-  } catch {
-    return fallback;
-  }
-}
-
 async function writeJson(url: URL, value: unknown) {
   await writeFile(url, `${JSON.stringify(value, null, 2)}\n`);
 }
 
 await mkdir(GENERATED_DIR, { recursive: true });
 
-let observations = await readJson<StoredObservation[]>(OBSERVATIONS_URL, []);
-let approvedPublicSources = await readJson<SourceRecord[]>(PUBLIC_SOURCES_URL, []);
+let observations = await readJsonFile<StoredObservation[]>(OBSERVATIONS_URL, []);
+let approvedPublicSources = await readJsonFile<SourceRecord[]>(PUBLIC_SOURCES_URL, []);
 const repository = process.env.GITHUB_REPOSITORY ?? "KyleStay/codex-reset-monitor";
 const githubToken = process.env.GITHUB_TOKEN ?? "";
 let observationSourceHealth = {
@@ -55,6 +48,7 @@ if (repository) {
       repository,
       token: githubToken,
       previousObservations: observations,
+      previousPublicSources: approvedPublicSources,
       now,
     });
     observations = collected.observations;
@@ -81,7 +75,7 @@ if (repository) {
   }
 }
 
-const previousSnapshot = await readJson<{
+const previousSnapshot = await readJsonFile<{
   officialIncidents?: SourceRecord[];
   officialStatusHealth?: { status: string; checkedAtUtc: string; message: string };
 }>(SNAPSHOT_URL, {});
@@ -173,7 +167,7 @@ const displayUtc = new Intl.DateTimeFormat("en", {
 const interval = forecast.likelyStartUtc && forecast.likelyEndUtc
   ? `${displayUtc.format(new Date(forecast.likelyStartUtc))}–${displayUtc.format(new Date(forecast.likelyEndUtc))} UTC`
   : null;
-let history = await readJson<ForecastHistoryRow[]>(HISTORY_URL, []);
+let history = await readJsonFile<ForecastHistoryRow[]>(HISTORY_URL, []);
 if (!history.some((row) => row.id === forecast.datasetVersion)) {
   history.unshift({
     id: forecast.datasetVersion,
@@ -278,7 +272,7 @@ const snapshot = {
 };
 await writeJson(SNAPSHOT_URL, snapshot);
 
-const jobHistory = await readJson<Array<Record<string, unknown>>>(JOB_HISTORY_URL, []);
+const jobHistory = await readJsonFile<Array<Record<string, unknown>>>(JOB_HISTORY_URL, []);
 jobHistory.unshift({
   id: `refresh-${nowUtc}`,
   startedAtUtc: nowUtc,
