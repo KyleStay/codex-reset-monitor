@@ -5,7 +5,7 @@
     "sourceKind": "approved_public_post",
     "provenance": "administrator_approved",
     "publicationTimeUtc": "2026-09-08T04:33:27.365Z",
-    "retrievalTimeUtc": "2026-09-22T12:30:41.964Z",
+    "retrievalTimeUtc": "2026-09-23T09:49:42.701Z",
     "canonicalUrl": "https://help.openai.com/en/articles/20001498-how-banked-codex-resets-work",
     "title": "OpenAI documents the September 7 global reset",
     "excerpt": "Official Help says OpenAI provided a September 7 global reset to Plus, Pro, and Business users. It applied directly and did not create a saved banked reset.",
@@ -18,7 +18,7 @@
       "signalClassification": "completed_hard_reset",
       "resetSignal": true
     },
-    "contentHash": "0b968ac1c39ad4df8c2ec377a61c7329ff99e3138dd5b1e80cee881c38af1b0a"
+    "contentHash": "1a3451c3587a18edb8498aa899f627d16bcc43db7eb33c75804f3677fb867bad"
   },
   {
     "id": "github-source-47",
@@ -26,7 +26,7 @@
     "sourceKind": "approved_public_post",
     "provenance": "administrator_approved",
     "publicationTimeUtc": "2026-09-04T23:59:50.236Z",
-    "retrievalTimeUtc": "2026-09-22T12:30:41.964Z",
+    "retrievalTimeUtc": "2026-09-23T09:49:42.701Z",
     "canonicalUrl": "https://help.openai.com/en/articles/20001498-how-banked-codex-resets-work",
     "title": "OpenAI documents September 3 and 4 banked-reset promotion",
     "excerpt": "Official Help says eligible existing Plus, Pro, and Business users receive a banked reset on September 3 and September 4, with new-account cutoffs and delivery that may take several hours.",
@@ -39,7 +39,7 @@
       "signalClassification": "banked_reset_grant",
       "resetSignal": false
     },
-    "contentHash": "922805c0746e637a7734cbee8f496c9394f2f00791accd8e77f4467781efa3da"
+    "contentHash": "80d2ce1e024760f4d5f0b975952375b9bc529cd8479a663547a9c1a7c6586ed4"
   },
   {
     "id": "github-source-42",
@@ -47,7 +47,7 @@
     "sourceKind": "approved_public_post",
     "provenance": "administrator_approved",
     "publicationTimeUtc": "2026-08-31T20:44:58.219Z",
-    "retrievalTimeUtc": "2026-09-22T12:30:41.964Z",
+    "retrievalTimeUtc": "2026-09-23T09:52:36.160Z",
     "canonicalUrl": "https://help.openai.com/en/articles/20001507-paid-weekly-work-and-codex-rate-limit-resets",
     "title": "Paid weekly Work and Codex rate limit resets",
     "excerpt": "Official Help documents eligible Plus and Pro users can purchase an immediate weekly reset distinct from banked resets and usage credits.",
@@ -60,7 +60,7 @@
       "signalClassification": "mechanism_change",
       "resetSignal": false
     },
-    "contentHash": "be883d8a3e9cd3f9d978441c0622071fd25e72860365472236b92f6bee3f1f3f"
+    "contentHash": "36b5d84fbc719b5c74ca7a8a10d9c569cf069086ba0869073c16eacf34078dae"
   },
   {
     "id": "github-source-3",
@@ -68,7 +68,7 @@
     "sourceKind": "approved_public_post",
     "provenance": "administrator_approved",
     "publicationTimeUtc": "2026-08-08T20:29:22.056Z",
-    "retrievalTimeUtc": "2026-09-22T12:30:41.964Z",
+    "retrievalTimeUtc": "2026-09-23T09:52:36.160Z",
     "canonicalUrl": "https://x.com/thsottiaux/status/2086188036493344823",
     "title": "Paid-user Codex and ChatGPT Work usage-limit reset announcement",
     "excerpt": "Announced a completed usage-limit reset for all paid ChatGPT Work and Codex users.",
@@ -81,6 +81,6 @@
       "signalClassification": "completed_hard_reset",
       "resetSignal": true
     },
-    "contentHash": "2daa1cd3742b2017d6f91fb3193ab7738a20d4160d2b59faa935f142e9175d53"
+    "contentHash": "c8b638dee034bcd5e5d8cc39d282896d47e5685f5201d5031a9ac06ff2d287de"
   }
 ]

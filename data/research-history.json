@@ -1,5 +1,52 @@
 [
   {
+    "id": "research-mechanism-2026-09-22-banked-reset",
+    "eventDate": "2026-09-22",
+    "datePrecision": "day",
+    "classification": "reset_mechanism_change",
+    "verificationState": "inferred",
+    "scope": "selected_plans",
+    "title": "Banked reset rollout announced for Plus, Pro, and Business",
+    "summary": "A canonical Tibo announcement says a banked reset was being loaded into Plus, Pro, and Business accounts during the GPT-6 Sol and Luna launch. The privacy-limited project observer later recorded one individual-paid account's available reset-credit count increasing from one to two at 2026-09-22T20:57:08Z, while the provider reset anchor did not advance and no hard-reset transition occurred. This supports receipt for one account, not universal delivery, redemption, or a completed hard reset.",
+    "evidenceGrade": "B",
+    "cause": {
+      "assessment": "GPT-6 Sol and Luna launch promotion",
+      "confidence": "attributed",
+      "rationale": "The banked-reset statement appears in the same canonical post as the Sol and Luna launch and subscription-value announcement. OpenAI's official launch page confirms the product rollout but does not mention the reset grant, so the promotional motivation remains attributed rather than provider-confirmed cause."
+    },
+    "detectionSignals": [
+      "A canonical operator statement identifies the banked mechanism and the intended Plus, Pro, and Business scope.",
+      "The local observer's authoritative available reset-credit count increases from one to two after the announcement.",
+      "The new credit carries an OpenAI-issued grant time and expiry while the usage meter and provider reset anchor do not show a hard-reset transition.",
+      "Separate source-native promise, rollout-statement, credit-grant, redemption, and hard-reset timestamps preserve the mechanism boundary."
+    ],
+    "contradictions": [
+      "The announcement's all-account wording does not supply an account-by-account recipient denominator or simultaneous-delivery proof.",
+      "The project observer covers one individual-paid account and cannot establish Plus, Pro, Business, regional, workspace, or seat breadth.",
+      "A public issue earlier on September 22 reported a reset-available notice without a visible credit, before the later announcement and observed grant.",
+      "The preferred discovery mirror retained only the linked launch URL for the relevant long post; only the canonical X page and split fallback mirror exposed the reset clause.",
+      "Neither the official launch page nor the current Help article independently announces this September 22 grant."
+    ],
+    "sources": [
+      {
+        "canonicalUrl": "https://x.com/thsottiaux/status/2102463847714247142",
+        "publicationTimeUtc": "2026-09-22T18:23:37.841Z",
+        "title": "Tibo announces a Plus, Pro, and Business banked-reset rollout",
+        "provenance": "public_report",
+        "role": "primary"
+      },
+      {
+        "canonicalUrl": "https://github.com/KyleStay/codex-reset-monitor/issues/66",
+        "publicationTimeUtc": "2026-09-23T09:43:16Z",
+        "title": "Pending review record with one-account observer corroboration",
+        "provenance": "public_report",
+        "role": "corroborating"
+      }
+    ],
+    "firstRecordedAtUtc": "2026-09-23T09:45:49Z",
+    "lastReviewedAtUtc": "2026-09-23T09:45:49Z"
+  },
+  {
     "id": "research-reset-2026-09-07-global",
     "eventDate": "2026-09-07",
     "datePrecision": "day",
